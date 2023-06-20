@@ -1,0 +1,15 @@
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\bin\Debug\net7.0\Final.Project.BL.deps.json
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\bin\Debug\net7.0\Final.Project.BL.dll
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\bin\Debug\net7.0\Final.Project.BL.pdb
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\bin\Debug\net7.0\Final.Project.DAL.dll
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\bin\Debug\net7.0\Final.Project.DAL.pdb
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.csproj.AssemblyReference.cache
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.GeneratedMSBuildEditorConfig.editorconfig
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.AssemblyInfoInputs.cache
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.AssemblyInfo.cs
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.csproj.CoreCompileInputs.cache
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.csproj.CopyComplete
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.dll
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\refint\Final.Project.BL.dll
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\Final.Project.BL.pdb
+E:\ITI Gradution Project\Final.Project.API\Final.Project.BL\obj\Debug\net7.0\ref\Final.Project.BL.dll
