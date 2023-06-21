@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Final.Project.DAL;
-public class ECommerceContext : IdentityDbContext<User>
+public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Product> Products => Set<Product>();
@@ -10,7 +11,8 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<OrderProductDetails> OrderProductDetails => Set<OrderProductDetails>();
     public DbSet<UserProductsCart> UserProductsCarts => Set<UserProductsCart>();
-    public ECommerceContext(DbContextOptions options) : base(options)
+    public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
+    public ECommerceContext(DbContextOptions<ECommerceContext> options) : base(options)
     {
     }
 
@@ -151,6 +153,28 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.HasKey(e => new { e.UserId, e.ProductId });
 
         });
+        #endregion
+
+        #region UserAddress
+
+        builder.Entity<UserAddress>(entity => {
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.City)
+                  .HasMaxLength(30)      
+                  .IsRequired();
+
+            entity.Property(e => e.Street)
+               .HasMaxLength(200)
+               .IsRequired();
+
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.UserAddresses)
+                  .HasForeignKey(e => e.UserId);
+
+        });
+
         #endregion
 
     }
