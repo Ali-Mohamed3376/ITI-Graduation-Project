@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
 
-#region My Services
+#region Database
 
 
 builder.Services.AddDbContext<ECommerceContext>(options => options

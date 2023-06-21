@@ -2,8 +2,8 @@
 namespace Final.Project.DAL;
 public class User : IdentityUser<int>
 {
-    //Changed DT of Id Column In IdentityUser Table From String To int
-    //by adding new Keyword and override get and set
+    // Changed DT of Id Column In IdentityUser Table From String To int
+    // by adding new Keyword and override get and set **
     public new int Id
     {
         get { return base.Id; }

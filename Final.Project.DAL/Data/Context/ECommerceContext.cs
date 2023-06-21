@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Final.Project.DAL;
+
+// Edit IdentityDbContext to change  Id Column In IdentityUser Table From String To int
+// See User Class to Understand What We Change !!!
 public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public DbSet<User> Users => Set<User>();
