@@ -35,9 +35,9 @@ builder.Services.AddScoped<UserManager<User>>();
 
 #region Database
 
-
 builder.Services.AddDbContext<ECommerceContext>(options => options
     .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+
 #endregion
 
 #region Identity

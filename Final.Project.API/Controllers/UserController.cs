@@ -104,5 +104,27 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
+        #region Logout
+
+
+
+
+        #endregion
+
+        #region Forget Password
+
+
+        #endregion
+        
+        #region Reset Password
+
+        #endregion
+
+
+
+
+
+
+
     }
 }
