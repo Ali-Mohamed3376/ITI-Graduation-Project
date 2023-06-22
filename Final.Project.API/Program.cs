@@ -14,7 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
 
-#region Our Services Repos
+#region Repos Services
+builder.Services.AddScoped<UserManager<User>>();
 
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
@@ -25,11 +26,12 @@ builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+#region Managers
 
+#endregion
 builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
 builder.Services.AddScoped<IProductsManager, ProductsManager>();
 
-builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<IUserProductsCartsManager,UserProductsCartsManager>();
 
 
