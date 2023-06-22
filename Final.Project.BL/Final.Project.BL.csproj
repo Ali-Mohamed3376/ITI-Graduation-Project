@@ -22,7 +22,6 @@
     <Folder Include="Managers\Orders\" />
     <Folder Include="Managers\Products\" />
     <Folder Include="Managers\UserAddresses\" />
-    <Folder Include="Managers\UserProductsCarts\" />
     <Folder Include="Managers\Users\" />
   </ItemGroup>
 
