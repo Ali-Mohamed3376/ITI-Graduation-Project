@@ -27,5 +27,6 @@ public class GenericRepo<T> : IGenericRepo<T> where T : class
     public void Delete(T entity)
     {
        context.Set<T>().Remove(entity);
+
     }
 }
