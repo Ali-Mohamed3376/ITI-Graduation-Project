@@ -12,3 +12,17 @@ E:\ITI Gradution Project\Final.Project.API\Final.Project.DAL\obj\Debug\net7.0\re
 E:\ITI Gradution Project\Final.Project.API\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.pdb
 E:\ITI Gradution Project\Final.Project.API\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.genruntimeconfig.cache
 E:\ITI Gradution Project\Final.Project.API\Final.Project.DAL\obj\Debug\net7.0\ref\Final.Project.DAL.dll
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\bin\Debug\net7.0\Final.Project.DAL.deps.json
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\bin\Debug\net7.0\Final.Project.DAL.runtimeconfig.json
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\bin\Debug\net7.0\Final.Project.DAL.dll
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\bin\Debug\net7.0\Final.Project.DAL.pdb
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.AssemblyInfoInputs.cache
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.AssemblyInfo.cs
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.dll
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\refint\Final.Project.DAL.dll
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.pdb
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\Final.Project.DAL.genruntimeconfig.cache
+C:\Users\Lenovo\Source\Repos\ITI-Graduation-Project\Final.Project.DAL\obj\Debug\net7.0\ref\Final.Project.DAL.dll
