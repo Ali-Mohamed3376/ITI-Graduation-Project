@@ -1,3 +1,4 @@
+using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,9 @@ builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
 builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+builder.Services.AddScoped<IProductsManager, ProductsManager>();
 
 #endregion
 
@@ -78,6 +82,7 @@ builder.Services.AddAuthentication(options =>
 
 #endregion
 
+
 var app = builder.Build();
 
 #region Middlewares
@@ -90,7 +95,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
