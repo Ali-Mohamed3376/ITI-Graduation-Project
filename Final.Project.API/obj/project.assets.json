@@ -4845,19 +4845,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dell\\.nuget\\packages\\": {}
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Abdo\\ITI ISMAILIYA\\FinalProject\\ITI-Graduation-Project\\Final.Project.API\\Final.Project.API.csproj",
+      "projectUniqueName": "E:\\ITI Gradution Project\\Final.Project.API\\Final.Project.API\\Final.Project.API.csproj",
       "projectName": "Final.Project.API",
-      "projectPath": "E:\\Abdo\\ITI ISMAILIYA\\FinalProject\\ITI-Graduation-Project\\Final.Project.API\\Final.Project.API.csproj",
-      "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
-      "outputPath": "E:\\Abdo\\ITI ISMAILIYA\\FinalProject\\ITI-Graduation-Project\\Final.Project.API\\obj\\",
+      "projectPath": "E:\\ITI Gradution Project\\Final.Project.API\\Final.Project.API\\Final.Project.API.csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "E:\\ITI Gradution Project\\Final.Project.API\\Final.Project.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4871,8 +4876,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "E:\\Abdo\\ITI ISMAILIYA\\FinalProject\\ITI-Graduation-Project\\Final.Project.BL\\Final.Project.BL.csproj": {
-              "projectPath": "E:\\Abdo\\ITI ISMAILIYA\\FinalProject\\ITI-Graduation-Project\\Final.Project.BL\\Final.Project.BL.csproj"
+            "E:\\ITI Gradution Project\\Final.Project.API\\Final.Project.BL\\Final.Project.BL.csproj": {
+              "projectPath": "E:\\ITI Gradution Project\\Final.Project.API\\Final.Project.BL\\Final.Project.BL.csproj"
             }
           }
         }
@@ -4921,7 +4926,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

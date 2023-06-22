@@ -1,12 +1,12 @@
 ﻿namespace Final.Project.DAL;
 public interface IUnitOfWork
 {
-    public UserRepo UserRepo { get; }
-    public ProductRepo ProductRepo { get; }
-    public CategoryRepo CategoryRepo { get; }
-    public OrderRepo OrderRepo { get; }
-    public OrdersDetailsRepo OrdersDetailsRepo  { get; }
-    public UserProdutsCartRepo UserProdutsCartRepo { get; }
-    public UserAddressRepo UserAddressRepo { get; }
+    //public UserRepo UserRepo { get; }
+    public IProductRepo ProductRepo { get; }
+    public ICategoryRepo CategoryRepo { get; }
+    public IOrderRepo OrderRepo { get; }
+    public IOrdersDetailsRepo OrdersDetailsRepo  { get; }
+    public IUserProductsCartRepo UserProdutsCartRepo { get; }
+    public IUserAddressRepo UserAddressRepo { get; }
     int Savechanges();
 }

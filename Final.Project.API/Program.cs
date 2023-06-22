@@ -15,15 +15,15 @@ builder.Services.AddSwaggerGen();
 
 #region Our Services Repos
 
-//builder.Services.AddScoped<IUserRepo, UserRepo>();
-//builder.Services.AddScoped<IProductRepo, ProductRepo>();
-//builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
-//builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
-//builder.Services.AddScoped<IUserAddressRepo, UserAddressRepo>();
-//builder.Services.AddScoped<IOrderRepo, OrderRepo>();
-//builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
-//builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
-//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
+builder.Services.AddScoped<IUserAddressRepo, UserAddressRepo>();
+builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
+builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #endregion
 

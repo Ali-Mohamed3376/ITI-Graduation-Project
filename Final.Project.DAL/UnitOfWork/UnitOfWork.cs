@@ -3,15 +3,15 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly ECommerceContext context;
 
-    public UserRepo UserRepo { get; }
-    public ProductRepo ProductRepo { get; }
-    public CategoryRepo CategoryRepo { get; }
-    public OrderRepo OrderRepo { get; }
-    public OrdersDetailsRepo OrdersDetailsRepo { get; }
-    public UserProdutsCartRepo UserProdutsCartRepo { get; }
-    public UserAddressRepo UserAddressRepo { get; }
+    public IUserRepo UserRepo { get; }
+    public IProductRepo ProductRepo { get; }
+    public ICategoryRepo CategoryRepo { get; }
+    public IOrderRepo OrderRepo { get; }
+    public IOrdersDetailsRepo OrdersDetailsRepo { get; }
+    public IUserProductsCartRepo UserProdutsCartRepo { get; }
+    public IUserAddressRepo UserAddressRepo { get; }
 
-    public UnitOfWork(ECommerceContext context, UserRepo userRepo, ProductRepo productRepo, CategoryRepo categoryRepo, OrderRepo orderRepo, OrdersDetailsRepo ordersDetailsRepo, UserProdutsCartRepo userProdutsCartRepo, UserAddressRepo userAddressRepo)
+    public UnitOfWork(ECommerceContext context, IUserRepo userRepo, IProductRepo productRepo, ICategoryRepo categoryRepo, IOrderRepo orderRepo, IOrdersDetailsRepo ordersDetailsRepo, IUserProductsCartRepo userProdutsCartRepo, IUserAddressRepo userAddressRepo)
     {
         this.context = context;
         UserRepo = userRepo;
