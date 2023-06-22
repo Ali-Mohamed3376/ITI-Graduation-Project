@@ -1,4 +1,4 @@
 ﻿namespace Final.Project.DAL;
-internal interface IOrderRepo:IGenericRepo<Order>
+public interface IOrderRepo:IGenericRepo<Order>
 {
 }

@@ -6,7 +6,8 @@ namespace Final.Project.DAL;
 
 // Edit IdentityDbContext to change  Id Column In IdentityUser Table From String To int
 // See User Class to Understand What We Change !!!
-public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
+//public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
+public class ECommerceContext : IdentityDbContext<User>
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Product> Products => Set<Product>();
@@ -64,7 +65,7 @@ public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Name)
-                  .HasMaxLength(20)
+                  .HasMaxLength(100)
                   .IsRequired();
 
             entity.Property(e => e.Price)
@@ -90,7 +91,7 @@ public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
         {
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasMaxLength(100);
         });
 
 
@@ -165,7 +166,7 @@ public class ECommerceContext : IdentityDbContext<User, IdentityRole<int>, int>
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.City)
-                  .HasMaxLength(30)      
+                  .HasMaxLength(100)      
                   .IsRequired();
 
             entity.Property(e => e.Street)

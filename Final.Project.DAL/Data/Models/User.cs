@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 namespace Final.Project.DAL;
-public class User : IdentityUser<int>
+public class User : IdentityUser//<int>
 {
     // Changed DT of Id Column In IdentityUser Table From String To int
     // by adding new Keyword and override get and set **
-    public new int Id
-    {
-        get { return base.Id; }
-        set { base.Id = value; }
-    }
+    //public new int Id
+    //{
+    //    get { return base.Id; }
+    //    set { base.Id = value; }
+    //}
     public string FName { get; set; } = string.Empty;
     public string LName { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
@@ -22,7 +22,8 @@ public class User : IdentityUser<int>
 
 public enum Role
 {
-    Admin, Customer
+    Admin, 
+    Customer
 }
 
 

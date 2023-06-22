@@ -1,4 +1,4 @@
 ﻿namespace Final.Project.DAL;
-public interface ICatrgoRyepo : IGenericRepo<Category>
+public interface ICategoryRepo : IGenericRepo<Category>
 {
 }

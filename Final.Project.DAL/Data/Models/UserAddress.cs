@@ -2,7 +2,7 @@
 public class UserAddress
 {
     public int Id { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }=string.Empty;
     public User User { get; set; } = null!;
     public string City { get; set; } = string.Empty;
     public string Street { get; set; } = string.Empty;

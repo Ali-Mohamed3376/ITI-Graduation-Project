@@ -17,7 +17,6 @@
     <Folder Include="Dtos\UserAddress\" />
     <Folder Include="Dtos\Order\" />
     <Folder Include="Dtos\Product\" />
-    <Folder Include="Dtos\User\" />
     <Folder Include="Managers\Categories\" />
     <Folder Include="Managers\OrdersDetails\" />
     <Folder Include="Managers\Orders\" />

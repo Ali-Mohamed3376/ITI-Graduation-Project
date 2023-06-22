@@ -1,7 +1,12 @@
 ﻿namespace Final.Project.DAL;
-public class UserProdutsCartRepo : GenericRepo<UserProdutsCartRepo>
+public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsCartRepo
 {
     public UserProdutsCartRepo(ECommerceContext context) : base(context)
     {
     }
+
+  
+
+   
+
 }
