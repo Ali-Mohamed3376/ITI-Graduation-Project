@@ -11,16 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Category\" />
     <Folder Include="Dtos\UserProductsCart\" />
     <Folder Include="Dtos\OrderDetails\" />
     <Folder Include="Dtos\UserAddress\" />
     <Folder Include="Dtos\Order\" />
-    <Folder Include="Dtos\Product\" />
-    <Folder Include="Managers\Categories\" />
     <Folder Include="Managers\OrdersDetails\" />
     <Folder Include="Managers\Orders\" />
-    <Folder Include="Managers\Products\" />
     <Folder Include="Managers\UserAddresses\" />
     <Folder Include="Managers\Users\" />
   </ItemGroup>
