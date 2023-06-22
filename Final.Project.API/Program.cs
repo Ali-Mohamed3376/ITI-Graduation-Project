@@ -22,8 +22,10 @@ builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
 builder.Services.AddScoped<IUserAddressRepo, UserAddressRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
-builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<UserManager<User>>();
+
 
 #endregion
 
@@ -31,12 +33,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
-    .UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
-
+    .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 #endregion
 
 #region Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredUniqueChars = 3;
@@ -45,6 +46,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
     options.User.RequireUniqueEmail = false;
+
 
 }).AddEntityFrameworkStores<ECommerceContext>();
 #endregion
@@ -66,7 +68,7 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = key,
-        ValidateIssuer = false,
+        ValidateIssuer = false, 
         ValidateAudience = false,
     };
 });

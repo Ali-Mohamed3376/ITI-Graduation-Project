@@ -29,7 +29,7 @@ namespace Final.Project.API.Controllers
         public ActionResult<TokenDto> Login(LoginDto loginCredientials)
         {
             // Search by Email and check if user found or Not 
-            User? user = manager.FindByEmailAsync(loginCredientials.Email).Result;
+            User? user = manager.FindByNameAsync(loginCredientials.UserName).Result;
             if (user is null) { return BadRequest("User Not Found!!!"); }
 
             // Check On Password
@@ -50,7 +50,7 @@ namespace Final.Project.API.Controllers
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddHours(2);
+            DateTime exp = DateTime.Now.AddMinutes(20);
             JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -76,6 +76,7 @@ namespace Final.Project.API.Controllers
                 FName = credentials.FName,
                 LName = credentials.LName,
                 UserName = credentials.Email,
+                Email = credentials.Email,
             };
 
             var result = manager.CreateAsync(user, credentials.Password).Result;
