@@ -12,6 +12,27 @@ public class ProductsManager: IProductsManager
     {
         _unitOfWork = unitOfWork;
     }
+
+
+    #region Get All Products in Database
+    public IEnumerable<ProductMiniDetailsDto> GetAllProducts()
+    {
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAll();
+        IEnumerable<ProductMiniDetailsDto> productsDtos = productsFromDb
+            .Select(p => new ProductMiniDetailsDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+            });
+        return productsDtos;
+    }
+
+    #endregion
+
+
+    #region Get Product Details
     public ProductDetailsDto? GetProductByID(int id)
     {
         Product? productFromDb = _unitOfWork.ProductRepo.GetProductByIdWithCategory(id);
@@ -24,9 +45,11 @@ public class ProductsManager: IProductsManager
             Description = productFromDb.Description,
             Model = productFromDb.Model,
             Image = productFromDb.Image,
-            CategoryName = productFromDb.Category.Name                      
+            CategoryName = productFromDb.Category.Name
         };
     }
+    #endregion
+
 }
 
 
