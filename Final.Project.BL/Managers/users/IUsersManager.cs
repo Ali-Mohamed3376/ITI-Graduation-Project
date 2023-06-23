@@ -12,4 +12,5 @@ public interface IUsersManager
     UserReadDto GetUserReadDto(string id);
     bool Edit(UserUpdateDto updateDto);
     bool delete(string id);
+
 }

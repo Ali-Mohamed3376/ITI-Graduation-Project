@@ -20,7 +20,8 @@ namespace Final.Project.API.Controllers
                 _UsersManager = userManager;
                 _Usermanager= manager;
             }
-            //get with id
+
+
             [HttpGet]
            [Authorize]
           public ActionResult<UserReadDto> getUser(string id)
@@ -50,9 +51,8 @@ namespace Final.Project.API.Controllers
             }
 
             [HttpDelete]
-             [Authorize]
+            [Authorize]
 
-        //  [Route("{id}")]
         public ActionResult Delete(string id)
             {
                 var currentUser = _Usermanager.GetUserAsync(User).Result;
@@ -63,6 +63,6 @@ namespace Final.Project.API.Controllers
             }
 
 
-        
+       
     }
 }
