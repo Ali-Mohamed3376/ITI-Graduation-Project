@@ -1,5 +1,6 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,8 @@ namespace Final.Project.API.Controllers
             }
             //get with id
             [HttpGet]
-            [Route("{id}")]
-            public ActionResult<UserReadDto> getUser(string id)
+           [Authorize]
+          public ActionResult<UserReadDto> getUser(string id)
             {
                 var currentUser=_Usermanager.GetUserAsync(User).Result;
                 id = currentUser.Id;
@@ -37,17 +38,22 @@ namespace Final.Project.API.Controllers
 
 
             [HttpPut]
+            [Authorize]
             public ActionResult Edit(UserUpdateDto updateDto)
             {
-                var isfound = _UsersManager.Edit(updateDto);
+            var currentUser = _Usermanager.GetUserAsync(User).Result;
+            updateDto.Id = currentUser.Id;
+            var isfound = _UsersManager.Edit(updateDto);
                 if (!isfound) { return NotFound(); }
                 return NoContent();
 
             }
 
             [HttpDelete]
-            [Route("{id}")]
-            public ActionResult Delete(string id)
+             [Authorize]
+
+        //  [Route("{id}")]
+        public ActionResult Delete(string id)
             {
                 var currentUser = _Usermanager.GetUserAsync(User).Result;
                 id = currentUser.Id;
