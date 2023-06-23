@@ -41,7 +41,7 @@ public class UserProductsCartsManager : IUserProductsCartsManager
         UserProductsCart productToRemove = new UserProductsCart
         {
             ProductId = product.ProductId,
-            Quantity = product.Quantity,
+           // Quantity = 0,
             UserId = userId,
         };
         _unitOfWork.UserProdutsCartRepo.Delete(productToRemove);

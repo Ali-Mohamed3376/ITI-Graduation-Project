@@ -50,13 +50,13 @@ namespace Final.Project.API.Controllers
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddMinutes(20);
+            DateTime exp = DateTime.Now.AddMinutes(60);
             JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
 
-
+            var currentUser =  manager.GetUserAsync(User).Result;
             return new TokenDto
             {
                 Token = token

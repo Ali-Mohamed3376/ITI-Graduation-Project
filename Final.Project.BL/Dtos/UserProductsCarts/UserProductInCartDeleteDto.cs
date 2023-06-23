@@ -9,5 +9,4 @@ namespace Final.Project.BL;
 public class UserProductInCartDeleteDto
 {
     public int ProductId { get; set; }
-    public int Quantity { get; set; }
 }
