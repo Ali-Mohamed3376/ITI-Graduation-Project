@@ -26,13 +26,55 @@ builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-#region Managers
+
+
+
 
 #endregion
-builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
-builder.Services.AddScoped<IProductsManager, ProductsManager>();
 
-builder.Services.AddScoped<IUserProductsCartsManager,UserProductsCartsManager>();
+
+#region Managers
+
+//Abdo
+builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
+
+
+
+
+
+//Ali
+
+
+
+
+
+
+
+
+//Adel
+
+
+
+
+
+
+//Reham Ahmed
+builder.Services.AddScoped<IProductsManager, ProductsManager>();
+builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+
+
+
+
+
+//RehamSayed
+
+
+
+
+
+
+//Ahmed
+
 
 
 #endregion
