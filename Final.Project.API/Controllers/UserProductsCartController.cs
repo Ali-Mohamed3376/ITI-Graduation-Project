@@ -51,7 +51,7 @@ namespace Final.Project.API.Controllers
             if (userIdFromToken is null)
             {
                 return BadRequest("not logged in");
-                //test
+                
             }
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             _userProductsCartsManager.AddProductToCart(product, userIdFromToken);

@@ -362,3 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /.vs/
+/.vs/Final.Project.API/v17/.suo
+/.vs/Final.Project.API/DesignTimeBuild/.dtbcache.v2
+/.vs/Final.Project.API/FileContentIndex/95d08dc9-950d-4100-81dc-db3d0b0cd0ba.vsidx
+/.vs/Final.Project.API/FileContentIndex/7b40972d-aa69-4464-ae12-f2495fb28edf.vsidx
+/.vs/Final.Project.API/FileContentIndex/09b72672-fd41-4912-8333-fc977238bc6e.vsidx
