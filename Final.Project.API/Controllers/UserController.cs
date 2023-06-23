@@ -115,15 +115,15 @@ namespace Final.Project.API.Controllers
 
         [HttpPost]
         [Route("Reset_Password")]
-        public ActionResult ResetPassword(UserResetPasswordDto userResetPasswordDto)
+        public  ActionResult ResetPassword(UserResetPasswordDto userResetPasswordDto)
         {
-            User? user = manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
+            User? user =  manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
             if (user is null)
             {
                 return NotFound("User Not Found!!!");
             }
 
-            var token = manager.GeneratePasswordResetTokenAsync(user).Result;
+            var token =  manager.GeneratePasswordResetTokenAsync(user).Result;
 
 
             var result = manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword).Result;
@@ -143,5 +143,6 @@ namespace Final.Project.API.Controllers
 
 
         #endregion
+        
     }
 }
