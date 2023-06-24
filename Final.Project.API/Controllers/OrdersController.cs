@@ -10,7 +10,7 @@ namespace Final.Project.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersManager _ordersManager;
-        //test
+        
         public OrdersController(IOrdersManager ordersManager)
         {
             _ordersManager = ordersManager;
