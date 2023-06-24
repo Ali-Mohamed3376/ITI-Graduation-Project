@@ -37,7 +37,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Abdo
 builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
 builder.Services.AddScoped<IOrdersManager, OrdersManager>();
-
+builder.Services.AddScoped<IUserAddressesManager, UserAddressesManager>();
 
 
 

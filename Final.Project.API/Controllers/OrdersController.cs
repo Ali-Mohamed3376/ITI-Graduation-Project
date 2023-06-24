@@ -16,14 +16,15 @@ namespace Final.Project.API.Controllers
             _ordersManager = ordersManager;
         }
         [HttpGet]
-        public ActionResult MakeNewOrder()
+        [Route("{addressId}")]
+        public ActionResult MakeNewOrder(int addressId)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (userIdFromToken is null)
             {
                 return BadRequest("not logged in");
             }
-            _ordersManager.AddNewOrder(userIdFromToken);
+            _ordersManager.AddNewOrder(userIdFromToken, addressId);
 
 
             return Ok("order Added Successfully");
