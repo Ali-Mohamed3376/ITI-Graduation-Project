@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Final.Project.DAL.Migrations
 {
     [DbContext(typeof(ECommerceContext))]
-    [Migration("20230624140108_initial")]
+    [Migration("20230624161104_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -51,9 +51,6 @@ namespace Final.Project.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("DeliverdDate")
                         .HasColumnType("datetime2");
 
@@ -68,8 +65,6 @@ namespace Final.Project.DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -407,10 +402,6 @@ namespace Final.Project.DAL.Migrations
 
             modelBuilder.Entity("Final.Project.DAL.Order", b =>
                 {
-                    b.HasOne("Final.Project.DAL.UserAddress", "UserAddress")
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId");
-
                     b.HasOne("Final.Project.DAL.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -418,8 +409,6 @@ namespace Final.Project.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-
-                    b.Navigation("UserAddress");
                 });
 
             modelBuilder.Entity("Final.Project.DAL.OrderProductDetails", b =>
@@ -557,11 +546,6 @@ namespace Final.Project.DAL.Migrations
                     b.Navigation("UserAddresses");
 
                     b.Navigation("UsersProductsCarts");
-                });
-
-            modelBuilder.Entity("Final.Project.DAL.UserAddress", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
