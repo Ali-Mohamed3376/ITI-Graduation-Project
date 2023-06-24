@@ -19,13 +19,17 @@ namespace Final.Project.API.Controllers
         private readonly IConfiguration configuration;
         private readonly UserManager<User> manager;
         private readonly ILogger<UserController> logger;
+        private readonly IMailingService mailingService;
+
         public UserController(IConfiguration configuration,
                                  UserManager<User> manager,
-                                 ILogger<UserController> logger)
+                                 ILogger<UserController> logger,
+                                 IMailingService mailingService)
         {
             this.configuration = configuration;
             this.manager = manager;
             this.logger = logger;
+            this.mailingService = mailingService;
         }
 
         #region Login
@@ -167,17 +171,24 @@ namespace Final.Project.API.Controllers
             {
                 return BadRequest(result.Errors);
             }
-            return Ok("Password Changed Successfully!!!");
+            return  Ok("Password Changed Successfully!!!");
         
         
         }
-            #endregion
+        #endregion
 
-       
-       
+        #region Sending Email
 
-       
-        
-        
+        [HttpPost]
+        [Route("Send_Email")]
+        public async Task<ActionResult> SendEmail([FromForm] MailRequestDto mailRequestDto)
+        {
+           await mailingService.SendEmailAsync(mailRequestDto.ToEmail, mailRequestDto.Subject, mailRequestDto.Body);
+
+            return Ok("Email Sending Successfully!!!"); 
+        }
+
+
+        #endregion
     }
 }
