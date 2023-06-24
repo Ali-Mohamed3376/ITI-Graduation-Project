@@ -18,8 +18,6 @@
     <Folder Include="Managers\OrdersDetails\" />
     <Folder Include="Managers\Orders\" />
     <Folder Include="Managers\UserAddresses\" />
-    <Folder Include="Managers\UserProductsCarts\" />
-    <Folder Include="Managers\Users\" />
   </ItemGroup>
 
 </Project>

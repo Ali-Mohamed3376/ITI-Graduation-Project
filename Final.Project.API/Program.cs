@@ -14,7 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
 
-#region Our Services Repos
+#region Repos Services
+builder.Services.AddScoped<UserManager<User>>();
 
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
@@ -25,10 +26,55 @@ builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
-builder.Services.AddScoped<IProductsManager, ProductsManager>();
 
-builder.Services.AddScoped<UserManager<User>>();
+
+
+
+#endregion
+
+#region Managers
+
+//Abdo
+builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
+
+
+
+
+
+//Ali
+
+
+
+
+
+
+
+
+//Adel
+
+
+
+
+
+
+//Reham Ahmed
+builder.Services.AddScoped<IProductsManager, ProductsManager>();
+builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+
+
+
+
+
+//RehamSayed
+
+builder.Services.AddScoped<IUsersManager, UsersManager>();
+
+
+
+
+
+//Ahmed
+
 
 
 #endregion
@@ -36,7 +82,11 @@ builder.Services.AddScoped<UserManager<User>>();
 #region Database
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
+
     .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+
+    //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+
 
 #endregion
 
@@ -52,7 +102,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.User.RequireUniqueEmail = false;
 
 
-}).AddEntityFrameworkStores<ECommerceContext>();
+}).AddEntityFrameworkStores<ECommerceContext>()
+  .AddDefaultTokenProviders();
 #endregion
 
 #region Authentication

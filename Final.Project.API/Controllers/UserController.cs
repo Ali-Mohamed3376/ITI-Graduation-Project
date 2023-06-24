@@ -3,10 +3,12 @@ using Final.Project.DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Final.Project.API.Controllers
 {
@@ -16,11 +18,14 @@ namespace Final.Project.API.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly UserManager<User> manager;
-
-        public UserController(IConfiguration configuration, UserManager<User> manager)
+        private readonly ILogger<UserController> logger;
+        public UserController(IConfiguration configuration,
+                                 UserManager<User> manager,
+                                 ILogger<UserController> logger)
         {
             this.configuration = configuration;
             this.manager = manager;
+            this.logger = logger;
         }
 
         #region Login
@@ -50,13 +55,13 @@ namespace Final.Project.API.Controllers
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddMinutes(20);
+            DateTime exp = DateTime.Now.AddMinutes(60);
             JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
 
-
+            var currentUser = manager.GetUserAsync(User).Result;
             return new TokenDto
             {
                 Token = token
@@ -111,20 +116,63 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Forget Password
-
-
-        #endregion
-        
         #region Reset Password
 
+        [HttpPost]
+        [Route("Reset_Password")]
+        public ActionResult ResetPassword(UserResetPasswordDto userResetPasswordDto)
+        {
+            User? user = manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
+            if (user is null)
+            {
+                return NotFound("User Not Found!!!");
+            }
+
+            var token = manager.GeneratePasswordResetTokenAsync(user).Result;
+
+
+            var result = manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword).Result;
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("Reset Password Successfully!!!");
+        }
+
         #endregion
 
+        #region Forget Password
 
+        [HttpPost]
+        [Route("Forget_Password")]
+        public async Task<ActionResult> Forget_Password(UserResetPasswordDto userResetPasswordDto)
+        {
+            if (string.IsNullOrEmpty(userResetPasswordDto.Email))
+            {
+                return BadRequest("Email is required.");
+            }
 
+            User? user = manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
+            if (user is null)
+            {
+                return NotFound("User not found with the given email.");
+            }
 
+            var token = manager.GeneratePasswordResetTokenAsync(user).Result;
+            var result = manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword).Result;
 
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok("Password Changed Successfully!!!");
+        
+        
+        }
+            #endregion
 
-
+        // test by Ali 
     }
 }
