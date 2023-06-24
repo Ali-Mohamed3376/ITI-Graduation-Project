@@ -181,8 +181,7 @@ public class ECommerceContext : IdentityDbContext<User>
 
         #endregion
 
-
-        //#region Category Seeding
+        #region Category Seeding
         //List<Category> categoryList = new List<Category>
         //{
         //    new Category{Id=1,Name="Apple"},
@@ -196,12 +195,10 @@ public class ECommerceContext : IdentityDbContext<User>
         //    new Category{Id=9,Name="Razer"},
         //    new Category{Id=10,Name="Samsung"},
         //};
-        //#endregion
         //builder.Entity<Category>().HasData(categoryList);
+        #endregion
 
-
-
-        //#region Product Seeding  
+        #region Product Seeding  
 
         //List<Product> ProductList = new List<Product>
         //{
@@ -215,6 +212,6 @@ public class ECommerceContext : IdentityDbContext<User>
         //        Description="AMD Ryzen™ 7 5700U (up to 4.3 GHz max boost clock, 8 MB L3 cache, 8 cores, 16 threads) 1 2 \r\nIntegrated,AMD Radeon™ Graphics .8 GB DDR4-3200 MHz RAM (1 x 8 GB) 512 GB PCIe® NVMe™ M.2 SSD\r\n39.6 cm (15.6\") diagonal, FHD (1920 x 1080), micro-edge, anti-glare, 250 nits, 45% NTSC 3\r\nFull-size, jet black keyboard with numeric keypad"}
         //};
         //builder.Entity<Product>().HasData(ProductList);
-        //#endregion
+        #endregion
     }
 }
