@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Final.Project.DAL.Migrations
 {
     [DbContext(typeof(ECommerceContext))]
-    [Migration("20230622100634_Initial")]
-    partial class Initial
+    [Migration("20230624140108_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,9 @@ namespace Final.Project.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DeliverdDate")
                         .HasColumnType("datetime2");
 
@@ -65,6 +68,8 @@ namespace Final.Project.DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -196,9 +201,6 @@ namespace Final.Project.DAL.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -212,8 +214,6 @@ namespace Final.Project.DAL.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -230,6 +230,9 @@ namespace Final.Project.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("DefaultAddress")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -404,13 +407,19 @@ namespace Final.Project.DAL.Migrations
 
             modelBuilder.Entity("Final.Project.DAL.Order", b =>
                 {
+                    b.HasOne("Final.Project.DAL.UserAddress", "UserAddress")
+                        .WithMany("Orders")
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Final.Project.DAL.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("UserAddress");
                 });
 
             modelBuilder.Entity("Final.Project.DAL.OrderProductDetails", b =>
@@ -441,13 +450,6 @@ namespace Final.Project.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Final.Project.DAL.User", b =>
-                {
-                    b.HasOne("Final.Project.DAL.User", null)
-                        .WithMany("Users")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Final.Project.DAL.UserAddress", b =>
@@ -550,11 +552,16 @@ namespace Final.Project.DAL.Migrations
 
             modelBuilder.Entity("Final.Project.DAL.User", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("UserAddresses");
 
-                    b.Navigation("Users");
-
                     b.Navigation("UsersProductsCarts");
+                });
+
+            modelBuilder.Entity("Final.Project.DAL.UserAddress", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

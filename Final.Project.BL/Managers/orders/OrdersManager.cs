@@ -15,14 +15,15 @@ public class OrdersManager : IOrdersManager
     {
         _unitOfWork = unitOfWork;
     }
-    public void AddNewOrder(string userId)
+    public void AddNewOrder(string userId, int addressId)
     {
         //1-Add new order in order table
         Order newOrder = new Order
         {
             OrderStatus = OrderStatus.Pending,
             OrderDate = DateTime.Now,
-            UserId = userId
+            UserId = userId,
+            AddressId= addressId
         };
         _unitOfWork.OrderRepo.Add(newOrder);
         _unitOfWork.Savechanges();

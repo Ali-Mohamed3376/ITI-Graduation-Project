@@ -104,17 +104,25 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.Property(e => e.UserId)
             .IsRequired();
 
+            
+
             entity.Property(e => e.OrderStatus)
            .IsRequired();
 
             entity.Property(e => e.OrderDate)
            .IsRequired();
 
+
             entity.HasOne(e => e.User)
                     .WithMany(e => e.Orders)
                     .HasForeignKey(e => e.UserId);
 
 
+            
+                    
+                    
+
+                    
 
 
 

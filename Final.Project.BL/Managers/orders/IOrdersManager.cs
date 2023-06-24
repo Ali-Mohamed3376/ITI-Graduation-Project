@@ -8,6 +8,6 @@ namespace Final.Project.BL;
 
 public interface IOrdersManager
 {
-    public void AddNewOrder(string userId);
+    public void AddNewOrder(string userId, int addressId);
 
 }
