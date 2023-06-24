@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Final.Project.DAL;
 public class UserRepo : IUserRepo
@@ -14,6 +16,8 @@ public class UserRepo : IUserRepo
     {
         return _context.Set<User>().Find(id);
     }
+    //public User? GetByName(string name) 
+    //{  return _context.Set<User>().Find(name); }
 
     public void Delete(User user)
     {
@@ -31,4 +35,11 @@ public class UserRepo : IUserRepo
     {
         return _context.SaveChanges();
     }
+    #region user order
+    public Order? GetUsersOrder(string id)
+    {
+        return (Order?)_context.Orders.Where(x => x.UserId == id); //Include(x => x.OrdersProductDetails).ThenInclude(x => x.Product)
+           
+    }
+    #endregion
 }
