@@ -1,3 +1,4 @@
+using Final.Project.API;
 using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Identity;
@@ -36,13 +37,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Abdo
 builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
-
-
+builder.Services.AddScoped<IOrdersManager, OrdersManager>();
+builder.Services.AddScoped<IUserAddressesManager, UserAddressesManager>();
 
 
 
 //Ali
 
+builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
+builder.Services.AddTransient<IMailingService, MailingService>();
 
 
 
@@ -68,7 +71,8 @@ builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
 //RehamSayed
 
 builder.Services.AddScoped<IUsersManager, UsersManager>();
-
+builder.Services.AddScoped<IReviewsManager, ReviewsManager>();
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 
 

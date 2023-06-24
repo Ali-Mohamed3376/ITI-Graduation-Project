@@ -44,7 +44,7 @@ public class CategoriesManager: ICategoriesManager
     #endregion
 
 
-    #region Get Category with Products
+    #region Get Category with Products By Id
     public IEnumerable<ProductChildDto>? GetCategoryWithProducts(int id)
     {
         IEnumerable<Product>? ProductsFromDb = _unitOfWork.CategoryRepo.GetByIdWithProducts(id);
@@ -57,7 +57,8 @@ public class CategoriesManager: ICategoriesManager
             Image = c.Image,
             Name = c.Name,
             Price = c.Price,
-            CategoryName=c.Category.Name
+            Discount= c.Discount
+           
         });
 
         return productsInThisCategory;
@@ -67,6 +68,29 @@ public class CategoriesManager: ICategoriesManager
     #endregion
 
 
+    #region Get All Categories with products
+    public IEnumerable<CategoryDetailsDto> GetAllCategoriesWithProducts()
+    {
+        IEnumerable<Category>? categoriesFromDb = _unitOfWork.CategoryRepo.GetAllCategoriesWithAllProducts();
+        IEnumerable<CategoryDetailsDto> CategoriesDto = categoriesFromDb
+            .Select(c => new CategoryDetailsDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Products = c.Products.Select(p => new ProductChildDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Image = p.Image, 
+                    Discount= p.Discount
+                }).ToList()
+
+            });
+        return CategoriesDto;
+
+    }
+    #endregion
 }
 
 
@@ -77,4 +101,3 @@ public class CategoriesManager: ICategoriesManager
 
 
 
-  

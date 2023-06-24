@@ -4,6 +4,8 @@ public class Product
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public decimal Price { get; set; }
+    public decimal Discount { get; set; }
+
     public string Description { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
@@ -11,6 +13,8 @@ public class Product
     public Category Category { get; set; } = null!;
     public IEnumerable<UserProductsCart> UsersProductsCarts { get; set; } = new HashSet<UserProductsCart>();
     public IEnumerable<OrderProductDetails> OrdersProductDetails { get; set; } = new HashSet<OrderProductDetails>();
+    public IEnumerable<Review> Reviews { get; set; } = new HashSet<Review>();
+
 
 
 

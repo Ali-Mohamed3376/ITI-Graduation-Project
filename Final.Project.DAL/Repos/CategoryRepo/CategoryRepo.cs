@@ -11,13 +11,21 @@ public class CategoryRepo : GenericRepo<Category>, ICategoryRepo
 
     }
 
-    #region Get Category With  Products
+    #region Get Category By ID  With  Products
     public IEnumerable<Product>? GetByIdWithProducts(int id)
     {
         return _context.Products
                .Include(p => p.Category)
                .Where(c => c.CategoryID == id).ToList();
 
+    }
+    #endregion
+
+    #region Get All Categories With all products
+    public IEnumerable<Category>? GetAllCategoriesWithAllProducts()
+    {
+        return _context.Categories
+              .Include(c => c.Products);
     }
     #endregion
 }

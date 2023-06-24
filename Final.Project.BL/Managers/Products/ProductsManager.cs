@@ -15,16 +15,18 @@ public class ProductsManager: IProductsManager
 
 
     #region Get All Products in Database
-    public IEnumerable<ProductMiniDetailsDto> GetAllProducts()
+    public IEnumerable<ProductChildDto> GetAllProducts()
     {
         IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAll();
-        IEnumerable<ProductMiniDetailsDto> productsDtos = productsFromDb
-            .Select(p => new ProductMiniDetailsDto
+        IEnumerable<ProductChildDto> productsDtos = productsFromDb
+            .Select(p => new ProductChildDto
             {
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
                 Image = p.Image,
+                Discount = p.Discount,
+                
             });
         return productsDtos;
     }
@@ -42,6 +44,7 @@ public class ProductsManager: IProductsManager
             Id = productFromDb.Id,
             Name = productFromDb.Name,
             Price = productFromDb.Price,
+            Discount= productFromDb.Discount,
             Description = productFromDb.Description,
             Model = productFromDb.Model,
             Image = productFromDb.Image,

@@ -15,13 +15,18 @@ namespace Final.Project.API.Controllers
             _categoriesManager = categoriesManager;
         }
 
+        #region Get All Categories
+
         [HttpGet]
         public ActionResult<IEnumerable<CategoryDto>> GetAllCategories()
         {
             IEnumerable<CategoryDto> categories = _categoriesManager.GetAllCategoriesDto();
             return Ok(categories);
         }
+        #endregion
 
+
+        #region Get Category by id
 
         [HttpGet]
         [Route("{id}")]
@@ -33,9 +38,10 @@ namespace Final.Project.API.Controllers
 
             return Ok(category);
         }
+        #endregion
 
 
-
+        #region Get Category By id With Products
 
         [HttpGet]
         [Route("{id}/Products")]
@@ -46,5 +52,6 @@ namespace Final.Project.API.Controllers
             if (categoryDetailDto == null) { return NotFound(); }
             return Ok(categoryDetailDto);
         }
+        #endregion
     }
 }

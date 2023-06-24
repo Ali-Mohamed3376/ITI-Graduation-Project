@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Final.Project.DAL.Migrations
 {
     [DbContext(typeof(ECommerceContext))]
-    [Migration("20230622100634_Initial")]
-    partial class Initial
+    [Migration("20230624161104_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,9 +196,6 @@ namespace Final.Project.DAL.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -212,8 +209,6 @@ namespace Final.Project.DAL.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -230,6 +225,9 @@ namespace Final.Project.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("DefaultAddress")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -405,7 +403,7 @@ namespace Final.Project.DAL.Migrations
             modelBuilder.Entity("Final.Project.DAL.Order", b =>
                 {
                     b.HasOne("Final.Project.DAL.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -441,13 +439,6 @@ namespace Final.Project.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Final.Project.DAL.User", b =>
-                {
-                    b.HasOne("Final.Project.DAL.User", null)
-                        .WithMany("Users")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Final.Project.DAL.UserAddress", b =>
@@ -550,9 +541,9 @@ namespace Final.Project.DAL.Migrations
 
             modelBuilder.Entity("Final.Project.DAL.User", b =>
                 {
-                    b.Navigation("UserAddresses");
+                    b.Navigation("Orders");
 
-                    b.Navigation("Users");
+                    b.Navigation("UserAddresses");
 
                     b.Navigation("UsersProductsCarts");
                 });
