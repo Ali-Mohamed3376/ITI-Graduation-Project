@@ -11,11 +11,18 @@ public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsC
 
     }
 
+    public void DeleteAllProductsFromUserCart(string userId)
+    {
+        _context.Set<UserProductsCart>()
+                .Where(u => u.UserId == userId)
+                .ExecuteDelete();
+    }
+
     public IEnumerable<UserProductsCart> GetAllProductsByUserId(string userId)
     {
         var products = _context.Set<UserProductsCart>()
-                .Include(u=>u.Product)
-                .Where(u=>u.UserId == userId)
+                .Include(u => u.Product)
+                .Where(u => u.UserId == userId)
                 .ToList();
 
         return products;
@@ -24,9 +31,9 @@ public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsC
     public UserProductsCart? GetByCompositeId(int ProductId, string userId)
     {
         return _context.Set<UserProductsCart>()
-                        .Where(u=>u.ProductId== ProductId && u.UserId == userId)
+                        .Where(u => u.ProductId == ProductId && u.UserId == userId)
                         .FirstOrDefault();
-              
+
     }
 
 

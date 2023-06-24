@@ -111,7 +111,7 @@ public class ECommerceContext : IdentityDbContext<User>
            .IsRequired();
 
             entity.HasOne(e => e.User)
-                    .WithMany()
+                    .WithMany(e => e.Orders)
                     .HasForeignKey(e => e.UserId);
 
 

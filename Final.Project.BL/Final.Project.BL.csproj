@@ -16,7 +16,6 @@
     <Folder Include="Dtos\UserAddress\" />
     <Folder Include="Dtos\Order\" />
     <Folder Include="Managers\OrdersDetails\" />
-    <Folder Include="Managers\Orders\" />
     <Folder Include="Managers\UserAddresses\" />
   </ItemGroup>
 

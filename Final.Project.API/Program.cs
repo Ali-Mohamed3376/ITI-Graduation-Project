@@ -36,7 +36,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Abdo
 builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
-
+builder.Services.AddScoped<IOrdersManager, OrdersManager>();
 
 
 
@@ -83,7 +83,7 @@ builder.Services.AddScoped<IUsersManager, UsersManager>();
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
 
-    .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    .UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
     //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
