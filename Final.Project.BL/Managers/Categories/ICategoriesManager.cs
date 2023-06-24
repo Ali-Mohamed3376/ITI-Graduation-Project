@@ -7,6 +7,8 @@ public interface ICategoriesManager
     public CategoryDto? GetCategoryById(int id);
 
     IEnumerable<ProductChildDto>? GetCategoryWithProducts(int id);
+    IEnumerable<CategoryDetailsDto> GetAllCategoriesWithProducts();
+
 }
 
 

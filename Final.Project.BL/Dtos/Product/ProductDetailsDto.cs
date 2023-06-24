@@ -14,5 +14,6 @@ public class ProductDetailsDto
     public string Model { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string CategoryName { get; set; } = string.Empty;
-
+    public decimal Discount { get; set; }
+    public decimal PriceAfter => Price - (Price * Discount / 100);
 }

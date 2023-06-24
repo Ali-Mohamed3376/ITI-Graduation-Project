@@ -15,6 +15,7 @@ namespace Final.Project.API.Controllers
             _productsManager = productsManager;
         }
 
+        #region Get Product By Id
 
         [HttpGet]
         [Route("{id}")]
@@ -24,6 +25,7 @@ namespace Final.Project.API.Controllers
             if (product == null) { return NotFound(); }
             return Ok(product);
         }
+        #endregion
     }
 }
 

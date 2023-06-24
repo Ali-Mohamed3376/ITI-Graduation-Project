@@ -68,7 +68,8 @@ builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
 //RehamSayed
 
 builder.Services.AddScoped<IUsersManager, UsersManager>();
-
+builder.Services.AddScoped<IReviewsManager, ReviewsManager>();
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 
 
@@ -83,9 +84,9 @@ builder.Services.AddScoped<IUsersManager, UsersManager>();
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
 
-    .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    //.UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
-    //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    .UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
 
 #endregion

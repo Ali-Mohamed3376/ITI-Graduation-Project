@@ -10,8 +10,10 @@ public class UnitOfWork : IUnitOfWork
     public IOrdersDetailsRepo OrdersDetailsRepo { get; }
     public IUserProductsCartRepo UserProdutsCartRepo { get; }
     public IUserAddressRepo UserAddressRepo { get; }
+    public IReviewRepo ReviewRepo { get; }
 
-    public UnitOfWork(ECommerceContext context, IUserRepo userRepo, IProductRepo productRepo, ICategoryRepo categoryRepo, IOrderRepo orderRepo, IOrdersDetailsRepo ordersDetailsRepo, IUserProductsCartRepo userProdutsCartRepo, IUserAddressRepo userAddressRepo)
+
+    public UnitOfWork(ECommerceContext context, IUserRepo userRepo, IProductRepo productRepo, ICategoryRepo categoryRepo, IOrderRepo orderRepo, IOrdersDetailsRepo ordersDetailsRepo, IUserProductsCartRepo userProdutsCartRepo, IUserAddressRepo userAddressRepo, IReviewRepo reviewRepo)
     {
         this.context = context;
         UserRepo = userRepo;
@@ -21,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
         OrdersDetailsRepo = ordersDetailsRepo;
         UserProdutsCartRepo = userProdutsCartRepo;
         UserAddressRepo = userAddressRepo;
+        ReviewRepo = reviewRepo;
     }
 
     public int Savechanges()
