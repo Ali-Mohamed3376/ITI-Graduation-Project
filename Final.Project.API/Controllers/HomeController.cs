@@ -25,9 +25,9 @@ namespace Final.Project.API.Controllers
         [HttpGet]
         [Route("AllProducts")]
 
-        public ActionResult<IEnumerable<ProductChildDto>> GetAllProducts()
+        public ActionResult<IEnumerable<ProductChildDto>> GetAllProductsWithAvgRating()
         {
-            IEnumerable<ProductChildDto> products = _productsManager.GetAllProducts();
+            IEnumerable<ProductChildDto> products = _productsManager.GetAllProductsWithAvgRating();
             if (products == null) { return NotFound(); }
             return Ok(products);
         }

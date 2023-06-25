@@ -50,15 +50,18 @@ public class CategoriesManager: ICategoriesManager
         IEnumerable<Product>? ProductsFromDb = _unitOfWork.CategoryRepo.GetByIdWithProducts(id);
         if (ProductsFromDb is null) { return null; };
 
-        var productsInThisCategory = ProductsFromDb.Select(c => new ProductChildDto
+        var productsInThisCategory = ProductsFromDb.Select(p => new ProductChildDto
         {
 
-            Id = c.Id,
-            Image = c.Image,
-            Name = c.Name,
-            Price = c.Price,
-            Discount= c.Discount
-           
+            Id = p.Id,
+            Image = p.Image,
+            Name = p.Name,
+            Price = p.Price,
+            Discount= p.Discount,
+            AvgRating= p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount = p.Reviews.Count()
+
+
         });
 
         return productsInThisCategory;
@@ -83,7 +86,10 @@ public class CategoriesManager: ICategoriesManager
                     Name = p.Name,
                     Price = p.Price,
                     Image = p.Image, 
-                    Discount= p.Discount
+                    Discount= p.Discount,
+                    AvgRating=p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                    ReviewCount = p.Reviews.Count()
+
                 }).ToList()
 
             });

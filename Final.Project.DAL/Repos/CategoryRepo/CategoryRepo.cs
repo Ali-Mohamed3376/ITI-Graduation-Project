@@ -15,6 +15,7 @@ public class CategoryRepo : GenericRepo<Category>, ICategoryRepo
     public IEnumerable<Product>? GetByIdWithProducts(int id)
     {
         return _context.Products
+               .Include(p => p.Reviews)
                .Include(p => p.Category)
                .Where(c => c.CategoryID == id).ToList();
 
@@ -25,7 +26,8 @@ public class CategoryRepo : GenericRepo<Category>, ICategoryRepo
     public IEnumerable<Category>? GetAllCategoriesWithAllProducts()
     {
         return _context.Categories
-              .Include(c => c.Products);
+              .Include(c => c.Products)
+              .ThenInclude(c => c.Reviews);
     }
     #endregion
 }
