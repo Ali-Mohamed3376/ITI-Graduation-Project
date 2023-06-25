@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+
 namespace Final.Project.DAL;
 public class User : IdentityUser//<int>
 {
@@ -17,13 +18,15 @@ public class User : IdentityUser//<int>
     public IEnumerable<UserProductsCart> UsersProductsCarts { get; set; } = new HashSet<UserProductsCart>();
     public IEnumerable<Order> Orders { get; set; } = new HashSet<Order>();
     public IEnumerable<UserAddress> UserAddresses { get; set; } = new HashSet<UserAddress>();
+    public IEnumerable<Review> Reviews { get; set; } = new HashSet<Review>();
 
+    
 }
 
 public enum Role
 {
-    Admin, 
-    Customer
+    Admin,
+    Customer,
 }
 
 

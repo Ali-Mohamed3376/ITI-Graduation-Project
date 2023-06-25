@@ -14,5 +14,12 @@ public class ProductDetailsDto
     public string Model { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string CategoryName { get; set; } = string.Empty;
+    public decimal Discount { get; set; }
+    public decimal PriceAfter => Price - (Price * Discount / 100);
+    public IEnumerable<ReviewDto> Reviews { get; set; } = new HashSet<ReviewDto>();
+    public decimal AvgRating { get; set; }
+    public decimal AvgRatingRounded => Math.Round(AvgRating, 1);
+    public int ReviewCount { get; set; }
+
 
 }

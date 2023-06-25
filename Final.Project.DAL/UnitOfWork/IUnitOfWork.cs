@@ -8,5 +8,9 @@ public interface IUnitOfWork
     public IOrdersDetailsRepo OrdersDetailsRepo  { get; }
     public IUserProductsCartRepo UserProdutsCartRepo { get; }
     public IUserAddressRepo UserAddressRepo { get; }
+    public IReviewRepo ReviewRepo { get; }
+    public IDashboardUserRepo DashboardUserRepo { get; }
+
+
     int Savechanges();
 }

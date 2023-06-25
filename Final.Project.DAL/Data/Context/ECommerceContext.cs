@@ -16,6 +16,8 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<OrderProductDetails> OrderProductDetails => Set<OrderProductDetails>();
     public DbSet<UserProductsCart> UserProductsCarts => Set<UserProductsCart>();
     public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
+    public DbSet<Review> Reviews => Set<Review>();
+
     public ECommerceContext(DbContextOptions<ECommerceContext> options) : base(options)
     {
     }
@@ -101,11 +103,7 @@ public class ECommerceContext : IdentityDbContext<User>
         builder.Entity<Order>(entity =>
         {
 
-            entity.Property(e => e.UserId)
-            .IsRequired();
-
             
-
             entity.Property(e => e.OrderStatus)
            .IsRequired();
 
@@ -115,11 +113,25 @@ public class ECommerceContext : IdentityDbContext<User>
 
             entity.HasOne(e => e.User)
                     .WithMany(e => e.Orders)
-                    .HasForeignKey(e => e.UserId);
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
 
             entity.HasOne(e => e.UserAddress)
                     .WithMany(e => e.Orders)
-                    .HasForeignKey(e => e.UserAddressId);
+                    .HasForeignKey(e => e.UserAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            
+
+
+
+
+
+
+
+
+
 
         });
         #endregion
@@ -178,9 +190,27 @@ public class ECommerceContext : IdentityDbContext<User>
 
             entity.HasOne(e => e.User)
                   .WithMany(u => u.UserAddresses)
-                  .HasForeignKey(e => e.UserId);
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+
 
         });
+
+        #endregion
+
+        #region review
+        builder.Entity<Review>(entity =>
+        {
+            entity.HasOne(x => x.User)
+            .WithMany(x => x.Reviews)
+            .HasForeignKey(e => e.UserId);
+            entity.HasOne(x => x.Product)
+            .WithMany(x => x.Reviews)
+            .HasForeignKey(x => x.ProductId);
+            entity.HasKey(e => new { e.UserId, e.ProductId });
+        });
+
 
         #endregion
 
@@ -201,7 +231,9 @@ public class ECommerceContext : IdentityDbContext<User>
         //builder.Entity<Category>().HasData(categoryList);
         #endregion
 
-        #region Product Seeding  
+
+
+        //#region Product Seeding  
 
         //List<Product> ProductList = new List<Product>
         //{
