@@ -1,4 +1,5 @@
 ﻿using Final.Project.DAL;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,16 @@ public class AdminDashboardManager : IAdminDashboardManager
         _unitOfWork = unitOfWork;
 
     }
-    public IEnumerable<AllUsersReadDto> GetAllUsers()
+
+    public void DeleteUser(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<UserDashboardReadDto> GetAllUsers()
     {
         IEnumerable<User> UsersFromDB = _unitOfWork.DashboardUserRepo.GetAll();
-        IEnumerable<AllUsersReadDto> AllUsersDetails = UsersFromDB.Select(u => new AllUsersReadDto
+        IEnumerable<UserDashboardReadDto> AllUsersDetails = UsersFromDB.Select(u => new UserDashboardReadDto
         {
             Id = u.Id,
             City = u.City,
@@ -32,18 +39,21 @@ public class AdminDashboardManager : IAdminDashboardManager
         return AllUsersDetails;
     }
 
-    public UserReadDto GetUserById(string userId)
+    public UserDashboardReadDto GetUserById(string userId)
     {
         User userFromDB = _unitOfWork.DashboardUserRepo.GetByUserId(userId);
-        UserReadDto user = new UserReadDto
+        UserDashboardReadDto user = new UserDashboardReadDto
         {
             Id = userFromDB.Id,
             City = userFromDB.City,
             Street = userFromDB.Street,
             Email = userFromDB.Email,
-            Fname = userFromDB.FName,
-            Lname = userFromDB.LName
+            FName = userFromDB.FName,
+            LName = userFromDB.LName,
+            Role=userFromDB.Role.ToString(),
         };
         return user;
     }
+
+   
 }

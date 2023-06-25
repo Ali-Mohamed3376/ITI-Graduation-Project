@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Final.Project.DAL;
 public class ProductRepo : GenericRepo<Product>, IProductRepo
@@ -30,5 +31,12 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     }
     #endregion
 
-
+    #region Get All Products have Discount
+    public IEnumerable<Product>GetAllProductWithDiscount()
+    {
+        return _context.Products
+            .Include(p => p.Reviews)
+            .Where(p => p.Discount > 0);
+    }
+    #endregion
 }

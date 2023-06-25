@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Final.Project.BL;
 
-public class AllUsersReadDto
+public class UserDashboardReadDto
 {
     public string Id { get; set; } = string.Empty;
     public string FName { get; set; } = string.Empty;

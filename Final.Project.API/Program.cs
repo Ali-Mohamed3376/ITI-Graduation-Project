@@ -62,6 +62,7 @@ builder.Services.AddTransient<IMailingService, MailingService>();
 //Reham Ahmed
 builder.Services.AddScoped<IProductsManager, ProductsManager>();
 builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+builder.Services.AddScoped<IOrderDetailsManager, OrderDetailsManager>();
 
 
 
