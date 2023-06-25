@@ -14,6 +14,7 @@ namespace Final.Project.API.Controllers
         private readonly IOrderDetailsManager _orderDetailsManager;
 
 
+
         public HomeController(IProductsManager productsManager, ICategoriesManager categoriesManager ,IOrderDetailsManager orderDetailsManager)
         {
             _productsManager = productsManager;
