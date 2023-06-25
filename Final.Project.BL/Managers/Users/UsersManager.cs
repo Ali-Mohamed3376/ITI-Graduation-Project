@@ -35,6 +35,11 @@ public class UsersManager : IUsersManager
 
     }
 
+    public IEnumerable<AllUsersReadDto> GetAllUsers()
+    {
+        throw new NotImplementedException();
+    }
+
     public UserReadDto GetUserReadDto(string id)
     {
         User? user = _userRepo.GetById(id);
