@@ -2,4 +2,13 @@
 public interface IOrdersDetailsRepo : IGenericRepo<OrderProductDetails>
 {
     void AddRange(IEnumerable<OrderProductDetails> orderProducts);
+
+
+
+
+
+
+
+    public IEnumerable<OrderProductDetails> GetTopProducts();
+
 }
