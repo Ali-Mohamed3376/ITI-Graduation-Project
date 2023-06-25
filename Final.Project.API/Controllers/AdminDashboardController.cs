@@ -25,7 +25,7 @@ namespace Final.Project.API.Controllers
         [Route("AllUsers")]
         public ActionResult GetAllUsers()
         {
-            IEnumerable<AllUsersReadDto> allUsers= _adminDashboardManager.GetAllUsers();
+            IEnumerable<UserDashboardReadDto> allUsers= _adminDashboardManager.GetAllUsers();
             return Ok(allUsers);
         }
 
@@ -33,11 +33,11 @@ namespace Final.Project.API.Controllers
         [Route("User/{userId}")]
         public ActionResult GetUserById(string userId)
         {
-            UserReadDto user = _adminDashboardManager.GetUserById(userId);
+            UserDashboardReadDto user = _adminDashboardManager.GetUserById(userId);
             return Ok(user);
         }
 
-        #region Register
+        
 
         [HttpPost]
         [Route("Register")]
@@ -75,7 +75,14 @@ namespace Final.Project.API.Controllers
             return Ok("Register Succeded!!!");
         }
 
+        [HttpDelete]
+        [Route("userDelete/{userId}")]
+        public ActionResult DeleteUserFromDashboard(string userId)
+        {
+            _adminDashboardManager.DeleteUser(userId);
 
-        #endregion
+            return Ok("user deleted Successfully");
+
+        }
     }
 }

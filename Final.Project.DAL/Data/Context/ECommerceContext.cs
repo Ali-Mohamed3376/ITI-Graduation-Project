@@ -122,7 +122,7 @@ public class ECommerceContext : IdentityDbContext<User>
                     .HasForeignKey(e => e.UserAddressId)
                     .OnDelete(DeleteBehavior.NoAction);
 
-            
+
 
 
 
@@ -233,7 +233,7 @@ public class ECommerceContext : IdentityDbContext<User>
 
 
 
-        //#region Product Seeding  
+        #region Product Seeding  
 
         //List<Product> ProductList = new List<Product>
         //{
