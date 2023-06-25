@@ -35,6 +35,8 @@ public class UsersManager : IUsersManager
 
     }
 
+   
+
     public UserReadDto GetUserReadDto(string id)
     {
         User? user = _userRepo.GetById(id);
