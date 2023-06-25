@@ -1,4 +1,5 @@
 ﻿using Final.Project.BL;
+using Final.Project.DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,14 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ICategoriesManager _categoriesManager;
+        private readonly ECommerceContext context;
 
 
-        public HomeController(IProductsManager productsManager, ICategoriesManager categoriesManager)
+        public HomeController(IProductsManager productsManager, ICategoriesManager categoriesManager, ECommerceContext context)
         {
             _productsManager = productsManager;
             _categoriesManager = categoriesManager;
+            this.context = context;
 
         }
 
@@ -45,6 +48,7 @@ namespace Final.Project.API.Controllers
         }
 
         #endregion
+
 
     }
 }
