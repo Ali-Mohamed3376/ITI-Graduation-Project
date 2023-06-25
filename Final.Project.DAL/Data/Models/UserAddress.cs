@@ -9,6 +9,6 @@ public class UserAddress
     public string Phone { get; set; } = string.Empty;
     public bool DefaultAddress { get; set; } = false;
 
-    //public IEnumerable<Order> Orders { get; set; } = new HashSet<Order>(); 
+    public IEnumerable<Order> Orders { get; set; } = new HashSet<Order>(); 
 
 }

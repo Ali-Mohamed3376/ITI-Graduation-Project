@@ -117,14 +117,9 @@ public class ECommerceContext : IdentityDbContext<User>
                     .WithMany(e => e.Orders)
                     .HasForeignKey(e => e.UserId);
 
-
-            
-                    
-                    
-
-                    
-
-
+            entity.HasOne(e => e.UserAddress)
+                    .WithMany(e => e.Orders)
+                    .HasForeignKey(e => e.UserAddressId);
 
         });
         #endregion

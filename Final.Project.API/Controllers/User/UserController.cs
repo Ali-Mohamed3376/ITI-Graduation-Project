@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -86,6 +87,7 @@ namespace Final.Project.API.Controllers
                 LName = credentials.LName,
                 UserName = credentials.Email,
                 Email = credentials.Email,
+                Role = Role.Customer,
             };
 
             var result = manager.CreateAsync(user, credentials.Password).Result;
@@ -97,7 +99,7 @@ namespace Final.Project.API.Controllers
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("Role","Customer"),
+                new Claim("Role", user.Role.ToString()),
             };
 
             var claimsResult = manager.AddClaimsAsync(user, claims).Result;
@@ -120,61 +122,67 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Reset Password
-
-        [HttpPost]
-        [Route("Reset_Password")]
-        public ActionResult ResetPassword(UserResetPasswordDto userResetPasswordDto)
-        {
-            User? user = manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
-            if (user is null)
-            {
-                return NotFound("User Not Found!!!");
-            }
-
-            var token = manager.GeneratePasswordResetTokenAsync(user).Result;
-
-
-            var result = manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword).Result;
-
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok("Reset Password Successfully!!!");
-        }
-
-        #endregion
-
         #region Forget Password
 
         [HttpPost]
         [Route("Forget_Password")]
-        public async Task<ActionResult> Forget_Password(UserResetPasswordDto userResetPasswordDto)
+        public async Task<ActionResult> Forget_Password(string email)
         {
-            if (string.IsNullOrEmpty(userResetPasswordDto.Email))
+
+            if (string.IsNullOrEmpty(email))
             {
-                return BadRequest("Email is required.");
+                return BadRequest("Email is Invalid!!!!");
             }
 
-            User? user = manager.FindByEmailAsync(userResetPasswordDto.Email).Result;
+
+            User? user = await manager.FindByEmailAsync(email);
             if (user is null)
             {
                 return NotFound("User not found with the given email.");
             }
 
-            var token = manager.GeneratePasswordResetTokenAsync(user).Result;
-            var result = manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword).Result;
+            var token = await manager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Encoding.UTF8.GetBytes(token);
+            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+
+
+            //var callBackURL = Url.Page("/ResetPassword", pageHandler: null,  validToken,  Request.Scheme);
+
+            string backUrl = $"{configuration.GetValue<string>("AppURL")}/Reset_Password?email={email}&token={validToken}";
+
+            await mailingService.SendEmailAsync(email, "Reset Password", "<h1>Follow this Instruction to Reset Password</h1>" + $"To Reset Password <a href='{backUrl}'>Click here</a>");
+
+            return Ok("Reset Password Email has been Sent Successfully!!!");
+        }
+        #endregion
+
+        #region Reset Password
+
+        [HttpPost]
+        [Route("Reset_Password")]
+        public async Task<ActionResult> ResetPassword([FromForm] UserResetPasswordDto userResetPasswordDto)
+        {
+            User? user = await manager.FindByEmailAsync(userResetPasswordDto.Email);
+            if (user is null)
+            {
+                return NotFound("User Not Found!!!");
+            }
+
+            if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmPassword)
+            {
+                return BadRequest("Passwored dosen't Match Confirmation!");
+            }
+
+            var result =await manager.ResetPasswordAsync(user, userResetPasswordDto.Token, userResetPasswordDto.NewPassword);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
-            return  Ok("Password Changed Successfully!!!");
-        
-        
+
+            return Ok("Password has been Reset Successfully!!!");
         }
+
         #endregion
 
         #region Sending Email
@@ -191,6 +199,5 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        //  test 1
     }
 }
