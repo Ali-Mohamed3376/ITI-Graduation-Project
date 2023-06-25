@@ -11,16 +11,14 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ICategoriesManager _categoriesManager;
-        private readonly ECommerceContext context;
         private readonly IOrderDetailsManager _orderDetailsManager;
 
 
-        public HomeController(IProductsManager productsManager, ICategoriesManager categoriesManager, ECommerceContext context)
+
         public HomeController(IProductsManager productsManager, ICategoriesManager categoriesManager ,IOrderDetailsManager orderDetailsManager)
         {
             _productsManager = productsManager;
             _categoriesManager = categoriesManager;
-            this.context = context;
 
             _orderDetailsManager = orderDetailsManager;
         }
