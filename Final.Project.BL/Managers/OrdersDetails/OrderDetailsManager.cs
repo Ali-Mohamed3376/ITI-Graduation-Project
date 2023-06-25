@@ -26,7 +26,6 @@ public class OrderDetailsManager:IOrderDetailsManager
                 AvgRating = p.Product.Reviews.Any() ? (decimal)p.Product.Reviews.Average(r => r.Rating) : 0,
                 ReviewCount = p.Product.Reviews.Count()
             });
-
         return productDtos;
     }
 
