@@ -103,11 +103,7 @@ public class ECommerceContext : IdentityDbContext<User>
         builder.Entity<Order>(entity =>
         {
 
-            entity.Property(e => e.UserId)
-            .IsRequired();
-
             
-
             entity.Property(e => e.OrderStatus)
            .IsRequired();
 
@@ -117,14 +113,23 @@ public class ECommerceContext : IdentityDbContext<User>
 
             entity.HasOne(e => e.User)
                     .WithMany(e => e.Orders)
-                    .HasForeignKey(e => e.UserId);
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
+
+            entity.HasOne(e => e.UserAddress)
+                    .WithMany(e => e.Orders)
+                    .HasForeignKey(e => e.UserAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
             
-                    
-                    
 
-                    
+
+
+
+
+
+
 
 
 
@@ -185,7 +190,10 @@ public class ECommerceContext : IdentityDbContext<User>
 
             entity.HasOne(e => e.User)
                   .WithMany(u => u.UserAddresses)
-                  .HasForeignKey(e => e.UserId);
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+
 
         });
 

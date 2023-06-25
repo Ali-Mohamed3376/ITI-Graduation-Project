@@ -25,8 +25,8 @@ builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
 builder.Services.AddScoped<IUserAddressRepo, UserAddressRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
+builder.Services.AddScoped<IDashboardUserRepo, DashboardUserRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 
 
 
@@ -39,7 +39,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
 builder.Services.AddScoped<IOrdersManager, OrdersManager>();
 builder.Services.AddScoped<IUserAddressesManager, UserAddressesManager>();
-
+builder.Services.AddScoped<IAdminDashboardManager, AdminDashboardManager>();
 
 
 //Ali

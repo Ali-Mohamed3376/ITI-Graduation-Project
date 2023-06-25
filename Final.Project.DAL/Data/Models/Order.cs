@@ -8,10 +8,10 @@ public class Order
     public OrderStatus OrderStatus  { get; set; }
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public DateTime? DeliverdDate { get; set; } = null;
-    public string UserId { get; set; }=string.Empty; 
-    public User User { get; set; } = null!;
-    //public int? AddressId { get; set; }
-    //public UserAddress? UserAddress { get; set; } 
+    public string? UserId { get; set; }=string.Empty; 
+    public User? User { get; set; } 
+    public int? UserAddressId { get; set; }
+    public UserAddress? UserAddress { get; set; } 
     public IEnumerable<OrderProductDetails> OrdersProductDetails { get; set; } = new HashSet<OrderProductDetails>();
 }
 
