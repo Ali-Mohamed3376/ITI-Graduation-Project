@@ -11,9 +11,7 @@ public class User : IdentityUser//<int>
     //    set { base.Id = value; }
     //}
     public string FName { get; set; } = string.Empty;
-    public string Fname { get; set; }
     public string LName { get; set; } = string.Empty;
-    public string Lname { get; set; }
     public string City { get; set; } = string.Empty;
     public string Street { get; set; } = string.Empty;
     public Role Role { get; set; }

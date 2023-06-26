@@ -31,7 +31,8 @@ namespace Final.Project.API.Controllers
         public ActionResult<UserReadDto> getUser()
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-            UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
+            //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
+            UserReadDto? user = _UsersManager.GetUserReadDto(currentUser);
 
             if (user is null)
             {
@@ -49,15 +50,17 @@ namespace Final.Project.API.Controllers
         public ActionResult Edit(UserUpdateDto updateDto)
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-            updateDto.Id = currentUser.Id;
+            //updateDto.Id=currentUser.Id;
             if (currentUser.Id is null)
             {
-                return BadRequest("no content");
+                return BadRequest("Edit failed");
             }
 
-            _UsersManager.Edit(updateDto);
+            // _UsersManager.Edit(updateDto,currentUser.Id);
+             _UsersManager.Edit(updateDto, currentUser);
 
-            return NoContent();
+
+            return Ok("Edit successfully");
         }
 
         #region Delete
@@ -93,7 +96,7 @@ namespace Final.Project.API.Controllers
                 return BadRequest("Incorrect Password!!!");
             }
             //change password
-             _Usermanager.ChangePasswordAsync(currentUser!,passwordDto.OldPassword,passwordDto.NewPassword);
+            var test= _Usermanager.ChangePasswordAsync(currentUser!,passwordDto.OldPassword,passwordDto.NewPassword).Result;
 
                 return Ok("Password Changed Successfully!!!");
         }
@@ -133,18 +136,18 @@ namespace Final.Project.API.Controllers
         #endregion region 
         [HttpGet]
         [Authorize]
-        [Route("order Details")]
-        public ActionResult<UserOrderDetailsDto> getOrderDetails()
+        [Route("order Details/{orderId}")]
+        public ActionResult<UserOrderDetailsDto> getOrderDetails(int orderId)
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-            var order = _UsersManager.GetUserOrderDto(currentUser.Id);
-            UserOrderDetailsDto? userO = _UsersManager.GetUserOrderDetailsDto(order.Id);
-            if (userO is null)
+           // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
+            var products = _UsersManager.GetUserOrderDetailsDto(orderId);
+            if (products is null)
             {
                 return NotFound();
             }
 
-            return userO; //200 OK
+            return Ok(products) ; //200 OK
         }
     }
 }
