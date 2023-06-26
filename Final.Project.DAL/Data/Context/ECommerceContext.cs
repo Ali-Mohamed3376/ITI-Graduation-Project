@@ -114,13 +114,13 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.HasOne(e => e.User)
                     .WithMany(e => e.Orders)
                     .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.SetNull);
 
 
             entity.HasOne(e => e.UserAddress)
                     .WithMany(e => e.Orders)
                     .HasForeignKey(e => e.UserAddressId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.SetNull);
 
 
 
@@ -192,7 +192,6 @@ public class ECommerceContext : IdentityDbContext<User>
                   .WithMany(u => u.UserAddresses)
                   .HasForeignKey(e => e.UserId)
                   .OnDelete(DeleteBehavior.NoAction);
-
 
 
         });
