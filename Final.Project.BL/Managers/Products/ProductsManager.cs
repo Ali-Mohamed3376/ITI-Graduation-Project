@@ -15,9 +15,9 @@ public class ProductsManager: IProductsManager
 
 
     #region Get All Products in Database
-    public IEnumerable<ProductChildDto> GetAllProducts()
+    public IEnumerable<ProductChildDto> GetAllProductsWithAvgRating()
     {
-        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAll();
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllProductsWithAvgRating();
         IEnumerable<ProductChildDto> productsDtos = productsFromDb
             .Select(p => new ProductChildDto
             {
@@ -26,10 +26,14 @@ public class ProductsManager: IProductsManager
                 Price = p.Price,
                 Image = p.Image,
                 Discount = p.Discount,
+                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                ReviewCount=p.Reviews.Count()
                 
             });
         return productsDtos;
     }
+
+   
 
     #endregion
 
@@ -38,6 +42,7 @@ public class ProductsManager: IProductsManager
     public ProductDetailsDto? GetProductByID(int id)
     {
         Product? productFromDb = _unitOfWork.ProductRepo.GetProductByIdWithCategory(id);
+
         if (productFromDb is null) { return null; }
         return new ProductDetailsDto()
         {
@@ -48,8 +53,41 @@ public class ProductsManager: IProductsManager
             Description = productFromDb.Description,
             Model = productFromDb.Model,
             Image = productFromDb.Image,
-            CategoryName = productFromDb.Category.Name
+            CategoryName = productFromDb.Category.Name,
+            ReviewCount = productFromDb.Reviews.Count(),
+
+            Reviews = productFromDb.Reviews.Select(p => new ReviewDto
+            {
+                Comment = p.Comment,
+                CreationDate = p.CreationDate,
+                Rating = p.Rating,
+
+            }),
+            AvgRating = (decimal)(productFromDb.Reviews.Any() ? productFromDb.Reviews.Average(r => r.Rating) : 0)
+
+
+
         };
+    }
+    #endregion
+
+    #region GetAll Products Have discounts
+    public IEnumerable<ProductChildDto> GetAllProductWithDiscount()
+    {
+       IEnumerable<Product>? productsFromDb=_unitOfWork.ProductRepo.GetAllProductWithDiscount();
+        IEnumerable<ProductChildDto> productsDtos = productsFromDb
+            .Select(p => new ProductChildDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+                Discount = p.Discount,
+                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                ReviewCount = p.Reviews.Count()
+
+            });
+        return productsDtos;
     }
     #endregion
 

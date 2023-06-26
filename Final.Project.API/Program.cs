@@ -8,7 +8,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 #region Default Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -25,8 +24,8 @@ builder.Services.AddScoped<IUserProductsCartRepo, UserProdutsCartRepo>();
 builder.Services.AddScoped<IUserAddressRepo, UserAddressRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<IOrdersDetailsRepo, OrdersDetailsRepo>();
+builder.Services.AddScoped<IDashboardUserRepo, DashboardUserRepo>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 
 
 
@@ -39,7 +38,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserProductsCartsManager, UserProductsCartsManager>();
 builder.Services.AddScoped<IOrdersManager, OrdersManager>();
 builder.Services.AddScoped<IUserAddressesManager, UserAddressesManager>();
-
+builder.Services.AddScoped<IAdminDashboardManager, AdminDashboardManager>();
 
 
 //Ali
@@ -63,6 +62,7 @@ builder.Services.AddTransient<IMailingService, MailingService>();
 //Reham Ahmed
 builder.Services.AddScoped<IProductsManager, ProductsManager>();
 builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+builder.Services.AddScoped<IOrderDetailsManager, OrderDetailsManager>();
 
 
 
@@ -90,6 +90,9 @@ builder.Services.AddDbContext<ECommerceContext>(options => options
     .UseSqlServer(@"Server=./;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
     //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    //.UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    //.UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDBTest;Trusted_Connection=true;Encrypt=false"));
+    .UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDBTest;Trusted_Connection=true;Encrypt=false"));
 
 
 #endregion
@@ -139,7 +142,6 @@ builder.Services.AddAuthentication(options =>
 
 #endregion
 
-
 var app = builder.Build();
 
 #region Middlewares
@@ -158,6 +160,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 #endregion
-
 
 app.Run();
