@@ -12,8 +12,7 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ECommerceContext context;
-
-        public ProductsController(IProductsManager productsManager, ECommerceContext context)
+        public ProductsController(IProductsManager productsManager,ECommerceContext context)
         {
             _productsManager = productsManager;
             this.context = context;
@@ -31,12 +30,11 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-        #region Products Filteration
-
+        #region Products Filteration by (CategoryName, ProductName, MinPrice, MaxPrice)
 
         [HttpPost]
         [Route("Filter")]
-        public ActionResult GetAll([FromBody] ProductQueryDto productQueryDto)
+        public ActionResult GetAll(ProductQueryDto productQueryDto)
         {
             var query = context.Products.AsQueryable();
 
@@ -57,17 +55,80 @@ namespace Final.Project.API.Controllers
 
             if (productQueryDto.MinPrice != 0)
             {
-                query = query.Where(q => q.Price >= productQueryDto.MaxPrice);
+                query = query.Where(q => q.Price >= productQueryDto.MinPrice);
+            }
+
+            if (productQueryDto.Rating != 0)
+            {
+                query = query.Where(q => q.Rating >= productQueryDto.Rating);
             }
 
             if (!query.Any())
             {
                 return BadRequest("Not Found");
             }
+
             return Ok(query.ToList());
         }
 
         #endregion
+
+        #region Get all Products
+
+        [HttpGet]
+        [Route("dashboard")]
+        public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
+        {
+            IEnumerable<ProductReadDto> products = _productsManager.GetAllProducts();
+
+            if (products is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
+        #endregion
+
+        #region Add Product
+
+        [HttpPost]
+        [Route("dashboard")]
+        public ActionResult Add(ProductAddDto productAddDto)
+        {
+            bool isAdded = _productsManager.AddProduct(productAddDto);
+            return isAdded ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Edit Product
+
+        [HttpPut]
+        [Route("dashboard")]
+        public ActionResult Edit(ProductEditDto productEditDto)
+        {
+            bool isEdited = _productsManager.UpdateProduct(productEditDto);
+
+            return isEdited ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Delete Product
+
+        [HttpDelete]
+        [Route("dashboard")]
+        public ActionResult Delete(int Id)
+        {
+            bool isDeleted = _productsManager.DeleteProduct(Id);
+
+            return isDeleted ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
     }
 }
 

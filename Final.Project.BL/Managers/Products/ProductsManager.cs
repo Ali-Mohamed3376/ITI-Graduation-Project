@@ -91,6 +91,88 @@ public class ProductsManager: IProductsManager
     }
     #endregion
 
+    #region Get All Products
+
+    public IEnumerable<ProductReadDto> GetAllProducts()
+    {
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllWithCategory();
+        if (productsFromDb is null)
+        {
+            return null;
+        }
+
+        IEnumerable<ProductReadDto> productReadDto = productsFromDb
+            .Select(p => new ProductReadDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+                CategoryName = p.Category.Name
+            });
+        return productReadDto;
+    }
+
+    #endregion
+
+    #region Add Product
+
+    public bool AddProduct(ProductAddDto product)
+    {
+        Product ProductToAdd = new Product
+        {
+            Name = product.Name,
+            Price = product.Price,
+            Description = product.Description,
+            Image = product.Image,
+            Model = product.Model,
+            CategoryID = product.CategoryID,
+        };
+
+        _unitOfWork.ProductRepo.Add(ProductToAdd);
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
+    #region Update Product
+
+    public bool UpdateProduct(ProductEditDto productEditDto)
+    {
+        var product = _unitOfWork.ProductRepo.GetById(productEditDto.Id);
+        if (product is null)
+        {
+            return false;
+        }
+
+        product.Name = productEditDto.Name;
+        product.Price = productEditDto.Price;
+        product.Description = productEditDto.Description;
+        product.Image = productEditDto.Image;
+        product.Model = productEditDto.Model;
+        product.CategoryID = productEditDto.CategoryID;
+
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
+    #region Delete Product
+
+    public bool DeleteProduct(int Id)
+    {
+        var product = _unitOfWork.ProductRepo.GetById(Id);
+        if (product is null)
+        {
+            return false;
+        }
+
+        _unitOfWork.ProductRepo.Delete(product);
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
 }
 
 

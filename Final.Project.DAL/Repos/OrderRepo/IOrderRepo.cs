@@ -3,4 +3,5 @@ public interface IOrderRepo : IGenericRepo<Order>
 {
     public int GetLastUserOrder(string userId);
 
+    Order GetOrderWithProducts(int OrderId);
 }

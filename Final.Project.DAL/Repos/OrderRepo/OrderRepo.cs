@@ -1,4 +1,6 @@
-﻿namespace Final.Project.DAL;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Final.Project.DAL;
 public class OrderRepo : GenericRepo<Order>, IOrderRepo
 {
     private readonly ECommerceContext _context;
@@ -15,5 +17,17 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
                         .First().Id;
 
     }
+
+    #region Get Order With Product
+
+    public Order GetOrderWithProducts(int OrderId)
+    {
+        return _context.Set<Order>()
+                .Include(o => o.OrdersProductDetails)
+                    .ThenInclude(op => op.Product)
+                .First(o => o.Id == OrderId);
+    }
+
+    #endregion
 }
 

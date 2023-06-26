@@ -5,5 +5,5 @@ public interface IProductRepo :IGenericRepo<Product>
     public IEnumerable<Product> GetAllProductsWithAvgRating();
     public IEnumerable<Product> GetAllProductWithDiscount();
 
-
+    IEnumerable<Product> GetAllWithCategory();
 }

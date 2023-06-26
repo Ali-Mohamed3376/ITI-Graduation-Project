@@ -10,4 +10,8 @@ public interface IOrdersManager
 {
     public void AddNewOrder(string userId, int addressId);
 
+    IEnumerable<OrderReadDto> GetAllOrders();
+    OrderDetailsDto GetOrderDetails(int OrderId);
+    bool UpdateOrder(OrderEditDto orderEdit);
+    bool DeleteOrder(int Id);
 }
