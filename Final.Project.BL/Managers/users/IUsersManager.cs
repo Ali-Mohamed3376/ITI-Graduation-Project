@@ -1,4 +1,5 @@
-﻿using Final.Project.DAL;
+﻿using Final.Project.Bl;
+using Final.Project.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace Final.Project.BL;
 public interface IUsersManager
 {
     UserReadDto GetUserReadDto(string id);
-    bool Edit(UserUpdateDto updateDto);
+   UserOrderDetailsDto GetUserOrderDetailsDto(int id);
+    bool Edit( UserUpdateDto updateDto);
     bool delete(string id);
+    UserOrderDto GetUserOrderDto(string id);
 
 }

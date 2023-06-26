@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Final.Project.API.Controllers
 {
@@ -23,12 +24,13 @@ namespace Final.Project.API.Controllers
         }
 
         #region profile
+        #region getuser
         [HttpGet]
         [Authorize]
+        [Route("profile")]
         public ActionResult<UserReadDto> getUser()
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-            //id = currentUser.Id;
             UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
 
             if (user is null)
@@ -37,9 +39,9 @@ namespace Final.Project.API.Controllers
             }
 
 
-            return user;
+            return Ok(user);
         }
-
+        #endregion
 
         [HttpPut]
         [Authorize]
@@ -47,20 +49,21 @@ namespace Final.Project.API.Controllers
         public ActionResult Edit(UserUpdateDto updateDto)
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-
             updateDto.Id = currentUser.Id;
+            if (currentUser.Id is null)
+            {
+                return BadRequest("no content");
+            }
 
-            var isfound = _UsersManager.Edit(updateDto);
-
-            if (!isfound) { return NotFound(); }
+            _UsersManager.Edit(updateDto);
 
             return NoContent();
-
         }
 
+        #region Delete
         [HttpDelete]
         [Authorize]
-
+        [Route("DeleteUser")]
         public ActionResult Delete()
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
@@ -73,6 +76,7 @@ namespace Final.Project.API.Controllers
 
             return NoContent();
         }
+        #endregion
 
         [HttpPost]
         [Authorize]
@@ -83,20 +87,15 @@ namespace Final.Project.API.Controllers
             User? currentUser = _Usermanager.GetUserAsync(User).Result;
 
             //confirm old password
-            bool isValiduser = _Usermanager.CheckPasswordAsync(currentUser, passwordDto.Oldpassword).Result;
+            var isValiduser = _Usermanager.CheckPasswordAsync(currentUser!, passwordDto.OldPassword).Result;
             if (!isValiduser)
             {
                 return BadRequest("Incorrect Password!!!");
             }
             //change password
-            var newP= _Usermanager.ChangePasswordAsync(currentUser,passwordDto.Oldpassword,passwordDto.Newpassword).Result;
+             _Usermanager.ChangePasswordAsync(currentUser!,passwordDto.OldPassword,passwordDto.NewPassword);
 
-            if (!newP.Succeeded)
-            {
-                return BadRequest(newP.Errors);
-            }
-
-            return Ok("Password Changed Successfully!!!");
+                return Ok("Password Changed Successfully!!!");
         }
         #endregion
 
@@ -104,12 +103,12 @@ namespace Final.Project.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("orders")]
-        public ActionResult <UserOrderDto> GetUserOrder() {
+        public ActionResult<UserOrderDto> GetUserOrder()
+        {
 
             var currentUser = _Usermanager.GetUserAsync(User).Result;
 
-           // id = currentUser.Id;
-            UserOrderDto? userOrder= (UserOrderDto?)_UsersManager.GetUserOrderDto(currentUser.Id);
+            UserOrderDto? userOrder = (UserOrderDto?)_UsersManager.GetUserOrderDto(currentUser.Id);
 
             if (userOrder is null)
 
@@ -118,14 +117,36 @@ namespace Final.Project.API.Controllers
             return userOrder;
 
         }
+        //[HttpGet]
+        //[Route("{id}/Products")]
+
+        //public ActionResult Userorder(int id)
+        //{
+        //    IEnumerable<UserProductDto>? Userpro = (IEnumerable<UserProductDto>?)_UsersManager.UserOrders();
+        //    if (Userpro == null) { return NotFound(); }
+        //    return Ok(Userpro);
+        //}
         #endregion
 
         #region  user order details
 
         #endregion region 
+        [HttpGet]
+        [Authorize]
+        [Route("order Details")]
+        public ActionResult<UserOrderDetailsDto> getOrderDetails()
+        {
+            var currentUser = _Usermanager.GetUserAsync(User).Result;
+            var order = _UsersManager.GetUserOrderDto(currentUser.Id);
+            UserOrderDetailsDto? userO = _UsersManager.GetUserOrderDetailsDto(order.Id);
+            if (userO is null)
+            {
+                return NotFound();
+            }
 
-
-
+            return userO; //200 OK
+        }
     }
-
 }
+
+
