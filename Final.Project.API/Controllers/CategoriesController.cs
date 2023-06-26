@@ -53,5 +53,63 @@ namespace Final.Project.API.Controllers
             return Ok(categoryDetailDto);
         }
         #endregion
+
+
+
+        #region Get all Categories Dashboard
+
+        [HttpGet]
+        [Route("dashboard")]
+        public ActionResult<IEnumerable<CategoryReadDto>> GetAllCategoriesDashBoard()
+        {
+            IEnumerable<CategoryReadDto> categoryReadDtos = _categoriesManager.GetAllCategories();
+            if (categoryReadDtos is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(categoryReadDtos);
+        }
+
+        #endregion
+
+        #region Add Category
+
+        [HttpPost]
+        [Route("dashboard")]
+        public ActionResult Add(CategoryAddDto categoryAddDto)
+        {
+            bool isAdded = _categoriesManager.AddCategory(categoryAddDto);
+            return isAdded ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Edit Category
+
+        [HttpPut]
+        [Route("dashboard")]
+        public ActionResult Edit(CategoryEditDto categoryEditDto)
+        {
+            bool isEdited = _categoriesManager.UpdateCategory(categoryEditDto);
+
+            return isEdited ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Delete Category
+
+        [HttpDelete]
+        [Route("dashboard")]
+        public ActionResult Delete(int Id)
+        {
+            bool isDeleted = _categoriesManager.DeleteCategory(Id);
+
+            return isDeleted ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
     }
 }

@@ -15,6 +15,9 @@ namespace Final.Project.API.Controllers
         {
             _ordersManager = ordersManager;
         }
+
+        #region Make new order
+
         [HttpGet]
         [Route("{addressId}")]
         public ActionResult MakeNewOrder(int addressId)
@@ -29,5 +32,68 @@ namespace Final.Project.API.Controllers
 
             return Ok("order Added Successfully");
         }
+
+        #endregion
+
+        #region Get all orders
+
+        [HttpGet]
+        [Route("dashboard")]
+        public ActionResult<IEnumerable<OrderReadDto>> GetAllOrders()
+        {
+            IEnumerable<OrderReadDto> orderReadDtos = _ordersManager.GetAllOrders();
+            if (orderReadDtos is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(orderReadDtos);
+        }
+
+        #endregion
+
+        #region Get order details
+
+        [HttpGet]
+        [Route("dashboard/{Id}")]
+        public ActionResult<OrderDetailsDto> GetOrderDetails(int Id)
+        {
+            OrderDetailsDto orderDetailsDto = _ordersManager.GetOrderDetails(Id);
+            if (orderDetailsDto is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(orderDetailsDto);
+        }
+
+        #endregion
+
+        #region Edit Order
+
+        [HttpPut]
+        [Route("dashboard")]
+        public ActionResult Edit(OrderEditDto orderEditDto)
+        {
+            bool isEdited = _ordersManager.UpdateOrder(orderEditDto);
+
+            return isEdited ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Delete Order
+
+        [HttpDelete]
+        [Route("dashboard")]
+        public ActionResult Delete(int Id)
+        {
+            bool isDeleted = _ordersManager.DeleteOrder(Id);
+
+            return isDeleted ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
     }
 }

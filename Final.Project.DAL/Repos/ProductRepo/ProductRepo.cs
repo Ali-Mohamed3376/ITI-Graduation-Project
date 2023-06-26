@@ -39,4 +39,14 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
             .Where(p => p.Discount > 0);
     }
     #endregion
+
+    #region Get all With Category
+
+    public IEnumerable<Product> GetAllWithCategory()
+    {
+        return _context.Set<Product>()
+                       .Include(x => x.Category);
+    }
+
+    #endregion
 }
