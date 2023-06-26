@@ -22,7 +22,7 @@ namespace Final.Project.API.Controllers
             _manager = manager;
         }
         [HttpGet]
-        [Route("AllUsers")]
+        [Route("GetAllUsers")]
         public ActionResult GetAllUsers()
         {
             IEnumerable<UserDashboardReadDto> allUsers= _adminDashboardManager.GetAllUsers();
@@ -76,7 +76,7 @@ namespace Final.Project.API.Controllers
         }
 
         [HttpDelete]
-        [Route("userDelete/{userId}")]
+        [Route("UserDelete/{userId}")]
         public ActionResult DeleteUserFromDashboard(string userId)
         {
             _adminDashboardManager.DeleteUser(userId);

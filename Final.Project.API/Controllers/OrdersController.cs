@@ -19,7 +19,7 @@ namespace Final.Project.API.Controllers
         #region Make new order
 
         [HttpGet]
-        [Route("{addressId}")]
+        [Route("MakeNewOrder/{addressId}")]
         public ActionResult MakeNewOrder(int addressId)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -38,7 +38,7 @@ namespace Final.Project.API.Controllers
         #region Get all orders
 
         [HttpGet]
-        [Route("dashboard")]
+        [Route("Dashboard/GetAllOrders")]
         public ActionResult<IEnumerable<OrderReadDto>> GetAllOrders()
         {
             IEnumerable<OrderReadDto> orderReadDtos = _ordersManager.GetAllOrders();
@@ -55,7 +55,7 @@ namespace Final.Project.API.Controllers
         #region Get order details
 
         [HttpGet]
-        [Route("dashboard/{Id}")]
+        [Route("Dashboard/GetOrderDetails/{Id}")]
         public ActionResult<OrderDetailsDto> GetOrderDetails(int Id)
         {
             OrderDetailsDto orderDetailsDto = _ordersManager.GetOrderDetails(Id);
@@ -72,7 +72,7 @@ namespace Final.Project.API.Controllers
         #region Edit Order
 
         [HttpPut]
-        [Route("dashboard")]
+        [Route("Dashboard/EditOrder")]
         public ActionResult Edit(OrderEditDto orderEditDto)
         {
             bool isEdited = _ordersManager.UpdateOrder(orderEditDto);
@@ -85,7 +85,7 @@ namespace Final.Project.API.Controllers
         #region Delete Order
 
         [HttpDelete]
-        [Route("dashboard")]
+        [Route("Dashboard/DeleteOrder")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _ordersManager.DeleteOrder(Id);

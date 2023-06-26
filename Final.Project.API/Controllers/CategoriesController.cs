@@ -59,7 +59,7 @@ namespace Final.Project.API.Controllers
         #region Get all Categories Dashboard
 
         [HttpGet]
-        [Route("dashboard")]
+        [Route("Dashboard/GetAllCategories")]
         public ActionResult<IEnumerable<CategoryReadDto>> GetAllCategoriesDashBoard()
         {
             IEnumerable<CategoryReadDto> categoryReadDtos = _categoriesManager.GetAllCategories();
@@ -76,7 +76,7 @@ namespace Final.Project.API.Controllers
         #region Add Category
 
         [HttpPost]
-        [Route("dashboard")]
+        [Route("Dashboard/AddCategory")]
         public ActionResult Add(CategoryAddDto categoryAddDto)
         {
             bool isAdded = _categoriesManager.AddCategory(categoryAddDto);
@@ -88,7 +88,7 @@ namespace Final.Project.API.Controllers
         #region Edit Category
 
         [HttpPut]
-        [Route("dashboard")]
+        [Route("Dashboard/EditCategory")]
         public ActionResult Edit(CategoryEditDto categoryEditDto)
         {
             bool isEdited = _categoriesManager.UpdateCategory(categoryEditDto);
@@ -101,7 +101,7 @@ namespace Final.Project.API.Controllers
         #region Delete Category
 
         [HttpDelete]
-        [Route("dashboard")]
+        [Route("Dashboard/DeleteCategory")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _categoriesManager.DeleteCategory(Id);

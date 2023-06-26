@@ -76,7 +76,7 @@ namespace Final.Project.API.Controllers
         #region Get all Products
 
         [HttpGet]
-        [Route("dashboard")]
+        [Route("Dashboard/GetAllProducts")]
         public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
         {
             IEnumerable<ProductReadDto> products = _productsManager.GetAllProducts();
@@ -94,7 +94,7 @@ namespace Final.Project.API.Controllers
         #region Add Product
 
         [HttpPost]
-        [Route("dashboard")]
+        [Route("Dashboard/AddProduct")]
         public ActionResult Add(ProductAddDto productAddDto)
         {
             bool isAdded = _productsManager.AddProduct(productAddDto);
@@ -106,7 +106,7 @@ namespace Final.Project.API.Controllers
         #region Edit Product
 
         [HttpPut]
-        [Route("dashboard")]
+        [Route("Dashboard/UpdateProduct")]
         public ActionResult Edit(ProductEditDto productEditDto)
         {
             bool isEdited = _productsManager.UpdateProduct(productEditDto);
@@ -119,7 +119,7 @@ namespace Final.Project.API.Controllers
         #region Delete Product
 
         [HttpDelete]
-        [Route("dashboard")]
+        [Route("Dashboard/DeleteProduct")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _productsManager.DeleteProduct(Id);

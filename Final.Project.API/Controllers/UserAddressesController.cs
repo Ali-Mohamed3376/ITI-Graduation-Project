@@ -34,7 +34,7 @@ namespace Final.Project.API.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost("AddNewAddress")]
         public ActionResult AddNewAddress(NewAddressAddingDto newAddress)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
