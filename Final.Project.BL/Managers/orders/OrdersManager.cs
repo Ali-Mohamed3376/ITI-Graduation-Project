@@ -26,7 +26,7 @@ public class OrdersManager : IOrdersManager
             OrderStatus = OrderStatus.Pending,
             OrderDate = DateTime.Now,
             UserId = userId,
-            //AddressId = addressId
+            UserAddressId = addressId
         };
         _unitOfWork.OrderRepo.Add(newOrder);
         _unitOfWork.Savechanges();
