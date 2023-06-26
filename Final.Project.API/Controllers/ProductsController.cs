@@ -32,8 +32,9 @@ namespace Final.Project.API.Controllers
 
         #region Products Filteration by (CategoryName, ProductName, MinPrice, MaxPrice)
 
-        [HttpGet("Filter")]
-        public ActionResult GetAll([FromBody] ProductQueryDto productQueryDto)
+        [HttpPost]
+        [Route("Filter")]
+        public ActionResult GetAll(ProductQueryDto productQueryDto)
         {
             var query = context.Products.AsQueryable();
 
@@ -54,7 +55,7 @@ namespace Final.Project.API.Controllers
 
             if (productQueryDto.MinPrice != 0)
             {
-                query = query.Where(q => q.Price >= productQueryDto.MaxPrice);
+                query = query.Where(q => q.Price >= productQueryDto.MinPrice);
             }
 
             if (productQueryDto.Rating != 0)
@@ -70,34 +71,6 @@ namespace Final.Project.API.Controllers
             return Ok(query.ToList());
         }
 
-        #endregion
-
-        #region Products Filteration by Rating
-       
-        //[HttpGet("Product/Filter/ByRating")]
-        //public IActionResult GetProductsByAverageRating(double minRating)
-        //{
-        //    var products = context.Products
-        //        .GroupJoin(context.Reviews, p => p.Id, r => r.ProductId,
-        //            (p, reviews) => new {
-        //                p.Id,
-        //                p.Name,
-        //                p.Description,
-        //                AverageRating = reviews.Average(r => r.Rating)
-        //            })
-        //        .Where(dto => dto.AverageRating >= minRating)
-        //        .Select(dto => new ProductDto
-        //        {
-        //            ProductId = dto.ProductId,
-        //            Name = dto.Name,
-        //            Description = dto.Description,
-        //            AverageRating = dto.AverageRating
-        //        })
-        //        .ToList();
-
-        //    return Ok(products);
-        //}
-        
         #endregion
 
         #region Get all Products
