@@ -1,6 +1,4 @@
-﻿
-
-namespace Final.Project.BL;
+﻿namespace Final.Project.BL;
 
 public class ReviewDto
 {
