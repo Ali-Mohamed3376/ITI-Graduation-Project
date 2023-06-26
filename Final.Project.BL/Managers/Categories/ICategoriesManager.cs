@@ -9,6 +9,10 @@ public interface ICategoriesManager
     IEnumerable<ProductChildDto>? GetCategoryWithProducts(int id);
     IEnumerable<CategoryDetailsDto> GetAllCategoriesWithProducts();
 
+    IEnumerable<CategoryReadDto> GetAllCategories();
+    bool AddCategory(CategoryAddDto category);
+    bool UpdateCategory(CategoryEditDto categoryEditDto);
+    bool DeleteCategory(int Id);
 }
 
 

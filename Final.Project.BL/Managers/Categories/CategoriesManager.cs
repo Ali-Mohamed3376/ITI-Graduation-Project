@@ -97,6 +97,73 @@ public class CategoriesManager: ICategoriesManager
 
     }
     #endregion
+
+    #region Get All Categories - Dashboard
+
+    public IEnumerable<CategoryReadDto> GetAllCategories()
+    {
+        var categoriesFromDb = _unitOfWork.CategoryRepo.GetAllCategoriesWithAllProducts();
+        var categoryReadDto = categoriesFromDb
+            .Select(c => new CategoryReadDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                NoOfProducts = c.Products.Count()
+            });
+
+        return categoryReadDto;
+    }
+
+    #endregion
+
+    #region Add Category
+
+    public bool AddCategory(CategoryAddDto category)
+    {
+        Category CategoryToAdd = new Category
+        {
+            Name = category.Name,
+        };
+
+        _unitOfWork.CategoryRepo.Add(CategoryToAdd);
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
+    #region Update Category
+
+    public bool UpdateCategory(CategoryEditDto categoryEditDto)
+    {
+        var category = _unitOfWork.CategoryRepo.GetById(categoryEditDto.Id);
+        if (category is null)
+        {
+            return false;
+        }
+
+        category.Name = categoryEditDto.Name;
+
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
+    #region Delete Category
+
+    public bool DeleteCategory(int Id)
+    {
+        var category = _unitOfWork.CategoryRepo.GetById(Id);
+        if (category is null)
+        {
+            return false;
+        }
+
+        _unitOfWork.CategoryRepo.Delete(category);
+        return _unitOfWork.Savechanges() > 0;
+    }
+
+    #endregion
+
 }
 
 

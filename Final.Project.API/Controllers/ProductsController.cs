@@ -68,6 +68,63 @@ namespace Final.Project.API.Controllers
         }
 
         #endregion
+
+        #region Get all Products
+
+        [HttpGet]
+        [Route("dashboard")]
+        public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
+        {
+            IEnumerable<ProductReadDto> products = _productsManager.GetAllProducts();
+
+            if (products is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
+        #endregion
+
+        #region Add Product
+
+        [HttpPost]
+        [Route("dashboard")]
+        public ActionResult Add(ProductAddDto productAddDto)
+        {
+            bool isAdded = _productsManager.AddProduct(productAddDto);
+            return isAdded ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Edit Product
+
+        [HttpPut]
+        [Route("dashboard")]
+        public ActionResult Edit(ProductEditDto productEditDto)
+        {
+            bool isEdited = _productsManager.UpdateProduct(productEditDto);
+
+            return isEdited ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
+        #region Delete Product
+
+        [HttpDelete]
+        [Route("dashboard")]
+        public ActionResult Delete(int Id)
+        {
+            bool isDeleted = _productsManager.DeleteProduct(Id);
+
+            return isDeleted ? NoContent() : BadRequest();
+        }
+
+        #endregion
+
     }
 }
 
