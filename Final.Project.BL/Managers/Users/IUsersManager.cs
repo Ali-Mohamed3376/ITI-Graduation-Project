@@ -10,9 +10,13 @@ namespace Final.Project.BL;
 
 public interface IUsersManager
 {
-    UserReadDto GetUserReadDto(string id);
-   UserOrderDetailsDto GetUserOrderDetailsDto(int id);
-    bool Edit( UserUpdateDto updateDto);
+    //UserReadDto GetUserReadDto(string id);
+    UserReadDto GetUserReadDto(User user);
+
+    IEnumerable<UserOrderDetailsDto> GetUserOrderDetailsDto(int id);
+    //bool Edit( UserUpdateDto updateDto,string id);
+    bool Edit(UserUpdateDto updateDto, User user);
+
     bool delete(string id);
     UserOrderDto GetUserOrderDto(string id);
 
