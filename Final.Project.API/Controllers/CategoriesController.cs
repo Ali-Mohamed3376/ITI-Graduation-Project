@@ -101,7 +101,7 @@ namespace Final.Project.API.Controllers
         #region Delete Category
 
         [HttpDelete]
-        [Route("Dashboard/DeleteCategory")]
+        [Route("Dashboard/DeleteCategory/{Id}")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _categoriesManager.DeleteCategory(Id);
