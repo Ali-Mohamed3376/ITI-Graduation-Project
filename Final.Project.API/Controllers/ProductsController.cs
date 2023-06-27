@@ -119,7 +119,7 @@ namespace Final.Project.API.Controllers
         #region Delete Product
 
         [HttpDelete]
-        [Route("Dashboard/DeleteProduct")]
+        [Route("Dashboard/DeleteProduct/{Id}")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _productsManager.DeleteProduct(Id);

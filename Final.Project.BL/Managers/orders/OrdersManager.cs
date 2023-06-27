@@ -119,9 +119,7 @@ public class OrdersManager : IOrdersManager
         }
 
         order.OrderStatus = orderEdit.OrderStatus;
-        order.OrderDate = orderEdit.OrderDate;
         order.DeliverdDate = orderEdit.DeliverdDate;
-        order.UserId = orderEdit.UserId;
 
         return _unitOfWork.Savechanges() > 0;
     }

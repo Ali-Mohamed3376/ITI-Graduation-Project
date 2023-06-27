@@ -87,9 +87,9 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
 
-    .UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    //.UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
-    //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    .UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
 
 #endregion
