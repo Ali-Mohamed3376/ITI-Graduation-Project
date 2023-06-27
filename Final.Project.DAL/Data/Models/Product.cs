@@ -15,8 +15,5 @@ public class Product
     public IEnumerable<OrderProductDetails> OrdersProductDetails { get; set; } = new HashSet<OrderProductDetails>();
     public IEnumerable<Review> Reviews { get; set; } = new HashSet<Review>();
 
-    public static explicit operator Product(Order? v)
-    {
-        throw new NotImplementedException();
-    }
+    
 }
