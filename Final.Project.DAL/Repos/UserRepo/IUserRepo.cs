@@ -5,7 +5,7 @@ public interface IUserRepo
 
     void Update(User user);
     void Delete(User user);
-    Order GetUsersOrder(string id);
+    IEnumerable<Order> GetUserOrders(string id);
     IEnumerable<OrderProductDetails> GetUsersOrderDetails(int id);
     int savechanges();
 }

@@ -60,7 +60,7 @@ namespace Final.Project.API.Controllers
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddMinutes(60);
+            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
             JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();

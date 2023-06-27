@@ -8,8 +8,6 @@ namespace Final.Project.BL;
 
 public class UserUpdateDto
 {
-    public string Fname { get; set; } = string.Empty;
-    public string Lname { get; set; } = string.Empty;
-    public string City { get; set; } = string.Empty;
-    public string Street { get; set; } = string.Empty;
+    public string FName { get; set; } = string.Empty;
+    public string LName { get; set; } = string.Empty;
 }

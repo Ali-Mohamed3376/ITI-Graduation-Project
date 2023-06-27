@@ -1,7 +1,7 @@
 ﻿namespace Final.Project.DAL;
 public interface IUnitOfWork
 {
-    //public UserRepo UserRepo { get; }
+    public IUserRepo UserRepo { get; }
     public IProductRepo ProductRepo { get; }
     public ICategoryRepo CategoryRepo { get; }
     public IOrderRepo OrderRepo { get; }

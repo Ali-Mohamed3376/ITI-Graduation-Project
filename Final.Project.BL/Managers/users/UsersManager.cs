@@ -5,64 +5,36 @@ namespace Final.Project.BL;
 
 public class UsersManager : IUsersManager
 {
-    private readonly IUserRepo? _userRepo;
+    private readonly IUnitOfWork _unitOfWork;
+    
 
-
-    public UsersManager(IUserRepo userRepo)
+    public UsersManager(IUnitOfWork unitOfWork)
     {
-        _userRepo = userRepo;
+        _unitOfWork = unitOfWork;
     }
     #region delete user's account
     public bool delete(string id)
     {
-        User? user = _userRepo.GetById(id);
+        User? user = _unitOfWork.UserRepo.GetById(id);
 
         if (user is null) { return false; }
 
-        _userRepo.Delete(user);
-        _userRepo.savechanges();
+        _unitOfWork.UserRepo.Delete(user);
+        _unitOfWork.Savechanges();
 
         return true;
     }
     #endregion
 
-    //public bool Edit(UserUpdateDto updateDto,string id)
-    //{
-
-    //    User? user = _userRepo.GetById(id);
-
-    //    if (user is null) { return false; };
-
-    //    user.FName = updateDto.Fname;
-
-    //    user.LName = updateDto.Lname;
-
-    //    user.Street = updateDto.Street;
-
-    //    user.City = updateDto.City;
-
-    //   // _userRepo.Update(user);
-
-    //    _userRepo.savechanges();
-    //    return true;
-
-    //}
+   
     public bool Edit(UserUpdateDto updateDto, User user)
     {
+        user.FName = updateDto.FName;
+
+        user.LName = updateDto.LName;
 
 
-
-        user.FName = updateDto.Fname;
-
-        user.LName = updateDto.Lname;
-
-        user.Street = updateDto.Street;
-
-        user.City = updateDto.City;
-
-        // _userRepo.Update(user);
-
-        _userRepo.savechanges();
+        _unitOfWork.Savechanges();
         return true;
 
     }
@@ -70,32 +42,32 @@ public class UsersManager : IUsersManager
     #region UserOrderDetails
     public IEnumerable<UserOrderDetailsDto> GetUserOrderDetailsDto(int id)
     {
-        
-        IEnumerable<OrderProductDetails> OrderProductDetails = _userRepo.GetUsersOrderDetails(id);
+
+        IEnumerable<OrderProductDetails> OrderProductDetails = _unitOfWork.UserRepo.GetUsersOrderDetails(id);
         if (OrderProductDetails == null)
         {
             return null;
         }
 
-        IEnumerable < UserOrderDetailsDto > products = OrderProductDetails.Select(p=>new  UserOrderDetailsDto
+        IEnumerable<UserOrderDetailsDto> products = OrderProductDetails.Select(p => new UserOrderDetailsDto
         {
             Image = p.Product.Image,
             Price = p.Product.Price,
             Quantity = p.Quantity,
-            title=p.Product.Name
-        }); 
+            title = p.Product.Name
+        });
 
         return products;
-        
+
     }
     #endregion
 
     #region UserOrder
-    public UserOrderDto GetUserOrderDto(string id)
+    public IEnumerable<UserOrderDto> GetUserOrdersDto(string id)
     {
-        Order? order = _userRepo.GetUsersOrder(id);
-        if (order == null) { return null; }
-        return new UserOrderDto
+        IEnumerable<Order>? ordersFromDB = _unitOfWork.UserRepo.GetUserOrders(id);
+        if (ordersFromDB == null) { return null; }
+        IEnumerable<UserOrderDto> ordersDto= ordersFromDB.Select(order=> new UserOrderDto
         {
             Id = order.Id,
             OrderStatus = order.OrderStatus,
@@ -108,51 +80,25 @@ public class UsersManager : IUsersManager
 
             )
 
-        };
+        });
+        return ordersDto.ToList();
     }
 
     #endregion
 
     #region View user Profile
-    //public UserReadDto GetUserReadDto(string id)
-    //{
-    //    User? user = _userRepo.GetById(id);
-    //    if (user == null)
-    //    {
-    //        return null;
-    //    }
-    //    return new UserReadDto
-    //    {
-    //        Fname = user.FName,
-
-    //        Lname = user.LName,
-
-    //        City = user.City,
-
-    //        Street = user.Street,
-
-    //    };
-
-    //}
+    
     public UserReadDto GetUserReadDto(User user)
     {
-        
+
         return new UserReadDto
         {
             Fname = user.FName,
-
             Lname = user.LName,
-
-            City = user.City,
-
-            Street = user.Street,
-
+            Email = user.Email
         };
 
     }
-
-
-
 
     #endregion
 }
