@@ -86,7 +86,7 @@ namespace Final.Project.API.Controllers
         #region Delete Order Dashboard
 
         [HttpDelete]
-        [Route("Dashboard/DeleteOrder")]
+        [Route("Dashboard/DeleteOrder/{Id}")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _ordersManager.DeleteOrder(Id);

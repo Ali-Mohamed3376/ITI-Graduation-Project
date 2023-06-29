@@ -18,9 +18,15 @@ public class AdminDashboardManager : IAdminDashboardManager
 
     }
 
-    public void DeleteUser(string userId)
+    public bool DeleteUser(string userId)
     {
-        throw new NotImplementedException();
+        User? user = _unitOfWork.UserRepo.GetById(userId);
+
+        if (user is null) { return false; }
+
+        _unitOfWork.UserRepo.Delete(user);
+        _unitOfWork.Savechanges();
+        return true;
     }
 
     public IEnumerable<UserDashboardReadDto> GetAllUsers()

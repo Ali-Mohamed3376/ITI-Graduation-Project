@@ -8,7 +8,7 @@ namespace Final.Project.BL;
 
 public interface IAdminDashboardManager
 {
-    void DeleteUser(string userId);
+    bool DeleteUser(string userId);
     IEnumerable<UserDashboardReadDto> GetAllUsers();
     UserDashboardReadDto GetUserById(string userId);
 }

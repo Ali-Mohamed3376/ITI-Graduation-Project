@@ -34,9 +34,13 @@ public class UserRepo : IUserRepo
         return _context.SaveChanges();
     }
     #region user order
-    public Order? GetUsersOrder(string id)
+    public IEnumerable<Order>? GetUserOrders(string id)
     {
-        return _context.Orders.Include(x=>x.User).Where(x=>x.UserId==id).FirstOrDefault();
+        return _context.Orders
+                .Include(x => x.OrdersProductDetails)
+                    .ThenInclude(x => x.Product)
+                .Where(x => x.UserId == id);
+                
            
     }
 

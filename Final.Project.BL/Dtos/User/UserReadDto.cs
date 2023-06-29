@@ -11,6 +11,4 @@ public class UserReadDto
     public string Fname { get; set; } = string.Empty;
     public string Lname { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string City { get; set; } = string.Empty;
-    public string Street { get; set; } = string.Empty;
 }

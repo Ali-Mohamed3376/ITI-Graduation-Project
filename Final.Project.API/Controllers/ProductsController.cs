@@ -117,7 +117,7 @@ namespace Final.Project.API.Controllers
         #region Delete Product
         [Authorize(Policy = "ForAdmin")]
         [HttpDelete]
-        [Route("Dashboard/DeleteProduct")]
+        [Route("Dashboard/DeleteProduct/{Id}")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _productsManager.DeleteProduct(Id);

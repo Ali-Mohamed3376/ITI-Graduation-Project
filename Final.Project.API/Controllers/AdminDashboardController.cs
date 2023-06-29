@@ -94,7 +94,9 @@ namespace Final.Project.API.Controllers
         [Route("DeleteUser/{userId}")]
         public ActionResult DeleteUserFromDashboard(string userId)
         {
-            _adminDashboardManager.DeleteUser(userId);
+            var isfound = _adminDashboardManager.DeleteUser(userId);
+
+            if (!isfound) { return NotFound(); }
 
             return Ok("User Deleted Successfully");
 

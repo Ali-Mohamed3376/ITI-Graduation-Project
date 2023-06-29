@@ -18,6 +18,6 @@ public interface IUsersManager
     bool Edit(UserUpdateDto updateDto, User user);
 
     bool delete(string id);
-    UserOrderDto GetUserOrderDto(string id);
+    IEnumerable<UserOrderDto> GetUserOrdersDto(string id);
 
 }

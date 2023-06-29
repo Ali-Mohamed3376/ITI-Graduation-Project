@@ -24,34 +24,35 @@ namespace Final.Project.API.Controllers
             _Usermanager = manager;
         }
 
-        #region User Profile
+        #region profile
 
-        #region Get user
+            #region getuser
 
-        
-        [HttpGet]
-        [Route("profile")]
-        public ActionResult<UserReadDto> GetUser()
-        {
-            var currentUser = _Usermanager.GetUserAsync(User).Result;
-            //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
-            UserReadDto? user = _UsersManager.GetUserReadDto(currentUser);
-
-            if (user is null)
+            [HttpGet]
+            [Authorize]
+            [Route("profile")]
+            public ActionResult<UserReadDto> getUserProfile()
             {
-                return NotFound();
-            }
+                var currentUser = _Usermanager.GetUserAsync(User).Result;
+                //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
+                UserReadDto? user = _UsersManager.GetUserReadDto(currentUser);
 
-            return Ok(user);
-        }
+                if (user is null)
+                {
+                    return NotFound();
+                }
+
+
+                return Ok(user);
+            }
         #endregion
 
-        #region Update User
+            #region EditUserName
 
-        
-        [HttpPut]
-        [Route("Update")]
-        public ActionResult Edit(UserUpdateDto updateDto)
+            [HttpPut]
+            [Authorize]
+            [Route("Edit")]
+            public ActionResult Edit(UserUpdateDto updateDto)
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
             //updateDto.Id=currentUser.Id;
@@ -66,31 +67,32 @@ namespace Final.Project.API.Controllers
 
             return Ok("Edit successfully");
         }
-
         #endregion
 
-        #region Delete User
-        [HttpDelete]
-        [Route("DeleteUser")]
-        public ActionResult Delete()
-        {
-            var currentUser = _Usermanager.GetUserAsync(User).Result;
+            #region Delete
+            [HttpDelete]
+            [Authorize]
+            [Route("DeleteUser")]
+            public ActionResult Delete()
+            {
+                var currentUser = _Usermanager.GetUserAsync(User).Result;
 
-            //id = currentUser.Id;
+                //id = currentUser.Id;
 
-            var isfound = _UsersManager.delete(currentUser.Id);
+                var isfound = _UsersManager.delete(currentUser.Id);
 
-            if (!isfound) { return NotFound(); }
+                if (!isfound) { return NotFound(); }
 
-            return NoContent();
-        }
+                return Ok("Deleted  Successfully");
+            }
         #endregion
+        //done
+            #region ChangePassword
 
-        #region Change Password
-
-        [HttpPost]
-        [Route("Change_Password")]
-        public ActionResult ChangePassword(UserChangepassDto passwordDto)
+            [HttpPost]
+            [Authorize]
+            [Route("Change_Password")]
+            public ActionResult ChangePassword(UserChangepassDto passwordDto)
         {
             //get the user
             User? currentUser = _Usermanager.GetUserAsync(User).Result;
@@ -109,23 +111,27 @@ namespace Final.Project.API.Controllers
 
 
         #endregion
-        
-        #region user orders
-        
+
+        #endregion
+
+
+        //done
+        #region GetUserOrders
         [HttpGet]
-        [Route("Orders")]
-        public ActionResult<UserOrderDto> GetUserOrder()
+        [Authorize]
+        [Route("orders")]
+        public ActionResult<List<UserOrderDto>> GetUserOrders()
         {
 
             var currentUser = _Usermanager.GetUserAsync(User).Result;
 
-            UserOrderDto? userOrder = (UserOrderDto?)_UsersManager.GetUserOrderDto(currentUser.Id);
+            List<UserOrderDto>? userOrder = _UsersManager.GetUserOrdersDto(currentUser.Id) as List<UserOrderDto>;
 
             if (userOrder is null)
 
             { return null; }
 
-            return userOrder;
+            return Ok(userOrder);
 
         }
         //[HttpGet]
@@ -139,23 +145,15 @@ namespace Final.Project.API.Controllers
         //}
         #endregion
 
-        #region  user order details
-
-        #endregion region 
-
-        #region Order Details
-        
+        //done
+        #region getUserOrderDetails
         [HttpGet]
-        [Route("Order Details/{orderId}")]
-        public ActionResult<UserOrderDetailsDto> getOrderDetails(int orderId)
+        [Authorize]
+        [Route("orderDetails/{orderId}")]
+        public ActionResult<UserOrderDetailsDto> GetOrderDetails(int orderId)
         {
-            var currentUser = _Usermanager.GetUserAsync(User).Result;
-            if (currentUser is null)
-            {
-                return NotFound();
-            }
-
-            // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
+            //var currentUser = _Usermanager.GetUserAsync(User).Result;
+           // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
             var products = _UsersManager.GetUserOrderDetailsDto(orderId);
             if (products is null)
             {
@@ -164,9 +162,7 @@ namespace Final.Project.API.Controllers
 
             return Ok(products); //200 OK
         }
-        #endregion
-
-        #endregion
+        #endregion region 
     }
 }
 
