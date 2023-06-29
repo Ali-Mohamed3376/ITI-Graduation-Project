@@ -12,6 +12,7 @@ public class UsersManager : IUsersManager
     {
         _userRepo = userRepo;
     }
+
     #region delete user's account
     public bool delete(string id)
     {
@@ -146,6 +147,8 @@ public class UsersManager : IUsersManager
             City = user.City,
 
             Street = user.Street,
+            
+            Email = user.Email
 
         };
 

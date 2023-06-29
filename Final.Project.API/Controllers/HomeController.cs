@@ -1,5 +1,6 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,6 @@ namespace Final.Project.API.Controllers
         }
 
 
-
         #region Get All Products
         [HttpGet]
         [Route("AllProducts")]
@@ -37,10 +37,9 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
         #region Get All Categories With All Products
         [HttpGet]
-        [Route("CategoriesWProducts")]
+        [Route("CategoriesWithProducts")]
         public ActionResult<IEnumerable<CategoryDetailsDto>> GetAllCategoriesWithProducts()
         {
             IEnumerable<CategoryDetailsDto> categories = _categoriesManager.GetAllCategoriesWithProducts();
@@ -50,8 +49,8 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-
         #region Get All Products have dicounts
+
         [HttpGet]
         [Route("SpecialOffers")]
 
@@ -63,9 +62,6 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
-
-
         #region Get Top Products
         [HttpGet]
         [Route("TopProducts")]
@@ -76,7 +72,6 @@ namespace Final.Project.API.Controllers
 
         }
         #endregion
-
 
     }
 }

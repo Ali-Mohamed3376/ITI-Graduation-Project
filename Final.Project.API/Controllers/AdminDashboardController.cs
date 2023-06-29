@@ -1,5 +1,6 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ForAdmin")]
     public class AdminDashboardController : ControllerBase
     {
         private readonly IAdminDashboardManager _adminDashboardManager;
@@ -21,14 +23,19 @@ namespace Final.Project.API.Controllers
             _adminDashboardManager = adminDashboardManager;
             _manager = manager;
         }
+
+        #region Get All Users
         [HttpGet]
         [Route("GetAllUsers")]
         public ActionResult GetAllUsers()
         {
-            IEnumerable<UserDashboardReadDto> allUsers= _adminDashboardManager.GetAllUsers();
+            IEnumerable<UserDashboardReadDto> allUsers = _adminDashboardManager.GetAllUsers();
             return Ok(allUsers);
         }
 
+        #endregion
+
+        #region Get User By Id
         [HttpGet]
         [Route("User/{userId}")]
         public ActionResult GetUserById(string userId)
@@ -37,7 +44,10 @@ namespace Final.Project.API.Controllers
             return Ok(user);
         }
 
-        
+        #endregion
+
+        #region Admin Register
+
 
         [HttpPost]
         [Route("Register")]
@@ -50,8 +60,9 @@ namespace Final.Project.API.Controllers
                 LName = credentials.LName,
                 UserName = credentials.Email,
                 Email = credentials.Email,
-                Role = (Role)Enum.Parse(typeof(Role),credentials.Role)
+                Role = (Role)Enum.Parse(typeof(Role), credentials.Role)
             };
+
 
             var result = _manager.CreateAsync(user, credentials.Password).Result;
             if (!result.Succeeded)
@@ -75,14 +86,20 @@ namespace Final.Project.API.Controllers
             return Ok("Register Succeded!!!");
         }
 
+        #endregion
+
+        #region Delete User
+
         [HttpDelete]
-        [Route("UserDelete/{userId}")]
+        [Route("DeleteUser/{userId}")]
         public ActionResult DeleteUserFromDashboard(string userId)
         {
             _adminDashboardManager.DeleteUser(userId);
 
-            return Ok("user deleted Successfully");
+            return Ok("User Deleted Successfully");
 
-        }
+        } 
+        #endregion
+
     }
 }

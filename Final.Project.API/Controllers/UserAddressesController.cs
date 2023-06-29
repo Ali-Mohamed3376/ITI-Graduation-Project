@@ -1,5 +1,6 @@
 ﻿using Final.Project.Bl;
 using Final.Project.BL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -9,6 +10,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserAddressesController : ControllerBase
     {
         private readonly IUserAddressesManager _userAddressesManager;
@@ -18,6 +20,7 @@ namespace Final.Project.API.Controllers
             _userAddressesManager = userAddressesManager;
         }
 
+        #region Get All User Addresses
         [HttpGet]
         public ActionResult GetAllUserAddresses()
         {
@@ -32,8 +35,10 @@ namespace Final.Project.API.Controllers
             return Ok(addresses);
         }
 
+        #endregion
 
-
+        #region Add New Address
+       
         [HttpPost("AddNewAddress")]
         public ActionResult AddNewAddress(NewAddressAddingDto newAddress)
         {
@@ -42,15 +47,17 @@ namespace Final.Project.API.Controllers
             {
                 return BadRequest("not logged in");
             }
-            _userAddressesManager.AddNewAddress(userIdFromToken,newAddress);
+            _userAddressesManager.AddNewAddress(userIdFromToken, newAddress);
 
             return Ok("Address Added Successfully");
 
         }
 
+        #endregion
+
+        #region Edit Address
         [HttpPut]
         [Route("Edit")]
-
         public ActionResult EditAddressDetails(AddressEditDto address)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -64,6 +71,9 @@ namespace Final.Project.API.Controllers
             return Ok("address Edited successfully");
         }
 
+        #endregion
+
+        #region Set Address Default
         [HttpPut]
         [Route("SetDefault/{AddressId}")]
         public ActionResult SetDefaultAddress(int AddressId)
@@ -73,13 +83,15 @@ namespace Final.Project.API.Controllers
             {
                 return BadRequest("not logged in");
             }
-            _userAddressesManager.SetDefaultAddress(userIdFromToken,AddressId);
+            _userAddressesManager.SetDefaultAddress(userIdFromToken, AddressId);
             return Ok("Set as default succeeded");
         }
 
+        #endregion
 
+        #region Delete Address
         [HttpDelete]
-        [Route("delete/{addressId}")]
+        [Route("Delete/{addressId}")]
         public ActionResult DeleteAddress(int addressId)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -91,10 +103,8 @@ namespace Final.Project.API.Controllers
             _userAddressesManager.Delete(addressId);
 
             return Ok("Address deleted Successfully");
-        }
-
-
-
+        } 
+        #endregion
 
     }
 }

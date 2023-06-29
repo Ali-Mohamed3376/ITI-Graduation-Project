@@ -11,6 +11,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserProfileController : ControllerBase
     {
         private readonly IUsersManager? _UsersManager;
@@ -23,12 +24,14 @@ namespace Final.Project.API.Controllers
             _Usermanager = manager;
         }
 
-        #region profile
-        #region getuser
+        #region User Profile
+
+        #region Get user
+
+        
         [HttpGet]
-        [Authorize]
         [Route("profile")]
-        public ActionResult<UserReadDto> getUser()
+        public ActionResult<UserReadDto> GetUser()
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
             //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
@@ -39,13 +42,14 @@ namespace Final.Project.API.Controllers
                 return NotFound();
             }
 
-
             return Ok(user);
         }
         #endregion
 
+        #region Update User
+
+        
         [HttpPut]
-        [Authorize]
         [Route("Update")]
         public ActionResult Edit(UserUpdateDto updateDto)
         {
@@ -57,15 +61,16 @@ namespace Final.Project.API.Controllers
             }
 
             // _UsersManager.Edit(updateDto,currentUser.Id);
-             _UsersManager.Edit(updateDto, currentUser);
+            _UsersManager.Edit(updateDto, currentUser);
 
 
             return Ok("Edit successfully");
         }
 
-        #region Delete
+        #endregion
+
+        #region Delete User
         [HttpDelete]
-        [Authorize]
         [Route("DeleteUser")]
         public ActionResult Delete()
         {
@@ -81,8 +86,9 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
+        #region Change Password
+
         [HttpPost]
-        [Authorize]
         [Route("Change_Password")]
         public ActionResult ChangePassword(UserChangepassDto passwordDto)
         {
@@ -96,16 +102,18 @@ namespace Final.Project.API.Controllers
                 return BadRequest("Incorrect Password!!!");
             }
             //change password
-            var test= _Usermanager.ChangePasswordAsync(currentUser!,passwordDto.OldPassword,passwordDto.NewPassword).Result;
+            var test = _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword).Result;
 
-                return Ok("Password Changed Successfully!!!");
+            return Ok("Password Changed Successfully!!!");
         }
-        #endregion
 
+
+        #endregion
+        
         #region user orders
+        
         [HttpGet]
-        [Authorize]
-        [Route("orders")]
+        [Route("Orders")]
         public ActionResult<UserOrderDto> GetUserOrder()
         {
 
@@ -134,21 +142,31 @@ namespace Final.Project.API.Controllers
         #region  user order details
 
         #endregion region 
+
+        #region Order Details
+        
         [HttpGet]
-        [Authorize]
-        [Route("order Details/{orderId}")]
+        [Route("Order Details/{orderId}")]
         public ActionResult<UserOrderDetailsDto> getOrderDetails(int orderId)
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-           // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
+            if (currentUser is null)
+            {
+                return NotFound();
+            }
+
+            // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
             var products = _UsersManager.GetUserOrderDetailsDto(orderId);
             if (products is null)
             {
                 return NotFound();
             }
 
-            return Ok(products) ; //200 OK
+            return Ok(products); //200 OK
         }
+        #endregion
+
+        #endregion
     }
 }
 

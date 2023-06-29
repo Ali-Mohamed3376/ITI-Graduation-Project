@@ -1,4 +1,5 @@
 ﻿using Final.Project.BL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersManager _ordersManager;
@@ -35,8 +37,7 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Get all orders
-
+        #region Get all Orders Dashboard
         [HttpGet]
         [Route("Dashboard/GetAllOrders")]
         public ActionResult<IEnumerable<OrderReadDto>> GetAllOrders()
@@ -52,7 +53,7 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Get order details
+        #region Get order details Dashboard
 
         [HttpGet]
         [Route("Dashboard/GetOrderDetails/{Id}")]
@@ -69,7 +70,7 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Edit Order
+        #region Edit Order Dashboard
 
         [HttpPut]
         [Route("Dashboard/EditOrder")]
@@ -82,7 +83,7 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Delete Order
+        #region Delete Order Dashboard
 
         [HttpDelete]
         [Route("Dashboard/DeleteOrder")]

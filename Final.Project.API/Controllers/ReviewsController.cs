@@ -8,6 +8,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewsManager _reviewsManager;
@@ -20,8 +21,8 @@ namespace Final.Project.API.Controllers
 
 
 
-        [Authorize]
-        [HttpPost("products/{productId}/reviews")]
+        
+        [HttpPost("Products/{productId}/AddReview")]
         public IActionResult AddReview(int productId, [FromBody] ReviewDto reviewDto)
         {
             try

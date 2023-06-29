@@ -52,7 +52,6 @@ namespace Final.Project.API.Controllers
             // Get claims
             List<Claim> claims = manager.GetClaimsAsync(user).Result.ToList();
 
-
             // get Secret Key
             string? secretKey = configuration.GetValue<string>("SecretKey");
             byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
@@ -60,7 +59,7 @@ namespace Final.Project.API.Controllers
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddMinutes(60);
+            DateTime exp = DateTime.Now.AddDays(20);
             JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -69,7 +68,8 @@ namespace Final.Project.API.Controllers
             var currentUser = manager.GetUserAsync(User).Result;
             return new TokenDto
             {
-                Token = token
+                Token = token,
+                Role = user.Role.ToString()
             };
         }
         #endregion
@@ -99,7 +99,7 @@ namespace Final.Project.API.Controllers
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("Role", user.Role.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
             var claimsResult = manager.AddClaimsAsync(user, claims).Result;
@@ -134,7 +134,6 @@ namespace Final.Project.API.Controllers
                 return BadRequest("Email is Invalid!!!!");
             }
 
-
             User? user = await manager.FindByEmailAsync(email);
             if (user is null)
             {
@@ -158,9 +157,9 @@ namespace Final.Project.API.Controllers
 
         #region Reset Password
 
-        [HttpPost]
+        [HttpGet]
         [Route("Reset_Password")]
-        public async Task<ActionResult> ResetPassword([FromForm] UserResetPasswordDto userResetPasswordDto)
+        public async Task<ActionResult> ResetPassword([FromQuery] UserResetPasswordDto userResetPasswordDto)
         {
             User? user = await manager.FindByEmailAsync(userResetPasswordDto.Email);
             if (user is null)

@@ -4,6 +4,7 @@ using Final.Project.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+#endregion
+
+#region CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllDomains", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 #endregion
 
 #region Repos Services
@@ -87,12 +100,7 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 builder.Services.AddDbContext<ECommerceContext>(options => options
 
-    .UseSqlServer(@"Server=./;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
-
-    //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
-    //.UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
-    //.UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDBTest;Trusted_Connection=true;Encrypt=false"));
-
+    .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
 #endregion
 
@@ -129,7 +137,7 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = key,
-        ValidateIssuer = false, 
+        ValidateIssuer = false,
         ValidateAudience = false,
     };
 });
@@ -139,7 +147,22 @@ builder.Services.AddAuthentication(options =>
 
 #region Authorization
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ForCustomer", policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Role, "Customer");
+    });
+
+    options.AddPolicy("ForAdmin", policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Role, "Admin");
+    });
+});
+
+
 #endregion
+
 
 var app = builder.Build();
 
@@ -153,7 +176,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthentication();
+app.UseCors("AllowAllDomains");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
