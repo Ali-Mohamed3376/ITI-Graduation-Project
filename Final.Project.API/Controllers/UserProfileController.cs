@@ -29,7 +29,6 @@ namespace Final.Project.API.Controllers
             #region getuser
 
             [HttpGet]
-            [Authorize]
             [Route("profile")]
             public ActionResult<UserReadDto> getUserProfile()
             {
@@ -50,7 +49,6 @@ namespace Final.Project.API.Controllers
             #region EditUserName
 
             [HttpPut]
-            [Authorize]
             [Route("Edit")]
             public ActionResult Edit(UserUpdateDto updateDto)
         {
@@ -71,7 +69,6 @@ namespace Final.Project.API.Controllers
 
             #region Delete
             [HttpDelete]
-            [Authorize]
             [Route("DeleteUser")]
             public ActionResult Delete()
             {
@@ -90,7 +87,6 @@ namespace Final.Project.API.Controllers
             #region ChangePassword
 
             [HttpPost]
-            [Authorize]
             [Route("Change_Password")]
             public ActionResult ChangePassword(UserChangepassDto passwordDto)
         {
@@ -118,7 +114,6 @@ namespace Final.Project.API.Controllers
         //done
         #region GetUserOrders
         [HttpGet]
-        [Authorize]
         [Route("orders")]
         public ActionResult<List<UserOrderDto>> GetUserOrders()
         {
@@ -148,7 +143,6 @@ namespace Final.Project.API.Controllers
         //done
         #region getUserOrderDetails
         [HttpGet]
-        [Authorize]
         [Route("orderDetails/{orderId}")]
         public ActionResult<UserOrderDetailsDto> GetOrderDetails(int orderId)
         {
