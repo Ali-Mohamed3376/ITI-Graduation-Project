@@ -1,6 +1,7 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserProductsCartController : ControllerBase
     {
-        //test by abdo
         private readonly IUserProductsCartsManager _userProductsCartsManager;
         private readonly UserManager<User> _manager;
 
@@ -23,6 +24,9 @@ namespace Final.Project.API.Controllers
             _manager = manager;
         }
 
+
+        #region Get All Products In Cart
+        
         [HttpGet]
         public ActionResult GetAllProductsInCart()
         {
@@ -32,7 +36,7 @@ namespace Final.Project.API.Controllers
             //then get user id from current user details
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var currentUser = _manager.GetUserAsync(User).Result;
-            if(userIdFromToken is null)
+            if (userIdFromToken is null)
             {
                 return BadRequest("not logged in");
             }
@@ -43,6 +47,11 @@ namespace Final.Project.API.Controllers
 
         }
 
+
+        #endregion     
+
+        #region Add Product To Cart
+        
         [HttpPost]
         [Route("AddProduct")]
         public ActionResult AddProductToCart(productToAddToCartDto product)
@@ -52,13 +61,16 @@ namespace Final.Project.API.Controllers
             if (userIdFromToken is null)
             {
                 return BadRequest("not logged in");
-                
+
             }
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             _userProductsCartsManager.AddProductToCart(product, userIdFromToken);
             return Ok("product Added to Cart");
         }
 
+        #endregion
+
+        #region Update Product Quantity In Cart
         [HttpPut]
         [Route("UpdateProduct")]
 
@@ -70,14 +82,14 @@ namespace Final.Project.API.Controllers
             {
                 return BadRequest("not logged in");
             }
-           // string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
+            // string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             _userProductsCartsManager.UpdateProductQuantityInCart(product, userIdFromToken);
             return Ok("product Quantity Edited to Cart");
         }
 
+        #endregion
 
-        
-
+        #region Delete Product
         [HttpDelete]
         [Route("DeleteProduct")]
 
@@ -95,6 +107,7 @@ namespace Final.Project.API.Controllers
             return Ok("product Deleted from Cart");
         }
 
+        #endregion
 
     }
 }

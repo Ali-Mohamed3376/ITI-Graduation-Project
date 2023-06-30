@@ -1,5 +1,6 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,6 @@ namespace Final.Project.API.Controllers
         }
 
         #region Get Product By Id
-
         [HttpGet]
         [Route("{id}")]
         public ActionResult<ProductDetailsDto> GetProductDetails(int id)
@@ -30,8 +30,7 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-        #region Products Filteration by (CategoryName, ProductName, MinPrice, MaxPrice)
-
+        #region Products Filteration
         [HttpPost]
         [Route("Filter")]
         public ActionResult GetAll(ProductQueryDto productQueryDto)
@@ -60,7 +59,7 @@ namespace Final.Project.API.Controllers
 
             if (productQueryDto.Rating != 0)
             {
-                query = query.Where(q => q.Rating >= productQueryDto.Rating);
+                query = query.Where(q => q.Reviews.Average(r => r.Rating) >= productQueryDto.Rating);
             }
 
             if (!query.Any())
@@ -74,7 +73,6 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Get all Products
-
         [HttpGet]
         [Route("Dashboard/GetAllProducts")]
         public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
@@ -92,7 +90,7 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Add Product
-
+        [Authorize(Policy ="ForAdmin")]
         [HttpPost]
         [Route("Dashboard/AddProduct")]
         public ActionResult Add(ProductAddDto productAddDto)
@@ -104,7 +102,7 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Edit Product
-
+        [Authorize(Policy = "ForAdmin")]
         [HttpPut]
         [Route("Dashboard/UpdateProduct")]
         public ActionResult Edit(ProductEditDto productEditDto)
@@ -117,7 +115,7 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Delete Product
-
+        [Authorize(Policy = "ForAdmin")]
         [HttpDelete]
         [Route("Dashboard/DeleteProduct/{Id}")]
         public ActionResult Delete(int Id)
@@ -129,11 +127,21 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
+        #region Get Related Products
+        [HttpGet]
+        [Route("RelatedProducts/{brand}")]
+        public ActionResult<RelatedProductDto> GetRelatedProducts(string brand)
+        {
+            IEnumerable<RelatedProductDto> products = _productsManager.GetRelatedProducts(brand);
+
+            if (products is null)
+            {
+                return NotFound("There is No Related Products");
+            }
+
+            return Ok(products);
+        }
+        #endregion
+
     }
 }
-
-
-
-
-
-

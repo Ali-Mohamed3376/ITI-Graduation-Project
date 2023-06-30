@@ -12,6 +12,7 @@ public class UsersManager : IUsersManager
     {
         _unitOfWork = unitOfWork;
     }
+
     #region delete user's account
     public bool delete(string id)
     {

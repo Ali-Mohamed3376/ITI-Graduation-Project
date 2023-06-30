@@ -10,10 +10,7 @@ public class Product
     public string Model { get; set; } = string.Empty;
     public int CategoryID { get; set; }
     public Category Category { get; set; } = null!;
-    public double? Rating { get => Reviews.Any() ? Reviews.Average(r => r.Rating) : 0; }
     public IEnumerable<UserProductsCart> UsersProductsCarts { get; set; } = new HashSet<UserProductsCart>();
     public IEnumerable<OrderProductDetails> OrdersProductDetails { get; set; } = new HashSet<OrderProductDetails>();
     public IEnumerable<Review> Reviews { get; set; } = new HashSet<Review>();
-
-    
 }

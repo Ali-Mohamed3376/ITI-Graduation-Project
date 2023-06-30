@@ -1,4 +1,5 @@
 ﻿using Final.Project.BL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace Final.Project.API.Controllers
         }
 
         #region Get All Categories
-
+        
         [HttpGet]
         public ActionResult<IEnumerable<CategoryDto>> GetAllCategories()
         {
@@ -25,12 +26,10 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
         #region Get Category by id
-
+        
         [HttpGet]
         [Route("{id}")]
-
         public ActionResult<CategoryDto> GetCategoryById(int id)
         {
             CategoryDto? category = _categoriesManager.GetCategoryById(id);
@@ -40,12 +39,10 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
         #region Get Category By id With Products
-
+        
         [HttpGet]
         [Route("{id}/Products")]
-
         public ActionResult CategoryDetails(int id)
         {
             IEnumerable<ProductChildDto>? categoryDetailDto = _categoriesManager.GetCategoryWithProducts(id);
@@ -54,12 +51,10 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
-
         #region Get all Categories Dashboard
-
         [HttpGet]
         [Route("Dashboard/GetAllCategories")]
+        [Authorize(Policy = "ForAdmin")]
         public ActionResult<IEnumerable<CategoryReadDto>> GetAllCategoriesDashBoard()
         {
             IEnumerable<CategoryReadDto> categoryReadDtos = _categoriesManager.GetAllCategories();
@@ -73,10 +68,11 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Add Category
+        #region Add Category Dashboard
 
         [HttpPost]
         [Route("Dashboard/AddCategory")]
+        [Authorize(Policy = "ForAdmin")]
         public ActionResult Add(CategoryAddDto categoryAddDto)
         {
             bool isAdded = _categoriesManager.AddCategory(categoryAddDto);
@@ -85,10 +81,11 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Edit Category
+        #region Edit Category Dashboard
 
         [HttpPut]
         [Route("Dashboard/EditCategory")]
+        [Authorize(Policy = "ForAdmin")]
         public ActionResult Edit(CategoryEditDto categoryEditDto)
         {
             bool isEdited = _categoriesManager.UpdateCategory(categoryEditDto);
@@ -98,10 +95,11 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-        #region Delete Category
+        #region Delete Category Dashboard 
 
         [HttpDelete]
-        [Route("Dashboard/DeleteCategory/{Id}")]
+        [Route("Dashboard/DeleteCategory")]
+        [Authorize(Policy = "ForAdmin")]
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _categoriesManager.DeleteCategory(Id);
