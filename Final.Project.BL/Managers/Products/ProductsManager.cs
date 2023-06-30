@@ -1,6 +1,7 @@
 ﻿
 
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Final.Project.BL;
 
@@ -69,7 +70,7 @@ public class ProductsManager: IProductsManager
 
         };
     }
-    #endregion
+    #endregion     
 
     #region GetAll Products Have discounts
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount()
@@ -115,29 +116,45 @@ public class ProductsManager: IProductsManager
 
     #endregion
 
+
     #region Add Product
-
-    public bool AddProduct(ProductAddDto product)
+    public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme)
     {
-        Product ProductToAdd = new Product
-        {
-            Name = product.Name,
-            Price = product.Price,
-            Description = product.Description,
-            Image = product.Image,
-            Model = product.Model,
-            CategoryID = product.CategoryID,
-        };
 
+
+        var extension = Path.GetExtension(productDto.Image.FileName);
+        // Save the file to disk
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(Environment.CurrentDirectory, "Images", fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            productDto.Image.CopyToAsync(stream);
+        }
+
+        // Create a new Product object and save it to the database
+        var ProductToAdd = new Product
+        {
+            Name = productDto.Name,
+            //Image = $"{Request.Scheme}://{Request.Host}/Images/{fileName}",
+            Image = $"{requestScheme}://{requestHost}/Image/{fileName}",
+            Price = productDto.Price,
+            CategoryID = productDto.CategoryID,
+            Description = productDto.Description,
+            Model = productDto.Model,
+            Discount=productDto.Discount
+        };
         _unitOfWork.ProductRepo.Add(ProductToAdd);
         return _unitOfWork.Savechanges() > 0;
     }
 
     #endregion
 
-    #region Update Product
 
-    public bool UpdateProduct(ProductEditDto productEditDto)
+
+    #region Edit Product
+
+    public bool EditProduct(ProductEditDto productEditDto)
     {
         var product = _unitOfWork.ProductRepo.GetById(productEditDto.Id);
         if (product is null)
@@ -148,9 +165,10 @@ public class ProductsManager: IProductsManager
         product.Name = productEditDto.Name;
         product.Price = productEditDto.Price;
         product.Description = productEditDto.Description;
-        product.Image = productEditDto.Image;
+        product.Image = productEditDto == null ? product.Image : productEditDto.Image;
         product.Model = productEditDto.Model;
         product.CategoryID = productEditDto.CategoryID;
+        product.Discount = productEditDto.Discount;
 
         return _unitOfWork.Savechanges() > 0;
     }
