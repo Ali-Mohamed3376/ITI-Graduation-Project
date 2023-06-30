@@ -15,4 +15,7 @@ public interface IProductsManager
     bool AddProduct(ProductAddDto product);
     bool UpdateProduct(ProductEditDto productEditDto);
     bool DeleteProduct(int Id);
+
+    public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand);
+
 }

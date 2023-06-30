@@ -47,6 +47,18 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
         return _context.Set<Product>()
                        .Include(x => x.Category);
     }
-
     #endregion
+
+    #region Get Related Products By brand
+    public IEnumerable<Product> GetRelatedProductsByCategoryName(string brand)
+    {
+        return _context.Set<Product>()
+            .Include(x => x.Category)
+            .Where(x => x.Category.Name == brand)
+            .Take(5);
+
+    }
+    #endregion
+
+
 }

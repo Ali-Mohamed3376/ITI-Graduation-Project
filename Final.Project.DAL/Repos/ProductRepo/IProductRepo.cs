@@ -6,4 +6,5 @@ public interface IProductRepo :IGenericRepo<Product>
     public IEnumerable<Product> GetAllProductWithDiscount();
 
     IEnumerable<Product> GetAllWithCategory();
+    IEnumerable<Product> GetRelatedProductsByCategoryName(string brand);
 }
