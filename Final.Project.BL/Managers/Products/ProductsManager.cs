@@ -191,6 +191,29 @@ public class ProductsManager: IProductsManager
 
     #endregion
 
+    #region Get Related Products by Category Name 
+    public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand)
+    {
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetRelatedProductsByCategoryName(brand);
+        IEnumerable<RelatedProductDto> productsDtos = productsFromDb
+            .Select(p => new RelatedProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+                CategoryName=p.Category.Name,
+                Discount = p.Discount,
+                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+
+
+            });
+        return productsDtos;
+    }
+    #endregion
+
+
+
 }
 
 

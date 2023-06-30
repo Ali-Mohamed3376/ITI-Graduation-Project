@@ -141,5 +141,21 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
+        #region Get Related Products
+        [HttpGet]
+        [Route("RelatedProducts/{brand}")]
+        public ActionResult<RelatedProductDto> GetRelatedProducts(string brand)
+        {
+            IEnumerable<RelatedProductDto> products = _productsManager.GetRelatedProducts(brand);
+
+            if (products is null)
+            {
+                return NotFound("There is No Related Products");
+            }
+
+            return Ok(products);
+        }
+        #endregion
+
     }
 }
