@@ -1,8 +1,10 @@
 using Final.Project.API;
 using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -92,7 +94,7 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 //Ahmed
 
-
+builder.Services.AddScoped<IHelper, Helper>();
 
 #endregion
 
@@ -176,6 +178,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region make static file 
+var staticFilesPath = Path.Combine(Environment.CurrentDirectory, "Images");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = "/Images"
+});
+#endregion
 
 app.UseHttpsRedirection();
 

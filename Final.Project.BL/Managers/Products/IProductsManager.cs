@@ -12,8 +12,8 @@ public interface IProductsManager
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount();
 
     IEnumerable<ProductReadDto> GetAllProducts();
-    bool AddProduct(ProductAddDto product);
-    bool UpdateProduct(ProductEditDto productEditDto);
+    public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme);
+    bool EditProduct(ProductEditDto productEditDto);
     bool DeleteProduct(int Id);
 
     public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand);

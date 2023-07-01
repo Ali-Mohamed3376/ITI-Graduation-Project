@@ -1,6 +1,7 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,13 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ECommerceContext context;
-        public ProductsController(IProductsManager productsManager,ECommerceContext context)
+        private readonly IHelper _helper;
+
+        public ProductsController(IProductsManager productsManager, ECommerceContext context,IHelper Helper)
         {
             _productsManager = productsManager;
             this.context = context;
+            _helper = Helper;
         }
 
         #region Get Product By Id
@@ -90,26 +94,36 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Add Product
-        [Authorize(Policy ="ForAdmin")]
+        //[Authorize(Policy = "ForAdmin")]
         [HttpPost]
         [Route("Dashboard/AddProduct")]
-        public ActionResult Add(ProductAddDto productAddDto)
+        public ActionResult Add([FromForm] ProductAddDto product)
         {
-            bool isAdded = _productsManager.AddProduct(productAddDto);
-            return isAdded ? NoContent() : BadRequest();
-        }
+            string message = _helper.ImageValidation(product.Image);
 
+            if (message == "ok")
+            {
+                _productsManager.AddProduct(product, Request.Host.Value, Request.Scheme);
+                return Ok(new { message = "ok" });
+            }
+            return BadRequest(message);
+        }
         #endregion
 
         #region Edit Product
         [Authorize(Policy = "ForAdmin")]
-        [HttpPut]
-        [Route("Dashboard/UpdateProduct")]
-        public ActionResult Edit(ProductEditDto productEditDto)
-        {
-            bool isEdited = _productsManager.UpdateProduct(productEditDto);
 
-            return isEdited ? NoContent() : BadRequest();
+        [HttpPatch]
+        [Route("{id}")]
+        public ActionResult<Product> Edit(ProductEditDto product, int id)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+            _productsManager.EditProduct(product);
+            return Ok(product);
+
         }
 
         #endregion

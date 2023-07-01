@@ -23,6 +23,7 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
     public Order GetOrderWithProducts(int OrderId)
     {
         return _context.Set<Order>()
+                .Include(o => o.User)
                 .Include(o => o.OrdersProductDetails)
                     .ThenInclude(op => op.Product)
                 .First(o => o.Id == OrderId);
