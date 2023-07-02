@@ -54,6 +54,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     {
         return _context.Set<Product>()
             .Include(x => x.Category)
+            .Include(x=>x.Reviews)
             .Where(x => x.Category.Name == brand)
             .Take(5);
 
