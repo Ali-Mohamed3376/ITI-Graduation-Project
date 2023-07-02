@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Final.Project.API.Controllers
 {
@@ -21,16 +22,19 @@ namespace Final.Project.API.Controllers
         private readonly UserManager<User> manager;
         private readonly ILogger<UserController> logger;
         private readonly IMailingService mailingService;
+        private readonly IUnitOfWork unitOfWork;
 
         public UserController(IConfiguration configuration,
                                  UserManager<User> manager,
                                  ILogger<UserController> logger,
-                                 IMailingService mailingService)
+                                 IMailingService mailingService,
+                                 IUnitOfWork unitOfWork)
         {
             this.configuration = configuration;
             this.manager = manager;
             this.logger = logger;
             this.mailingService = mailingService;
+            this.unitOfWork = unitOfWork;
         }
 
         #region Login
@@ -78,7 +82,7 @@ namespace Final.Project.API.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public ActionResult Register(RegisterDto credentials)
+        public async Task<ActionResult> Register([FromBody] RegisterDto credentials)
         {
 
             User user = new User
@@ -90,7 +94,7 @@ namespace Final.Project.API.Controllers
                 Role = Role.Customer,
             };
 
-            var result = manager.CreateAsync(user, credentials.Password).Result;
+            var result = await manager.CreateAsync(user, credentials.Password);
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
@@ -102,22 +106,26 @@ namespace Final.Project.API.Controllers
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
-            var claimsResult = manager.AddClaimsAsync(user, claims).Result;
+            var claimsResult = await manager.AddClaimsAsync(user, claims);
 
             if (!claimsResult.Succeeded)
             {
                 return BadRequest(claimsResult.Errors);
             }
 
-            return Ok("Register Succeded!!!");
+
+            //var token = await manager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = $"{configuration.GetValue<string>("AppURL")}";
+            await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
+
+
+            var response = new
+            {
+                message = "Confirmation Link Sent Successfully!!"
+            };
+
+            return Ok(response);
         }
-
-
-        #endregion
-
-        #region Logout
-
-
 
 
         #endregion
@@ -126,7 +134,7 @@ namespace Final.Project.API.Controllers
 
         [HttpPost]
         [Route("Forget_Password")]
-        public async Task<ActionResult> Forget_Password(string email)
+        public async Task<ActionResult> Forget_Password([FromForm] string email)
         {
 
             if (string.IsNullOrEmpty(email))
@@ -140,46 +148,87 @@ namespace Final.Project.API.Controllers
                 return NotFound("User not found with the given email.");
             }
 
-            var token = await manager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken = Encoding.UTF8.GetBytes(token);
-            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+            var random = new Random();
+            var code = random.Next(10000, 99999).ToString();
+            user.Code = code;
+            unitOfWork.Savechanges();
 
+            await mailingService.SendEmailAsync(email, "Reset Password", $"Your Code is {code}");
 
-            //var callBackURL = Url.Page("/ResetPassword", pageHandler: null,  validToken,  Request.Scheme);
+            var response = new
+            {
+                message = "Reset Password Email has been Sent Successfully!!!"
+            };
 
-            string backUrl = $"{configuration.GetValue<string>("AppURL")}/Reset_Password?email={email}&token={validToken}";
+            return Ok(response);
+        }
+        #endregion
 
-            await mailingService.SendEmailAsync(email, "Reset Password", "<h1>Follow this Instruction to Reset Password</h1>" + $"To Reset Password <a href='{backUrl}'>Click here</a>");
+        #region Check Code For User
+        [HttpPost]
+        [Route("Check_Code")]
+        public async Task<ActionResult> Check_Code([FromBody] ConfirmCodeDto confirmCodeDto)
+        {
+            if (string.IsNullOrEmpty(confirmCodeDto.Email))
+            {
+                return BadRequest("Email is Invalid!!!!");
+            }
 
-            return Ok("Reset Password Email has been Sent Successfully!!!");
+            User? user = await manager.FindByEmailAsync(confirmCodeDto.Email);
+            if (user is null)
+            {
+                return NotFound("User not found with the given email.");
+            }
+
+            if (user.Code != confirmCodeDto.Code)
+            {
+                return BadRequest("Invalid Code!!!");
+            }
+
+            var response = new
+            {
+                message = "Code is Valid"
+            };
+
+            return Ok(response);
+
         }
         #endregion
 
         #region Reset Password
 
-        [HttpGet]
+        [HttpPost]
         [Route("Reset_Password")]
-        public async Task<ActionResult> ResetPassword([FromQuery] UserResetPasswordDto userResetPasswordDto)
+        public async Task<ActionResult> ResetPassword(UserResetPasswordDto userResetPasswordDto)
         {
             User? user = await manager.FindByEmailAsync(userResetPasswordDto.Email);
             if (user is null)
             {
-                return NotFound("User Not Found!!!");
+                return NotFound("user not found!!!");
             }
 
-            if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmPassword)
+            if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmNewPassword)
             {
-                return BadRequest("Passwored dosen't Match Confirmation!");
+                return BadRequest("passwored dosen't match confirmation!");
             }
 
-            var result =await manager.ResetPasswordAsync(user, userResetPasswordDto.Token, userResetPasswordDto.NewPassword);
+            var token = await manager.GeneratePasswordResetTokenAsync(user);
+            //var encodedtoken = Encoding.UTF8.GetBytes(token);
+            //var validtoken = WebEncoders.Base64UrlEncode(encodedtoken);
+
+            var result = await manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
 
-            return Ok("Password has been Reset Successfully!!!");
+            var response = new
+            {
+                message = "Password has been Reset Successfully!!!"
+            };
+
+            return Ok(response);
         }
 
         #endregion
@@ -190,9 +239,9 @@ namespace Final.Project.API.Controllers
         [Route("Send_Email")]
         public async Task<ActionResult> SendEmail([FromForm] MailRequestDto mailRequestDto)
         {
-           await mailingService.SendEmailAsync(mailRequestDto.ToEmail, mailRequestDto.Subject, mailRequestDto.Body);
+            await mailingService.SendEmailAsync(mailRequestDto.ToEmail, mailRequestDto.Subject, mailRequestDto.Body);
 
-            return Ok("Email Sending Successfully!!!"); 
+            return Ok("Email Sending Successfully!!!");
         }
 
 

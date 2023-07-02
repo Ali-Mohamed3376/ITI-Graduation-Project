@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Final.Project.DAL.Migrations
 {
     [DbContext(typeof(ECommerceContext))]
-    [Migration("20230626165018_Initial")]
+    [Migration("20230701122209_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -266,6 +266,10 @@ namespace Final.Project.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")

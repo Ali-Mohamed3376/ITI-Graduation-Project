@@ -84,6 +84,11 @@ public class OrdersManager : IOrdersManager
     {
         Order order = _unitOfWork.OrderRepo.GetOrderWithProducts(OrderId);
 
+        if(order is null)
+        {
+            return null;
+        }
+
         OrderDetailsDto orderDetails = new OrderDetailsDto
         {
             Id = order.Id,

@@ -1,8 +1,10 @@
 using Final.Project.API;
 using Final.Project.BL;
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -92,7 +94,7 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 //Ahmed
 
-
+builder.Services.AddScoped<IHelper, Helper>();
 
 #endregion
 
@@ -101,6 +103,7 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddDbContext<ECommerceContext>(options => options
 
     .UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+   // .UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
     //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
@@ -176,6 +179,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region make static file 
+var staticFilesPath = Path.Combine(Environment.CurrentDirectory, "Images");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = "/Images"
+});
+#endregion
 
 app.UseHttpsRedirection();
 

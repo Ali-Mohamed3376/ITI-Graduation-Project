@@ -14,6 +14,7 @@ public class User : IdentityUser//<int>
     public string LName { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public string Street { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
     public Role Role { get; set; }
     public IEnumerable<UserProductsCart> UsersProductsCarts { get; set; } = new HashSet<UserProductsCart>();
     public IEnumerable<Order> Orders { get; set; } = new HashSet<Order>();

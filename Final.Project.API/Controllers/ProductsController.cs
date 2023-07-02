@@ -1,6 +1,7 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,13 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ECommerceContext context;
-        public ProductsController(IProductsManager productsManager,ECommerceContext context)
+        private readonly IHelper _helper;
+
+        public ProductsController(IProductsManager productsManager, ECommerceContext context,IHelper Helper)
         {
             _productsManager = productsManager;
             this.context = context;
+            _helper = Helper;
         }
 
         #region Get Product By Id
@@ -30,47 +34,60 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
+        #region Products Filteration Old Version
+        //[HttpPost]
+        //[Route("Filter")]
+        //public ActionResult GetAll(ProductQueryDto productQueryDto)
+        //{
+        //    var query = context.Products.AsQueryable();
+
+        //    if (productQueryDto.CategotyId.HasValue && productQueryDto.CategotyId > 0)
+        //    {
+        //        query = query.Where(q => q.CategoryID == productQueryDto.CategotyId);
+        //    }
+
+        //    if (productQueryDto.ProductName != null || productQueryDto.ProductName != "")
+        //    {
+        //        query = query.Where(q => q.Name.Contains(productQueryDto.ProductName));
+        //    }
+
+        //    if (productQueryDto.MaxPrice.HasValue && productQueryDto.MaxPrice > 0)
+        //    {
+        //        query = query.Where(q => q.Price <= productQueryDto.MaxPrice.Value);
+        //    }
+
+        //    if (productQueryDto.MinPrice > 0)
+        //    {
+        //        query = query.Where(q => q.Price >= productQueryDto.MinPrice.Value);
+        //    }
+
+        //    if (productQueryDto.Rating.HasValue && productQueryDto.Rating > 0)
+        //    {
+        //        query = query.Where(q => q.Reviews.Average(r => r.Rating) >= productQueryDto.Rating.Value);
+        //    }
+
+        //    if (!query.Any())
+        //    {
+        //        return Ok("Not Found");
+        //    }
+
+        //    return Ok(query.ToList());
+        //}
+
+        #endregion
+
         #region Products Filteration
         [HttpPost]
         [Route("Filter")]
         public ActionResult GetAll(ProductQueryDto productQueryDto)
         {
-            var query = context.Products.AsQueryable();
+            var result = _productsManager.ProductAfterFilteration(productQueryDto);
 
-            if (productQueryDto.CategotyId != 0)
-            {
-                query = query.Where(q => q.CategoryID == productQueryDto.CategotyId);
-            }
-
-            if (productQueryDto.ProductName != null)
-            {
-                query = query.Where(q => q.Name.Contains(productQueryDto.ProductName));
-            }
-
-            if (productQueryDto.MaxPrice != 0)
-            {
-                query = query.Where(q => q.Price <= productQueryDto.MaxPrice);
-            }
-
-            if (productQueryDto.MinPrice != 0)
-            {
-                query = query.Where(q => q.Price >= productQueryDto.MinPrice);
-            }
-
-            if (productQueryDto.Rating != 0)
-            {
-                query = query.Where(q => q.Reviews.Average(r => r.Rating) >= productQueryDto.Rating);
-            }
-
-            if (!query.Any())
-            {
-                return BadRequest("Not Found");
-            }
-
-            return Ok(query.ToList());
+            return Ok(result.ToList());
         }
 
         #endregion
+
 
         #region Get all Products
         [HttpGet]
@@ -90,26 +107,36 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Add Product
-        [Authorize(Policy ="ForAdmin")]
+        //[Authorize(Policy = "ForAdmin")]
         [HttpPost]
         [Route("Dashboard/AddProduct")]
-        public ActionResult Add(ProductAddDto productAddDto)
+        public ActionResult Add([FromForm] ProductAddDto product)
         {
-            bool isAdded = _productsManager.AddProduct(productAddDto);
-            return isAdded ? NoContent() : BadRequest();
-        }
+            string message = _helper.ImageValidation(product.Image);
 
+            if (message == "ok")
+            {
+                _productsManager.AddProduct(product, Request.Host.Value, Request.Scheme);
+                return Ok(new { message = "ok" });
+            }
+            return BadRequest(message);
+        }
         #endregion
 
         #region Edit Product
         [Authorize(Policy = "ForAdmin")]
-        [HttpPut]
-        [Route("Dashboard/UpdateProduct")]
-        public ActionResult Edit(ProductEditDto productEditDto)
-        {
-            bool isEdited = _productsManager.UpdateProduct(productEditDto);
 
-            return isEdited ? NoContent() : BadRequest();
+        [HttpPatch]
+        [Route("{id}")]
+        public ActionResult<Product> Edit(ProductEditDto product, int id)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+            _productsManager.EditProduct(product);
+            return Ok(product);
+
         }
 
         #endregion
@@ -125,6 +152,22 @@ namespace Final.Project.API.Controllers
             return isDeleted ? NoContent() : BadRequest();
         }
 
+        #endregion
+
+        #region Get Related Products
+        [HttpGet]
+        [Route("RelatedProducts/{brand}")]
+        public ActionResult<RelatedProductDto> GetRelatedProducts(string brand)
+        {
+            IEnumerable<RelatedProductDto> products = _productsManager.GetRelatedProducts(brand);
+
+            if (products is null)
+            {
+                return NotFound("There is No Related Products");
+            }
+
+            return Ok(products);
+        }
         #endregion
 
     }

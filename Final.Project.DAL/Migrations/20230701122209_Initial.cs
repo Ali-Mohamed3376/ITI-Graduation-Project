@@ -36,6 +36,7 @@ namespace Final.Project.DAL.Migrations
                     LName = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Street = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

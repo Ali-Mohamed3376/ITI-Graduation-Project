@@ -1,6 +1,7 @@
 ﻿
 
 using Final.Project.DAL;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Final.Project.BL;
 
@@ -69,7 +70,7 @@ public class ProductsManager: IProductsManager
 
         };
     }
-    #endregion
+    #endregion     
 
     #region GetAll Products Have discounts
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount()
@@ -116,28 +117,41 @@ public class ProductsManager: IProductsManager
     #endregion
 
     #region Add Product
-
-    public bool AddProduct(ProductAddDto product)
+    public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme)
     {
-        Product ProductToAdd = new Product
-        {
-            Name = product.Name,
-            Price = product.Price,
-            Description = product.Description,
-            Image = product.Image,
-            Model = product.Model,
-            CategoryID = product.CategoryID,
-        };
 
+
+        var extension = Path.GetExtension(productDto.Image.FileName);
+        // Save the file to disk
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(Environment.CurrentDirectory, "Images", fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            productDto.Image.CopyToAsync(stream);
+        }
+
+        // Create a new Product object and save it to the database
+        var ProductToAdd = new Product
+        {
+            Name = productDto.Name,
+            //Image = $"{Request.Scheme}://{Request.Host}/Images/{fileName}",
+            Image = $"{requestScheme}://{requestHost}/Image/{fileName}",
+            Price = productDto.Price,
+            CategoryID = productDto.CategoryID,
+            Description = productDto.Description,
+            Model = productDto.Model,
+            Discount=productDto.Discount
+        };
         _unitOfWork.ProductRepo.Add(ProductToAdd);
         return _unitOfWork.Savechanges() > 0;
     }
 
     #endregion
 
-    #region Update Product
+    #region Edit Product
 
-    public bool UpdateProduct(ProductEditDto productEditDto)
+    public bool EditProduct(ProductEditDto productEditDto)
     {
         var product = _unitOfWork.ProductRepo.GetById(productEditDto.Id);
         if (product is null)
@@ -148,9 +162,10 @@ public class ProductsManager: IProductsManager
         product.Name = productEditDto.Name;
         product.Price = productEditDto.Price;
         product.Description = productEditDto.Description;
-        product.Image = productEditDto.Image;
+        product.Image = productEditDto == null ? product.Image : productEditDto.Image;
         product.Model = productEditDto.Model;
         product.CategoryID = productEditDto.CategoryID;
+        product.Discount = productEditDto.Discount;
 
         return _unitOfWork.Savechanges() > 0;
     }
@@ -173,6 +188,55 @@ public class ProductsManager: IProductsManager
 
     #endregion
 
+    #region Get Related Products by Category Name 
+    public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand)
+    {
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetRelatedProductsByCategoryName(brand);
+        IEnumerable<RelatedProductDto> productsDtos = productsFromDb
+            .Select(p => new RelatedProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+                CategoryName=p.Category.Name,
+                Discount = p.Discount,
+                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+
+
+            });
+        return productsDtos;
+    }
+
+    #endregion
+    
+    public IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto)
+    {
+        var queryParameters = new QueryParametars
+        {
+            CategotyId = queryDto.CategotyId,
+            ProductName = queryDto.ProductName,
+            MaxPrice = queryDto.MaxPrice,
+            MinPrice = queryDto.MinPrice,
+            Rating = queryDto.Rating
+        };
+
+        var productsFilteredFromDB = _unitOfWork.ProductRepo.GetProductFiltered(queryParameters);
+
+
+        IEnumerable<ProductFilterationResultDto> productsFilteredRsulte = productsFilteredFromDB.Select(p => new ProductFilterationResultDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Image = p.Image,
+            Discount = p.Discount,
+            AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount = p.Reviews.Count()
+        }) ;
+
+        return productsFilteredRsulte;
+    }
 }
 
 
