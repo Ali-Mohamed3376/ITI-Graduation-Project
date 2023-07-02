@@ -3,9 +3,9 @@ namespace Final.Project.BL;
 
 public interface IUserProductsCartsManager
 {
-    void AddProductToCart(productToAddToCartDto product,string userId);
-    void UpdateProductQuantityInCart(ProductQuantityinCartUpdateDto product, string userId);
-
-    void DeleteProductFromCart(UserProductInCartDeleteDto product, string userId);
+    string AddProductToCart(productToAddToCartDto product,string userId);
+    string UpdateProductQuantityInCart(ProductQuantityinCartUpdateDto product, string userId);
+    void DeleteProductFromCart(int id, string userId);
     IEnumerable<AllProductsReadDto> GetAllUserProductsInCart(string userId);
+
 }

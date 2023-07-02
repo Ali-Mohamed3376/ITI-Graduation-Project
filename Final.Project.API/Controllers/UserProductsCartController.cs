@@ -26,7 +26,7 @@ namespace Final.Project.API.Controllers
 
 
         #region Get All Products In Cart
-        
+
         [HttpGet]
         public ActionResult GetAllProductsInCart()
         {
@@ -48,10 +48,10 @@ namespace Final.Project.API.Controllers
         }
 
 
-        #endregion     
+        #endregion
 
         #region Add Product To Cart
-        
+
         [HttpPost]
         [Route("AddProduct")]
         public ActionResult AddProductToCart(productToAddToCartDto product)
@@ -64,8 +64,10 @@ namespace Final.Project.API.Controllers
 
             }
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
-            _userProductsCartsManager.AddProductToCart(product, userIdFromToken);
-            return Ok("product Added to Cart");
+            string status = _userProductsCartsManager.AddProductToCart(product, userIdFromToken);
+
+            return Ok(status);
+
         }
 
         #endregion
@@ -83,17 +85,17 @@ namespace Final.Project.API.Controllers
                 return BadRequest("not logged in");
             }
             // string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
-            _userProductsCartsManager.UpdateProductQuantityInCart(product, userIdFromToken);
-            return Ok("product Quantity Edited to Cart");
+            string status= _userProductsCartsManager.UpdateProductQuantityInCart(product, userIdFromToken);
+            return Ok(status);
         }
 
         #endregion
 
         #region Delete Product
         [HttpDelete]
-        [Route("DeleteProduct")]
+        [Route("DeleteProduct/{id}")]
 
-        public ActionResult DeleteProduct(UserProductInCartDeleteDto product)
+        public ActionResult DeleteProduct(int id)
         {
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var currentUser = _manager.GetUserAsync(User).Result;
@@ -103,7 +105,7 @@ namespace Final.Project.API.Controllers
             }
 
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
-            _userProductsCartsManager.DeleteProductFromCart(product, userIdFromToken);
+            _userProductsCartsManager.DeleteProductFromCart(id, userIdFromToken);
             return Ok("product Deleted from Cart");
         }
 
