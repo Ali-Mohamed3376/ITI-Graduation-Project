@@ -66,7 +66,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     public IEnumerable<Product> GetProductFiltered(QueryParametars parametars)
     {
 
-        var products = _context.Products.AsQueryable();
+        var products = _context.Products.Include(p=>p.Reviews).AsQueryable();
         
         if (parametars.CategotyId > 0)
         {
