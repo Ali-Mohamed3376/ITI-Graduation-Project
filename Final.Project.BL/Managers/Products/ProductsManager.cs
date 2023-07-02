@@ -116,7 +116,6 @@ public class ProductsManager: IProductsManager
 
     #endregion
 
-
     #region Add Product
     public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme)
     {
@@ -149,8 +148,6 @@ public class ProductsManager: IProductsManager
     }
 
     #endregion
-
-
 
     #region Edit Product
 
@@ -210,10 +207,36 @@ public class ProductsManager: IProductsManager
             });
         return productsDtos;
     }
+
     #endregion
+    
+    public IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto)
+    {
+        var queryParameters = new QueryParametars
+        {
+            CategotyId = queryDto.CategotyId,
+            ProductName = queryDto.ProductName,
+            MaxPrice = queryDto.MaxPrice,
+            MinPrice = queryDto.MinPrice,
+            Rating = queryDto.Rating
+        };
+
+        var productsFilteredFromDB = _unitOfWork.ProductRepo.GetProductFiltered(queryParameters);
 
 
+        IEnumerable<ProductFilterationResultDto> productsFilteredRsulte = productsFilteredFromDB.Select(p => new ProductFilterationResultDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Image = p.Image,
+            Discount = p.Discount,
+            AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount = p.Reviews.Count()
+        }) ;
 
+        return productsFilteredRsulte;
+    }
 }
 
 

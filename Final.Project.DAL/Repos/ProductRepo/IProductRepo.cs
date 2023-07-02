@@ -7,4 +7,6 @@ public interface IProductRepo :IGenericRepo<Product>
 
     IEnumerable<Product> GetAllWithCategory();
     IEnumerable<Product> GetRelatedProductsByCategoryName(string brand);
+
+    IEnumerable<Product> GetProductFiltered (QueryParametars parametars);
 }
