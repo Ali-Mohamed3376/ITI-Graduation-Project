@@ -58,6 +58,37 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
             .Take(5);
 
     }
+
+    public IEnumerable<Product> GetFilteredProducts(IQueryable<Product> query)
+    {
+      
+        var products = _context.Products
+                            .Include( p => p.Reviews)
+                            .ToList();
+
+        foreach (var product in products)
+        {
+
+            if (product.CategoryID > 0 )
+            {
+                query = query.Where(q => q.CategoryID == product.CategoryID);
+            }
+
+            if (!string.IsNullOrEmpty(product.Name))
+            {
+                query = query.Where(q => q.Name.Contains(product.Name));
+            }
+
+            if (product.Price > 0)
+            {
+                query = query.Where(q => q.Price <= product.Price);
+            }
+
+           
+        }
+        return products;
+
+    }
     #endregion
 
 

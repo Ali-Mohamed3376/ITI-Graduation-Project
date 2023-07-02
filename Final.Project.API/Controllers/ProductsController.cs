@@ -35,44 +35,27 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Products Filteration
+        //[HttpPost]
+        //[Route("Filter")]
+        //public ActionResult GetAll(ProductQueryDto productQueryDto)
+        //{
+
+
+
+        //    return Ok(query.ToList());
+        //}
         [HttpPost]
         [Route("Filter")]
         public ActionResult GetAll(ProductQueryDto productQueryDto)
         {
-            var query = context.Products.AsQueryable();
+            IQueryable<Product> query = context.Products.AsQueryable();
+            IEnumerable<ProductFilteredDto> filteredProducts = _productsManager.ProductFiltereds(query);
 
-            if (productQueryDto.CategotyId.HasValue && productQueryDto.CategotyId > 0)
-            {
-                query = query.Where(q => q.CategoryID == productQueryDto.CategotyId);
-            }
-
-            if (productQueryDto.ProductName != null || productQueryDto.ProductName != "")
-            {
-                query = query.Where(q => q.Name.Contains(productQueryDto.ProductName));
-            }
-
-            if (productQueryDto.MaxPrice.HasValue && productQueryDto.MaxPrice > 0)
-            {
-                query = query.Where(q => q.Price <= productQueryDto.MaxPrice.Value);
-            }
-
-            if (productQueryDto.MinPrice > 0)
-            {
-                query = query.Where(q => q.Price >= productQueryDto.MinPrice.Value);
-            }
-
-            if (productQueryDto.Rating.HasValue && productQueryDto.Rating > 0)
-            {
-                query = query.Where(q => q.Reviews.Average(r => r.Rating) >= productQueryDto.Rating.Value);
-            }
-
-            if (!query.Any())
-            {
-                return Ok("Not Found");
-            }
-
-            return Ok(query.ToList());
+            return Ok(filteredProducts.ToList());
         }
+
+
+
 
         #endregion
 

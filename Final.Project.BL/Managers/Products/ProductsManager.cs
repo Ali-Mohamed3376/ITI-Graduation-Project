@@ -210,10 +210,29 @@ public class ProductsManager: IProductsManager
             });
         return productsDtos;
     }
+
     #endregion
+    public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable<Product> query)
 
+    //public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable query)
+    {
+        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetFilteredProducts(query);
+        IEnumerable<ProductFilteredDto> filteredDtos = productsFromDb.Select(p => new ProductFilteredDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Image = p.Image,
+            Discount = p.Discount,
+            AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount=p.Reviews.Count(),
+            
+        });
 
+        return filteredDtos;
+    }
 
+    
 }
 
 

@@ -18,4 +18,7 @@ public interface IProductsManager
 
     public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand);
 
+    //public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable query);
+    public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable<Product> query);
+
 }
