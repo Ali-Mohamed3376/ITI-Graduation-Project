@@ -32,7 +32,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     #endregion
 
     #region Get All Products have Discount
-    public IEnumerable<Product>GetAllProductWithDiscount()
+    public IEnumerable<Product> GetAllProductWithDiscount()
     {
         return _context.Products
             .Include(p => p.Reviews)
@@ -59,37 +59,42 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
     }
 
-    public IEnumerable<Product> GetFilteredProducts(IQueryable<Product> query)
-    {
-      
-        var products = _context.Products
-                            .Include( p => p.Reviews)
-                            .ToList();
-
-        foreach (var product in products)
-        {
-
-            if (product.CategoryID > 0 )
-            {
-                query = query.Where(q => q.CategoryID == product.CategoryID);
-            }
-
-            if (!string.IsNullOrEmpty(product.Name))
-            {
-                query = query.Where(q => q.Name.Contains(product.Name));
-            }
-
-            if (product.Price > 0)
-            {
-                query = query.Where(q => q.Price <= product.Price);
-            }
-
-           
-        }
-        return products;
-
-    }
     #endregion
 
+    #region Get Product After Filteration
+
+    public IEnumerable<Product> GetProductFiltered(QueryParametars parametars)
+    {
+
+        var products = _context.Products.AsQueryable();
+        
+        if (parametars.CategotyId > 0)
+        {
+            products = products.Where(q => q.CategoryID == parametars.CategotyId);
+        }
+
+        if (parametars.ProductName != null || parametars.ProductName != "")
+        {
+            products = products.Where(q => q.Name.Contains(parametars.ProductName));
+        }
+
+        if (parametars.MaxPrice > 0)
+        {
+            products = products.Where(q => q.Price <= parametars.MaxPrice);
+        }
+        if (parametars.MinPrice > 0)
+        {
+            products = products.Where(q => q.Price >= parametars.MinPrice);
+        }
+
+        if (parametars.Rating > 0)
+        {
+            products = products.Where(q => q.Reviews.Average(r => r.Rating) >= parametars.Rating);
+        }
+
+        return products;
+    }
+
+    #endregion
 
 }

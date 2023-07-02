@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Final.Project.API.Controllers
 {
@@ -81,7 +82,7 @@ namespace Final.Project.API.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public ActionResult Register(RegisterDto credentials)
+        public async Task<ActionResult> Register([FromBody] RegisterDto credentials)
         {
 
             User user = new User
@@ -93,7 +94,7 @@ namespace Final.Project.API.Controllers
                 Role = Role.Customer,
             };
 
-            var result = manager.CreateAsync(user, credentials.Password).Result;
+            var result = await manager.CreateAsync(user, credentials.Password);
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
@@ -105,14 +106,25 @@ namespace Final.Project.API.Controllers
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
-            var claimsResult = manager.AddClaimsAsync(user, claims).Result;
+            var claimsResult = await manager.AddClaimsAsync(user, claims);
 
             if (!claimsResult.Succeeded)
             {
                 return BadRequest(claimsResult.Errors);
             }
 
-            return Ok("Register Succeded!!!");
+
+            //var token = await manager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = $"{configuration.GetValue<string>("AppURL")}";
+            await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
+
+
+            var response = new
+            {
+                message = "Confirmation Link Sent Successfully!!"
+            };
+
+            return Ok(response);
         }
 
 
@@ -185,34 +197,39 @@ namespace Final.Project.API.Controllers
 
         #region Reset Password
 
-        //[HttpGet]
-        //[Route("Reset_Password")]
-        //public async Task<ActionResult> ResetPassword(UserResetPasswordDto userResetPasswordDto)
-        //{
-        //    //User? user = await manager.FindByEmailAsync(userResetPasswordDto);
-        //    //if (user is null)
-        //    //{
-        //    //    return NotFound("User Not Found!!!");
-        //    //}
+        [HttpPost]
+        [Route("Reset_Password")]
+        public async Task<ActionResult> ResetPassword(UserResetPasswordDto userResetPasswordDto)
+        {
+            User? user = await manager.FindByEmailAsync(userResetPasswordDto.Email);
+            if (user is null)
+            {
+                return NotFound("user not found!!!");
+            }
 
-        //    //if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmPassword)
-        //    //{
-        //    //    return BadRequest("Passwored dosen't Match Confirmation!");
-        //    //}
+            if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmNewPassword)
+            {
+                return BadRequest("passwored dosen't match confirmation!");
+            }
 
-        //    //var token = await manager.GeneratePasswordResetTokenAsync(user);
-        //    //var encodedToken = Encoding.UTF8.GetBytes(token);
-        //    //var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+            var token = await manager.GeneratePasswordResetTokenAsync(user);
+            //var encodedtoken = Encoding.UTF8.GetBytes(token);
+            //var validtoken = WebEncoders.Base64UrlEncode(encodedtoken);
 
-        //    //var result = await manager.ResetPasswordAsync(user, validToken, userResetPasswordDto.NewPassword);
+            var result = await manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword);
 
-        //    //if (!result.Succeeded)
-        //    //{
-        //    //    return BadRequest(result.Errors);
-        //    //}
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
 
-        //    return Ok("Password has been Reset Successfully!!!");
-        //}
+            var response = new
+            {
+                message = "Password has been Reset Successfully!!!"
+            };
+
+            return Ok(response);
+        }
 
         #endregion
 

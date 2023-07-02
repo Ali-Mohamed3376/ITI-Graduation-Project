@@ -116,7 +116,6 @@ public class ProductsManager: IProductsManager
 
     #endregion
 
-
     #region Add Product
     public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme)
     {
@@ -149,8 +148,6 @@ public class ProductsManager: IProductsManager
     }
 
     #endregion
-
-
 
     #region Edit Product
 
@@ -212,12 +209,22 @@ public class ProductsManager: IProductsManager
     }
 
     #endregion
-    public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable<Product> query)
-
-    //public IEnumerable<ProductFilteredDto> ProductFiltereds(IQueryable query)
+    
+    public IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto)
     {
-        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetFilteredProducts(query);
-        IEnumerable<ProductFilteredDto> filteredDtos = productsFromDb.Select(p => new ProductFilteredDto
+        var queryParameters = new QueryParametars
+        {
+            CategotyId = queryDto.CategotyId,
+            ProductName = queryDto.ProductName,
+            MaxPrice = queryDto.MaxPrice,
+            MinPrice = queryDto.MinPrice,
+            Rating = queryDto.Rating
+        };
+
+        var productsFilteredFromDB = _unitOfWork.ProductRepo.GetProductFiltered(queryParameters);
+
+
+        IEnumerable<ProductFilterationResultDto> productsFilteredRsulte = productsFilteredFromDB.Select(p => new ProductFilterationResultDto
         {
             Id = p.Id,
             Name = p.Name,
@@ -225,14 +232,11 @@ public class ProductsManager: IProductsManager
             Image = p.Image,
             Discount = p.Discount,
             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-            ReviewCount=p.Reviews.Count(),
-            
-        });
+            ReviewCount = p.Reviews.Count()
+        }) ;
 
-        return filteredDtos;
+        return productsFilteredRsulte;
     }
-
-    
 }
 
 
