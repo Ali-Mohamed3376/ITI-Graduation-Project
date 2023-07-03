@@ -62,7 +62,8 @@ public class ProductsManager: IProductsManager
                 Comment = p.Comment,
                 CreationDate = p.CreationDate,
                 Rating = p.Rating,
-
+                FName=p.User.FName,
+                LName=p.User.LName,
             }),
             AvgRating = (decimal)(productFromDb.Reviews.Any() ? productFromDb.Reviews.Average(r => r.Rating) : 0)
 
