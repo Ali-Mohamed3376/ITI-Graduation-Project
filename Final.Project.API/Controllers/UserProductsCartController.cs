@@ -66,7 +66,10 @@ namespace Final.Project.API.Controllers
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             string status = _userProductsCartsManager.AddProductToCart(product, userIdFromToken);
 
-            return Ok(status);
+            return Ok(new
+            {
+                message=status
+            });
 
         }
 
