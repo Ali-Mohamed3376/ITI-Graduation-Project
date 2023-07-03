@@ -92,6 +92,7 @@ namespace Final.Project.API.Controllers
                 UserName = credentials.Email,
                 Email = credentials.Email,
                 Role = Role.Customer,
+               
             };
 
             var result = await manager.CreateAsync(user, credentials.Password);
