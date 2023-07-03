@@ -97,7 +97,7 @@ public class OrdersManager : IOrdersManager
         OrderDetailsDto orderDetails = new OrderDetailsDto
         {
             Id = order.Id,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = Enum.GetName(typeof(OrderStatus), order.OrderStatus),
             OrderDate = order.OrderDate,
             DeliverdDate = order.DeliverdDate,
             UserName = (order.User.FName + " " + order.User.LName),
