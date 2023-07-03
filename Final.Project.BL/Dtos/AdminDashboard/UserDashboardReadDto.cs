@@ -33,6 +33,5 @@ public class UserDashboardOrderDto
     public string OrderStatus { get; set; }
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public DateTime? DeliverdDate { get; set; } = null;
-    public string UserName { get; set; } = string.Empty;
 
 }
