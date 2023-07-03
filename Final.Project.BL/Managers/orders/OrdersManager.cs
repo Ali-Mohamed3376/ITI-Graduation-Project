@@ -73,6 +73,7 @@ public class OrdersManager : IOrdersManager
                 Id = o.Id,
                 OrderStatus = Enum.GetName(typeof(OrderStatus), o.OrderStatus),
                 OrderDate = o.OrderDate,
+                UserId = o.User.Id,
                 UserName = (o.User.FName + " " + o.User.LName),
                 ProductCount = o.OrdersProductDetails.Count(),
                 TotalPrice = o.OrdersProductDetails.Sum(op => Math.Round( (op.Product.Price - (op.Product.Price * (op.Product.Discount/100))) * op.Quantity, 0)),
@@ -97,9 +98,10 @@ public class OrdersManager : IOrdersManager
         OrderDetailsDto orderDetails = new OrderDetailsDto
         {
             Id = order.Id,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = Enum.GetName(typeof(OrderStatus), order.OrderStatus),
             OrderDate = order.OrderDate,
             DeliverdDate = order.DeliverdDate,
+            UserId = order.User.Id,
             UserName = (order.User.FName + " " + order.User.LName),
             ProductsInOrder = order.OrdersProductDetails.Select(op => new ProductsInOrder
             {

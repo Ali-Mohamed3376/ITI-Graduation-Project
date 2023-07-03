@@ -62,7 +62,8 @@ public class ProductsManager: IProductsManager
                 Comment = p.Comment,
                 CreationDate = p.CreationDate,
                 Rating = p.Rating,
-
+                FName=p.User.FName,
+                LName=p.User.LName,
             }),
             AvgRating = (decimal)(productFromDb.Reviews.Any() ? productFromDb.Reviews.Average(r => r.Rating) : 0)
 
@@ -202,6 +203,8 @@ public class ProductsManager: IProductsManager
                 CategoryName=p.Category.Name,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                ReviewCount=p.Reviews.Count()
+                
 
 
             });

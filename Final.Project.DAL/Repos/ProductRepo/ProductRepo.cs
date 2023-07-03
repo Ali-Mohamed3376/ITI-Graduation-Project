@@ -18,6 +18,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
         return _context.Products
                     .Include(p => p.Category)
                     .Include(p => p.Reviews)
+                    .ThenInclude(p=>p.User)
                     .FirstOrDefault(p => p.Id == id);
     }
 
@@ -81,7 +82,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
         if (parametars.MaxPrice > 0)
         {
-            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) <= parametars.MaxPrice);
+            products = products.Where(q => q.Price-(q.Price * q.Discount/100) <= parametars.MaxPrice);
         }
         if (parametars.MinPrice > 0)
         {
