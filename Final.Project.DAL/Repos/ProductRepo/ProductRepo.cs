@@ -81,11 +81,11 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
         if (parametars.MaxPrice > 0)
         {
-            products = products.Where(q => q.Price <= parametars.MaxPrice);
+            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) <= parametars.MaxPrice);
         }
         if (parametars.MinPrice > 0)
         {
-            products = products.Where(q => q.Price >= parametars.MinPrice);
+            products = products.Where(q => q.Price-(q.Price * q.Discount/100) >= parametars.MinPrice);
         }
 
         if (parametars.Rating > 0)
