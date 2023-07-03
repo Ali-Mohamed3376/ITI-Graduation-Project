@@ -21,7 +21,10 @@ public class ReviewsManager:IReviewsManager
             ProductId = productId,
             Comment = comment,
             CreationDate = DateTime.Now,
-            Rating = rating
+            Rating = rating, 
+             
+             
+             
         };
 
         _unitOfWork.ReviewRepo.Add(newReview);

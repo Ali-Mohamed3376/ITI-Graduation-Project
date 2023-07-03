@@ -85,7 +85,6 @@ namespace Final.Project.API.Controllers
 
             return Ok(result.ToList());
         }
-
         #endregion
 
 

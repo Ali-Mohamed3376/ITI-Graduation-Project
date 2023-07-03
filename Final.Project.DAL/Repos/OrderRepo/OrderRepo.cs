@@ -18,6 +18,15 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
 
     }
 
+    public ICollection<Order> GetOrdersWithData()
+    {
+        return _context.Set<Order>()
+                .Include(o=>o.User)
+                .Include(o=>o.OrdersProductDetails)
+                    .ThenInclude(op => op.Product)
+                .ToList();
+    }
+
     #region Get Order With Product
 
     public Order GetOrderWithProducts(int OrderId)

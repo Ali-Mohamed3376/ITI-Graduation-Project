@@ -62,15 +62,21 @@ public class OrdersManager : IOrdersManager
 
     public IEnumerable<OrderReadDto> GetAllOrders()
     {
-        var orderFromDb = _unitOfWork.OrderRepo.GetAll();
+        var orderFromDb = _unitOfWork.OrderRepo.GetOrdersWithData();
+        if(orderFromDb is null)
+        {
+            return null;
+        }
         var orderReadDto = orderFromDb
             .Select(o => new OrderReadDto
             {
                 Id = o.Id,
-                OrderStatus = o.OrderStatus,
+                OrderStatus = Enum.GetName(typeof(OrderStatus), o.OrderStatus),
                 OrderDate = o.OrderDate,
-                DeliverdDate = o.DeliverdDate,
+                UserId = o.User.Id,
                 UserName = (o.User.FName + " " + o.User.LName),
+                ProductCount = o.OrdersProductDetails.Count(),
+                TotalPrice = o.OrdersProductDetails.Sum(op => Math.Round( (op.Product.Price - (op.Product.Price * (op.Product.Discount/100))) * op.Quantity, 0)),
             });
 
         return orderReadDto;
@@ -92,9 +98,10 @@ public class OrdersManager : IOrdersManager
         OrderDetailsDto orderDetails = new OrderDetailsDto
         {
             Id = order.Id,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = Enum.GetName(typeof(OrderStatus), order.OrderStatus),
             OrderDate = order.OrderDate,
             DeliverdDate = order.DeliverdDate,
+            UserId = order.User.Id,
             UserName = (order.User.FName + " " + order.User.LName),
             ProductsInOrder = order.OrdersProductDetails.Select(op => new ProductsInOrder
             {
