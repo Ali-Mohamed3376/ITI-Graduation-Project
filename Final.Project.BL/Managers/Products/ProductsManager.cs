@@ -203,6 +203,8 @@ public class ProductsManager: IProductsManager
                 CategoryName=p.Category.Name,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                ReviewCount=p.Reviews.Count()
+                
 
 
             });

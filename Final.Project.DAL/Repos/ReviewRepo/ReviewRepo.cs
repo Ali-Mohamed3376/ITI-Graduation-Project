@@ -1,7 +1,5 @@
 ﻿
 
-using Microsoft.EntityFrameworkCore;
-
 namespace Final.Project.DAL;
 
 public class ReviewRepo : GenericRepo<Review>, IReviewRepo
@@ -15,8 +13,6 @@ public class ReviewRepo : GenericRepo<Review>, IReviewRepo
 
     public IEnumerable<Review> GetReviewsByProduct(int productId)
     {
-        return _context.Set<Review>()
-            .Where(r => r.ProductId == productId)
-            .ToList();
+        return _context.Set<Review>().Where(r => r.ProductId == productId).ToList();
     }
 }
