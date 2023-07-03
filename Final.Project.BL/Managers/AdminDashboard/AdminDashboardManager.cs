@@ -35,8 +35,6 @@ public class AdminDashboardManager : IAdminDashboardManager
         IEnumerable<UserDashboardReadDto> AllUsersDetails = UsersFromDB.Select(u => new UserDashboardReadDto
         {
             Id = u.Id,
-            City = u.City,
-            Street = u.Street,
             FName = u.FName,
             LName = u.LName,
             Email = u.Email,
@@ -51,15 +49,29 @@ public class AdminDashboardManager : IAdminDashboardManager
         UserDashboardReadDto user = new UserDashboardReadDto
         {
             Id = userFromDB.Id,
-            City = userFromDB.City,
-            Street = userFromDB.Street,
             Email = userFromDB.Email,
             FName = userFromDB.FName,
             LName = userFromDB.LName,
-            Role=userFromDB.Role.ToString(),
+            Role = userFromDB.Role.ToString(),
+            Orders = userFromDB.Orders.Select(o => new UserDashboardOrderDto
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                OrderStatus = Enum.GetName(typeof(OrderStatus), o.OrderStatus),
+                DeliverdDate = o.DeliverdDate,
+                UserName = (o.User.FName + " " + o.User.LName),
+            }),
+            UserAddresses = userFromDB.UserAddresses.Select(o => new UserDashboardAddressDto
+            {
+                Id = o.Id,
+                City = o.City,
+                Street = o.Street,
+                Phone = o.Phone,
+                DefaultAddress = o.DefaultAddress,
+            })
         };
         return user;
     }
 
-   
+
 }
