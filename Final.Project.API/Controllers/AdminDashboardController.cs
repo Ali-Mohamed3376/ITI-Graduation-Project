@@ -98,7 +98,7 @@ namespace Final.Project.API.Controllers
 
             if (!isfound) { return NotFound(); }
 
-            return Ok("User Deleted Successfully");
+            return NoContent();
 
         } 
         #endregion
