@@ -116,8 +116,8 @@ namespace Final.Project.API.Controllers
 
 
             //var token = await manager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"{configuration.GetValue<string>("AppURL")}";
-            await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
+            //var confirmationLink = $"{configuration.GetValue<string>("AppURL")}";
+            //await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
 
 
             var response = new
