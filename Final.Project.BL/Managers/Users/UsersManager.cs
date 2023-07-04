@@ -52,10 +52,12 @@ public class UsersManager : IUsersManager
 
         IEnumerable<UserOrderDetailsDto> products = OrderProductDetails.Select(p => new UserOrderDetailsDto
         {
+            product_Id = p.ProductId,
             Image = p.Product.Image,
             Price = p.Product.Price,
             Quantity = p.Quantity,
-            title = p.Product.Name
+            title = p.Product.Name,
+          
         });
 
         return products;

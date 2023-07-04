@@ -8,6 +8,8 @@ namespace Final.Project.BL;
 
 public class UserOrderDetailsDto
 {
+    public int product_Id { get; set; }
+
     public string title { get; set; } = string.Empty;
 
     public string Image { get; set; } = string.Empty;
