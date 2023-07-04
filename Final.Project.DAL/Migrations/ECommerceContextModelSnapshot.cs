@@ -37,7 +37,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -121,7 +121,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Final.Project.DAL.OrderProductDetails", b =>
@@ -139,7 +139,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProductDetails");
+                    b.ToTable("OrderProductDetails", (string)null);
                 });
 
             modelBuilder.Entity("Final.Project.DAL.Product", b =>
@@ -180,7 +180,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -251,7 +251,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Final.Project.DAL.User", b =>
@@ -377,7 +377,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddresses");
+                    b.ToTable("UserAddresses", (string)null);
                 });
 
             modelBuilder.Entity("Final.Project.DAL.UserProductsCart", b =>
@@ -395,7 +395,7 @@ namespace Final.Project.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("UserProductsCarts");
+                    b.ToTable("UserProductsCarts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
