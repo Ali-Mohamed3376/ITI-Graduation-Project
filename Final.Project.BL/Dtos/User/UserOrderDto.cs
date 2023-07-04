@@ -10,6 +10,7 @@ namespace Final.Project;
 
 public class UserOrderDto
 {
+    public int? Address_Id {get; set;}
 
     public int Id { get; set; }
     public OrderStatus OrderStatus { get; set; }
