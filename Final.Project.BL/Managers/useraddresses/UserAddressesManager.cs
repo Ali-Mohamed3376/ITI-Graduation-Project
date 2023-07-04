@@ -85,4 +85,19 @@ public class UserAddressesManager : IUserAddressesManager
         _unitOfWork.Savechanges();
 
     }
+
+    public AllUserAddressesReadDto GetAddressById(int id)
+    {
+        UserAddress userAddressFromDB= _unitOfWork.UserAddressRepo.GetById(id);
+        AllUserAddressesReadDto userAddress = new AllUserAddressesReadDto
+        {
+            Id = userAddressFromDB.Id,
+            City = userAddressFromDB.City,
+            Street = userAddressFromDB.Street,
+            DefaultAddress = userAddressFromDB.DefaultAddress,
+            Phone = userAddressFromDB.Phone
+        };
+
+        return userAddress;
+    }
 }

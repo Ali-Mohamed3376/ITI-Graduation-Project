@@ -12,6 +12,7 @@ public interface IUserAddressesManager
     void AddNewAddress(string userId, NewAddressAddingDto newAddress);
     void Delete(int addressId);
     void EditAddress(string userIdFromToken, AddressEditDto address);
+    AllUserAddressesReadDto GetAddressById(int id);
     IEnumerable<AllUserAddressesReadDto> GetAllUserAddresses(string userIdFromToken);
     void SetDefaultAddress(string userIdFromToken, int addressId);
 }
