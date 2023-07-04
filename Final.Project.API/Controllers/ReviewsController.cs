@@ -38,5 +38,31 @@ namespace Final.Project.API.Controllers
                 return StatusCode(500, "An error occurred while adding the review.");
             }
         }
+
+        #region Get All Reviews
+
+        [HttpGet]
+        [Route("Dashboard/Reviews")]
+        [Authorize(Policy = "ForAdmin")]
+        public ActionResult<IEnumerable<CategoryDto>> GetAllCategories()
+        {
+            IEnumerable<ReviewReadDto> reviews = _reviewsManager.GetAllReviews();
+            return Ok(reviews);
+        }
+        #endregion
+
+        #region Delete review Dashboard 
+
+        [HttpDelete]
+        [Route("Dashboard/Reviews/Delete")]
+        [Authorize(Policy = "ForAdmin")]
+        public ActionResult Delete(ReviewKeyDto reviewKey)
+        {
+            bool isDeleted = _reviewsManager.DeleteReview(reviewKey);
+
+            return isDeleted ? NoContent() : BadRequest();
+        }
+
+        #endregion
     }
 }

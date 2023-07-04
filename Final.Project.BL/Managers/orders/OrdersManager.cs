@@ -130,8 +130,12 @@ public class OrdersManager : IOrdersManager
             return false;
         }
 
-        order.OrderStatus = orderEdit.OrderStatus;
-        order.DeliverdDate = orderEdit.DeliverdDate;
+        order.OrderStatus = (OrderStatus)Enum.ToObject(typeof(OrderStatus), orderEdit.OrderStatus);
+
+        if ((OrderStatus)Enum.ToObject(typeof(OrderStatus), orderEdit.OrderStatus) == OrderStatus.Delivered)
+        {
+            order.DeliverdDate = DateTime.Now;
+        }
 
         return _unitOfWork.Savechanges() > 0;
     }
