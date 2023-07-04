@@ -92,7 +92,6 @@ public class UsersManager : IUsersManager
             Id = order.Id,
             OrderStatus = order.OrderStatus,
             DeliverdDate = order.DeliverdDate,
-            Address_Id = order.UserAddressId,
             Products = order.OrdersProductDetails.Select(ip => new UserProductDto
             {
                 
