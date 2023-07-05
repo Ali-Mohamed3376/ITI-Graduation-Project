@@ -24,20 +24,14 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
     #endregion
 
-    #region Get All Products With AvgRating
-    public IEnumerable<Product> GetAllProductsWithAvgRating()
-    {
-        return _context.Products.Include(p => p.Reviews);
-
-    }
-    #endregion
-
     #region Get All Products have Discount
     public IEnumerable<Product> GetAllProductWithDiscount()
     {
         return _context.Products
             .Include(p => p.Reviews)
-            .Where(p => p.Discount > 0);
+            .Where(p => p.Discount > 0)
+            .OrderByDescending(p => p.Discount)
+            .Take(10);
     }
     #endregion
 
@@ -99,4 +93,57 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
     #endregion
 
+    #region Get All Products With Pagination
+    public IEnumerable<Product> GetAllProductsInPagnation(int page, int countPerPage)
+    {
+        return _context.Products
+            .Include(p => p.Reviews)
+            .Skip((page - 1) * countPerPage)
+            .Take(countPerPage);
+
+
+    }
+
+    public int GetCount()
+    {
+        return _context.Products.Count();
+    }
+    #endregion
+
+    #region Get Product After Filteration with Pagination
+
+    public IEnumerable<Product> GetProductFilteredInPagination(QueryParametars parametars,int page, int countPerPage)
+    {
+
+        var products = _context.Products.Include(p => p.Reviews).AsQueryable();
+
+        if (parametars.CategotyId > 0)
+        {
+            products = products.Where(q => q.CategoryID == parametars.CategotyId);
+        }
+
+        if (parametars.ProductName != null || parametars.ProductName != "")
+        {
+            products = products.Where(q => q.Name.Contains(parametars.ProductName));
+        }
+
+        if (parametars.MaxPrice > 0)
+        {
+            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) <= parametars.MaxPrice);
+        }
+        if (parametars.MinPrice > 0)
+        {
+            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) >= parametars.MinPrice);
+        }
+
+        if (parametars.Rating > 0)
+        {
+            products = products.Where(q => q.Reviews.Average(r => r.Rating) >= parametars.Rating);
+        }
+
+        return products
+            
+;    }
+
+    #endregion
 }
