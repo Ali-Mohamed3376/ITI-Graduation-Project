@@ -283,7 +283,10 @@ public class ProductsManager: IProductsManager
         };
 
         var productsFilteredFromDB = _unitOfWork.ProductRepo.GetProductFilteredInPagination(queryParameters,page,countPerPage);
-
+        var totalCount = productsFilteredFromDB.Count();
+        productsFilteredFromDB = productsFilteredFromDB
+                    .Skip((page - 1) * countPerPage)
+                    .Take(countPerPage);
 
         var productsFilteredResult = productsFilteredFromDB.Select(p => new ProductFilterationResultDto
         {
@@ -299,7 +302,7 @@ public class ProductsManager: IProductsManager
         return new ProductFilterationPaginationResultDto
         {
             filteredProducts = productsFilteredResult,
-            TotalCount = productsFilteredResult.Count(),
+            TotalCount = totalCount
         };
     }
     #endregion
