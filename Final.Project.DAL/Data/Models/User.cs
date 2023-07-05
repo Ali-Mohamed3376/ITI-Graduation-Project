@@ -20,8 +20,10 @@ public class User : IdentityUser//<int>
     public IEnumerable<Order> Orders { get; set; } = new HashSet<Order>();
     public IEnumerable<UserAddress> UserAddresses { get; set; } = new HashSet<UserAddress>();
     public IEnumerable<Review> Reviews { get; set; } = new HashSet<Review>();
+    public IEnumerable<WishList> WishLists { get; set; } = new HashSet<WishList>();
 
-    
+
+
 }
 
 public enum Role

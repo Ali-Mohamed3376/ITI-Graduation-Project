@@ -10,6 +10,8 @@ public interface IUnitOfWork
     public IUserAddressRepo UserAddressRepo { get; }
     public IReviewRepo ReviewRepo { get; }
     public IDashboardUserRepo DashboardUserRepo { get; }
+    public IWishListRepo WishListRepo { get; }
+
 
 
     int Savechanges();

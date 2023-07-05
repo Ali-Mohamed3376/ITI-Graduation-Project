@@ -17,6 +17,8 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<UserProductsCart> UserProductsCarts => Set<UserProductsCart>();
     public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<WishList> wishLists => Set<WishList>();
+
 
     public ECommerceContext(DbContextOptions<ECommerceContext> options) : base(options)
     {
@@ -164,6 +166,14 @@ public class ECommerceContext : IdentityDbContext<User>
         });
         #endregion
 
+        #region WishList
+        builder.Entity<WishList>(entity =>
+        {
+            
+            entity.HasKey(e => new { e.UserId, e.ProductId });
+
+        });
+        #endregion
         #region UserAddress
 
         builder.Entity<UserAddress>(entity => {

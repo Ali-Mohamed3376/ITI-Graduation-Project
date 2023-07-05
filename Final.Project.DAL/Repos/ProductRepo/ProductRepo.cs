@@ -142,8 +142,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
         }
 
         return products
-            .Skip((page - 1) * countPerPage)
-            .Take(countPerPage)
+            
 ;    }
 
     #endregion

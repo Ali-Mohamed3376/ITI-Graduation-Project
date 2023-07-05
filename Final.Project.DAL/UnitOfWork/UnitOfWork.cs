@@ -12,9 +12,10 @@ public class UnitOfWork : IUnitOfWork
     public IUserAddressRepo UserAddressRepo { get; }
     public IReviewRepo ReviewRepo { get; }
     public IDashboardUserRepo DashboardUserRepo { get; }
+    public IWishListRepo WishListRepo { get; }
 
 
-    public UnitOfWork(ECommerceContext context, IUserRepo userRepo, IProductRepo productRepo, ICategoryRepo categoryRepo, IOrderRepo orderRepo, IOrdersDetailsRepo ordersDetailsRepo, IUserProductsCartRepo userProdutsCartRepo, IUserAddressRepo userAddressRepo, IReviewRepo reviewRepo, IDashboardUserRepo dashboardUserRepo)
+    public UnitOfWork(ECommerceContext context, IUserRepo userRepo, IProductRepo productRepo, ICategoryRepo categoryRepo, IOrderRepo orderRepo, IOrdersDetailsRepo ordersDetailsRepo, IUserProductsCartRepo userProdutsCartRepo, IUserAddressRepo userAddressRepo, IReviewRepo reviewRepo, IDashboardUserRepo dashboardUserRepo,IWishListRepo wishListRepo)
     {
         this.context = context;
         UserRepo = userRepo;
@@ -26,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
         UserAddressRepo = userAddressRepo;
         ReviewRepo = reviewRepo;
         DashboardUserRepo = dashboardUserRepo;
+        WishListRepo = wishListRepo;
     }
 
     public int Savechanges()
