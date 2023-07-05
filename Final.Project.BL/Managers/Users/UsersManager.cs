@@ -17,10 +17,11 @@ public class UsersManager : IUsersManager
     public bool delete(string id)
     {
         User? user = _unitOfWork.UserRepo.GetById(id);
-
-        if (user is null) { return false; }
+        
+        _unitOfWork.UserAddressRepo.deleteByUId(user.Id);
 
         _unitOfWork.UserRepo.Delete(user);
+
         _unitOfWork.Savechanges();
 
         return true;
@@ -90,9 +91,8 @@ public class UsersManager : IUsersManager
         IEnumerable<UserOrderDto> ordersDto= ordersFromDB.Select(order=> new UserOrderDto
         {
             Id = order.Id,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = Enum.GetName(typeof(OrderStatus), order.OrderStatus),
             DeliverdDate = order.DeliverdDate,
-            Address_Id = order.UserAddressId,
             Products = order.OrdersProductDetails.Select(ip => new UserProductDto
             {
                 
