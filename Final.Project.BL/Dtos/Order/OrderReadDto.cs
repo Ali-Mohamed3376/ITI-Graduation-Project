@@ -11,5 +11,6 @@ public class OrderReadDto
     public string UserName { get; set; } = string.Empty;
     public int ProductCount { get; set; }
     public decimal TotalPrice { get; set; }
+    public string FormattedCreationDate => OrderDate.ToString("dd-MM-yyyy");
 }
 
