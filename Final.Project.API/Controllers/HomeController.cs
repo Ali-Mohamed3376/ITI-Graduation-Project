@@ -25,17 +25,6 @@ namespace Final.Project.API.Controllers
         }
 
 
-        #region Get All Products
-        [HttpGet]
-        [Route("AllProducts")]
-
-        public ActionResult<IEnumerable<ProductChildDto>> GetAllProductsWithAvgRating()
-        {
-            IEnumerable<ProductChildDto> products = _productsManager.GetAllProductsWithAvgRating();
-            if (products == null) { return NotFound(); }
-            return Ok(products);
-        }
-        #endregion
 
         #region Get All Categories With All Products
         [HttpGet]
