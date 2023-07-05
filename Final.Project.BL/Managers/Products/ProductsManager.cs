@@ -16,25 +16,25 @@ public class ProductsManager: IProductsManager
 
 
     #region Get All Products in Database
-    public IEnumerable<ProductChildDto> GetAllProductsWithAvgRating()
-    {
-        IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllProductsWithAvgRating();
-        IEnumerable<ProductChildDto> productsDtos = productsFromDb
-            .Select(p => new ProductChildDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Price = p.Price,
-                Image = p.Image,
-                Discount = p.Discount,
-                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-                ReviewCount=p.Reviews.Count()
+   // public IEnumerable<ProductChildDto> GetAllProductsWithAvgRating()
+   // {
+   //     IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllProductsWithAvgRating();
+   //     IEnumerable<ProductChildDto> productsDtos = productsFromDb
+   //         .Select(p => new ProductChildDto
+   //         {
+   //             Id = p.Id,
+   //             Name = p.Name,
+   //             Price = p.Price,
+   //             Image = p.Image,
+   //             Discount = p.Discount,
+   //             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+   //             ReviewCount=p.Reviews.Count()
                 
-            });
-        return productsDtos;
-    }
+   //         });
+   //     return productsDtos;
+   // }
 
-   
+   ////version before making pagination
 
     #endregion
 
@@ -212,7 +212,8 @@ public class ProductsManager: IProductsManager
     }
 
     #endregion
-    
+
+    #region Filteration
     public IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto)
     {
         var queryParameters = new QueryParametars
@@ -236,10 +237,75 @@ public class ProductsManager: IProductsManager
             Discount = p.Discount,
             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
             ReviewCount = p.Reviews.Count()
-        }) ;
+        });
 
         return productsFilteredRsulte;
     }
+
+
+    #endregion
+
+    #region Get All Products In Pagination
+    public ProductPaginationDto GetAllProductsInPagnation(int page, int countPerPage)
+    {
+       var products= _unitOfWork.ProductRepo.GetAllProductsInPagnation(page, countPerPage)
+           .Select(p => new ProductChildDto
+           {
+               Id = p.Id,
+               Name = p.Name,
+               Price = p.Price,
+               Image = p.Image,
+               Discount = p.Discount,
+               AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+               ReviewCount = p.Reviews.Count()
+
+           });
+        var totalCount = _unitOfWork.ProductRepo.GetCount();
+        return new ProductPaginationDto
+        {
+            products = products,
+            TotalCount = totalCount
+        };
+    }
+    #endregion
+
+    #region Filtering With Pagination
+
+    public ProductFilterationPaginationResultDto ProductAfterFilterationInPagination(ProductQueryDto queryDto, int page, int countPerPage)
+    {
+        var queryParameters = new QueryParametars
+        {
+            CategotyId = queryDto.CategotyId,
+            ProductName = queryDto.ProductName,
+            MaxPrice = queryDto.MaxPrice,
+            MinPrice = queryDto.MinPrice,
+            Rating = queryDto.Rating
+        };
+
+        var productsFilteredFromDB = _unitOfWork.ProductRepo.GetProductFilteredInPagination(queryParameters,page,countPerPage);
+
+
+        var productsFilteredResult = productsFilteredFromDB.Select(p => new ProductFilterationResultDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Image = p.Image,
+            Discount = p.Discount,
+            AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount = p.Reviews.Count()
+        });
+
+        return new ProductFilterationPaginationResultDto
+        {
+            filteredProducts = productsFilteredResult,
+            TotalCount = productsFilteredResult.Count(),
+        };
+    }
+    #endregion
+
+
+
 }
 
 

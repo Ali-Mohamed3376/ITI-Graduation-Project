@@ -7,7 +7,6 @@ namespace Final.Project.BL;
 public interface IProductsManager
 {
    public ProductDetailsDto GetProductByID(int id);
-   IEnumerable<ProductChildDto> GetAllProductsWithAvgRating();
 
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount();
 
@@ -19,5 +18,9 @@ public interface IProductsManager
     public IEnumerable<RelatedProductDto> GetRelatedProducts(string brand);
 
     IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto);
+
+    ProductPaginationDto GetAllProductsInPagnation(int page, int countPerPage);
+    ProductFilterationPaginationResultDto ProductAfterFilterationInPagination(ProductQueryDto queryDto, int page, int countPerPage);
+
 
 }
