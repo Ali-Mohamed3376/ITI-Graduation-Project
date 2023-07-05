@@ -75,6 +75,23 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
+        #region Get Cart Products Counter
+        [HttpGet]
+        [Route("counter")]
+        public ActionResult GetUserCartProductsCounter()
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+
+            }
+            int counter = _userProductsCartsManager.CartCounter(userIdFromToken);
+            return Ok(counter);
+        }
+
+        #endregion
+
         #region Update Product Quantity In Cart
         [HttpPut]
         [Route("UpdateProduct")]

@@ -7,5 +7,5 @@ public interface IUserProductsCartsManager
     string UpdateProductQuantityInCart(ProductQuantityinCartUpdateDto product, string userId);
     void DeleteProductFromCart(int id, string userId);
     IEnumerable<AllProductsReadDto> GetAllUserProductsInCart(string userId);
-
+    int CartCounter(string userIdFromToken);
 }

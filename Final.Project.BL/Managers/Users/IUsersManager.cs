@@ -13,7 +13,7 @@ public interface IUsersManager
     //UserReadDto GetUserReadDto(string id);
     UserReadDto GetUserReadDto(User user);
 
-    IEnumerable<UserOrderDetailsDto> GetUserOrderDetailsDto(int id);
+    UserOrderDetailsDto GetUserOrderDetailsDto(int id);
     //bool Edit( UserUpdateDto updateDto,string id);
     bool Edit(UserUpdateDto updateDto, User user);
 

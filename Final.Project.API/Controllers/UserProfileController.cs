@@ -148,13 +148,13 @@ namespace Final.Project.API.Controllers
         {
             //var currentUser = _Usermanager.GetUserAsync(User).Result;
            // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
-            var products = _UsersManager.GetUserOrderDetailsDto(orderId);
-            if (products is null)
+            var orderDetails = _UsersManager.GetUserOrderDetailsDto(orderId);
+            if (orderDetails is null)
             {
                 return NotFound();
             }
 
-            return Ok(products); //200 OK
+            return Ok(orderDetails); //200 OK
         }
         #endregion region 
     }
