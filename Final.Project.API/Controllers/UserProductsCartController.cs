@@ -66,8 +66,28 @@ namespace Final.Project.API.Controllers
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             string status = _userProductsCartsManager.AddProductToCart(product, userIdFromToken);
 
-            return Ok(status);
+            return Ok(new
+            {
+                message=status
+            });
 
+        }
+
+        #endregion
+
+        #region Get Cart Products Counter
+        [HttpGet]
+        [Route("counter")]
+        public ActionResult GetUserCartProductsCounter()
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+
+            }
+            int counter = _userProductsCartsManager.CartCounter(userIdFromToken);
+            return Ok(counter);
         }
 
         #endregion
@@ -85,8 +105,16 @@ namespace Final.Project.API.Controllers
                 return BadRequest("not logged in");
             }
             // string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
-            string status= _userProductsCartsManager.UpdateProductQuantityInCart(product, userIdFromToken);
+            string status = _userProductsCartsManager.UpdateProductQuantityInCart(product, userIdFromToken);
             return Ok(status);
+
+            //return new JsonResult(new
+            //{
+            //    message = status,
+            //    statuscode = 200,
+            //    data = product,
+            //    success = true
+            //});
         }
 
         #endregion
@@ -107,6 +135,21 @@ namespace Final.Project.API.Controllers
             //string? userId = "18c2ddd6-ec81-4e72-ab47-88958cd1e43a";
             _userProductsCartsManager.DeleteProductFromCart(id, userIdFromToken);
             return Ok("product Deleted from Cart");
+
+            
+            //this return json to frontend
+
+            //return new JsonResult(new
+            //{
+            //    Message = "Product Deleted SuccessFully From user cart",
+            //    StatusCode = 200,
+            //    data = id,
+            //    Success = true
+            //});
+
+
+            
+
         }
 
         #endregion

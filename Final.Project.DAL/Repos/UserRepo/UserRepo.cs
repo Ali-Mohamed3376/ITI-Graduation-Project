@@ -46,7 +46,11 @@ public class UserRepo : IUserRepo
 
     public IEnumerable<OrderProductDetails> GetUsersOrderDetails(int id)
     {
-        return _context.OrderProductDetails.Include(x => x.Product).Where(x => x.OrderId == id);
+        return _context.OrderProductDetails
+            .Include(x => x.Product)
+            .Include(x=>x.Order)
+                .ThenInclude(x=>x.UserAddress)
+            .Where(x => x.OrderId == id);
     }
 
 

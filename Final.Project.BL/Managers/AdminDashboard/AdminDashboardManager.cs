@@ -59,7 +59,6 @@ public class AdminDashboardManager : IAdminDashboardManager
                 OrderDate = o.OrderDate,
                 OrderStatus = Enum.GetName(typeof(OrderStatus), o.OrderStatus),
                 DeliverdDate = o.DeliverdDate,
-                UserName = (o.User.FName + " " + o.User.LName),
             }),
             UserAddresses = userFromDB.UserAddresses.Select(o => new UserDashboardAddressDto
             {
