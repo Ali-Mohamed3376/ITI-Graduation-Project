@@ -11,7 +11,7 @@ namespace Final.Project;
 public class UserOrderDto
 {
     public int Id { get; set; }
-    public OrderStatus OrderStatus { get; set; }
+    public string OrderStatus { get; set; }
     public DateTime? DeliverdDate { get; set; } = null;
     //public string UserId { get; set; } = string.Empty;
     public IEnumerable<UserProductDto> Products { get; set; } = new HashSet<UserProductDto>();

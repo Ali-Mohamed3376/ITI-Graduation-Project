@@ -17,7 +17,6 @@ namespace Final.Project.API.Controllers
         private readonly IUsersManager? _UsersManager;
         private readonly UserManager<User> _Usermanager;
 
-
         public UserProfileController(IUsersManager userManager, UserManager<User> manager)
         {
             _UsersManager = userManager;
@@ -75,7 +74,8 @@ namespace Final.Project.API.Controllers
                 var currentUser = _Usermanager.GetUserAsync(User).Result;
 
                 //id = currentUser.Id;
-
+        
+               // if (!result) { return NotFound(); }
                 var isfound = _UsersManager.delete(currentUser.Id);
 
                 if (!isfound) { return NotFound(); }

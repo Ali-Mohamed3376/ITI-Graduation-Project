@@ -10,6 +10,11 @@ public class UserAddressRepo : GenericRepo<UserAddress>, IUserAddressRepo
         _context = context;
     }
 
+    public void deleteByUId(string uId)
+    {
+        _context.Set<UserAddress>().Where(u => u.UserId == uId).ExecuteDelete();
+    }
+
     public IEnumerable<UserAddress> GetAllUserAddresses(string userIdFromToken)
     {
         return _context.Set<UserAddress>()
