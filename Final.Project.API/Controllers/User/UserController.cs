@@ -82,7 +82,7 @@ namespace Final.Project.API.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult> Register([FromBody] RegisterDto credentials)
+        public async Task<ActionResult<TokenDto>> Register([FromBody] RegisterDto credentials)
         {
 
             User user = new User
@@ -120,12 +120,23 @@ namespace Final.Project.API.Controllers
             //await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
 
 
-            var response = new
-            {
-                message = "Confirmation Link Sent Successfully!!"
-            };
+            string? secretKey = configuration.GetValue<string>("SecretKey");
+            byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
 
-            return Ok(response);
+            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+            return new TokenDto
+            {
+                Token = token,
+                Role = user.Role.ToString()
+            };
         }
 
 
