@@ -36,9 +36,26 @@ namespace Final.Project.API.Controllers
         }
 
         #endregion
+        #region Get User Addresses  by Id
+        [HttpGet]
+        [Route("address/{id}")]
+        public ActionResult<AllUserAddressesReadDto> GetAddressById( int id)
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+            }
+
+            var addresses = _userAddressesManager.GetAddressById(id);
+
+            return Ok(addresses);
+        }
+
+        #endregion
 
         #region Add New Address
-       
+
         [HttpPost("AddNewAddress")]
         public ActionResult AddNewAddress(NewAddressAddingDto newAddress)
         {

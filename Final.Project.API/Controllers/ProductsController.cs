@@ -96,7 +96,6 @@ namespace Final.Project.API.Controllers
 
             return Ok(result.ToList());
         }
-
         #endregion
 
 
@@ -190,6 +189,29 @@ namespace Final.Project.API.Controllers
             }
 
             return Ok(products);
+        }
+        #endregion
+
+
+        #region Get All Products in Pagination 
+        [HttpGet]
+        [Route("{page}/{countPerPage}")]
+
+        public ActionResult<ProductPaginationDto> GetAllProductsInPagination(int page,int countPerPage)
+        {
+            return _productsManager.GetAllProductsInPagnation(page,countPerPage);
+            
+        }
+        #endregion
+
+        #region Filter With Pagination
+        [HttpPost]
+        [Route("PaginationFilter/{page}/{countPerPage}")]
+        public ActionResult<ProductFilterationPaginationResultDto> GetAllProductAfterFilterationInPagination(ProductQueryDto productQueryDto, int page, int countPerPage)
+        {
+            var result = _productsManager.ProductAfterFilterationInPagination(productQueryDto, page, countPerPage);
+
+            return Ok(result);
         }
         #endregion
 

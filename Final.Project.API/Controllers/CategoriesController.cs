@@ -98,7 +98,7 @@ namespace Final.Project.API.Controllers
         #region Delete Category Dashboard 
 
         [HttpDelete]
-        [Route("Dashboard/DeleteCategory")]
+        [Route("Dashboard/DeleteCategory/{Id}")]
         [Authorize(Policy = "ForAdmin")]
         public ActionResult Delete(int Id)
         {

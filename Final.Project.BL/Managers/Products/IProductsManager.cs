@@ -20,4 +20,8 @@ public interface IProductsManager
 
     IEnumerable<ProductFilterationResultDto> ProductAfterFilteration(ProductQueryDto queryDto);
 
+    ProductPaginationDto GetAllProductsInPagnation(int page, int countPerPage);
+    ProductFilterationPaginationResultDto ProductAfterFilterationInPagination(ProductQueryDto queryDto, int page, int countPerPage);
+
+
 }

@@ -83,7 +83,7 @@ namespace Final.Project.API.Controllers
                 return BadRequest(claimsResult.Errors);
             }
 
-            return Ok("Register Succeded!!!");
+            return NoContent();
         }
 
         #endregion

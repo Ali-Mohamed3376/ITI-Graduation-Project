@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Final.Project.DAL;
 public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsCartRepo
@@ -36,5 +37,10 @@ public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsC
 
     }
 
-
+    public int GetCartCounter(string userIdFromToken)
+    {
+        return _context.Set<UserProductsCart>()
+                        .Where(u => u.UserId == userIdFromToken)
+                        .Sum(x => x.Quantity);
+    }
 }

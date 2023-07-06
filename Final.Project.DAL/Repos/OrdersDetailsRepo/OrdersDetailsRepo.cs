@@ -54,10 +54,11 @@ public class OrdersDetailsRepo : GenericRepo<OrderProductDetails>, IOrdersDetail
     {
         return _context.OrderProductDetails
                 .Include(op => op.Product)
-                .ThenInclude(p=>p.Reviews)
+                .ThenInclude(p => p.Reviews)
                 .GroupBy(op => op.ProductId)
                 .Select(g => new OrderProductDetails { Product = g.First().Product, Quantity = g.Sum(op => op.Quantity) })
-                .OrderByDescending(pq => pq.Quantity);
+                .OrderByDescending(pq => pq.Quantity)
+                .Take(10);
     }
 
     #endregion

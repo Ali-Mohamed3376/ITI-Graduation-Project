@@ -101,5 +101,9 @@ public class UserProductsCartsManager : IUserProductsCartsManager
         return products;
     }
 
-
+    public int CartCounter(string userIdFromToken)
+    {
+        int counter = _unitOfWork.UserProdutsCartRepo.GetCartCounter(userIdFromToken);
+        return counter;
+    }
 }

@@ -73,6 +73,7 @@ public class OrdersManager : IOrdersManager
                 Id = o.Id,
                 OrderStatus = Enum.GetName(typeof(OrderStatus), o.OrderStatus),
                 OrderDate = o.OrderDate,
+                UserId = o.User.Id,
                 UserName = (o.User.FName + " " + o.User.LName),
                 ProductCount = o.OrdersProductDetails.Count(),
                 TotalPrice = o.OrdersProductDetails.Sum(op => Math.Round( (op.Product.Price - (op.Product.Price * (op.Product.Discount/100))) * op.Quantity, 0)),
@@ -97,18 +98,25 @@ public class OrdersManager : IOrdersManager
         OrderDetailsDto orderDetails = new OrderDetailsDto
         {
             Id = order.Id,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = Enum.GetName(typeof(OrderStatus), order.OrderStatus),
             OrderDate = order.OrderDate,
             DeliverdDate = order.DeliverdDate,
+            UserId = order.User.Id,
             UserName = (order.User.FName + " " + order.User.LName),
+            ProductCount = order.OrdersProductDetails.Count(),
+            TotalPrice = order.OrdersProductDetails.Sum(op => Math.Round((op.Product.Price - (op.Product.Price * (op.Product.Discount / 100))) * op.Quantity, 0)),
             ProductsInOrder = order.OrdersProductDetails.Select(op => new ProductsInOrder
             {
                 Quantity = op.Quantity,
                 ProductName = op.Product.Name,
-                ProductDescription = op.Product.Description,
                 ProductPrice = op.Product.Price,
-                ProductModel = op.Product.Model,
-            })
+                ProductImage = op.Product.Image,
+                Discount = op.Product.Discount,
+                ProductId = op.ProductId
+            }),
+            City = order.UserAddress.City,
+            Street = order.UserAddress.Street,
+            Phone = order.UserAddress.Phone
 
         };
 
@@ -127,8 +135,12 @@ public class OrdersManager : IOrdersManager
             return false;
         }
 
-        order.OrderStatus = orderEdit.OrderStatus;
-        order.DeliverdDate = orderEdit.DeliverdDate;
+        order.OrderStatus = (OrderStatus)Enum.ToObject(typeof(OrderStatus), orderEdit.OrderStatus);
+
+        if ((OrderStatus)Enum.ToObject(typeof(OrderStatus), orderEdit.OrderStatus) == OrderStatus.Delivered)
+        {
+            order.DeliverdDate = DateTime.Now;
+        }
 
         return _unitOfWork.Savechanges() > 0;
     }
