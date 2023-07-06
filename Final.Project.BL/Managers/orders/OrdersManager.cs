@@ -103,15 +103,20 @@ public class OrdersManager : IOrdersManager
             DeliverdDate = order.DeliverdDate,
             UserId = order.User.Id,
             UserName = (order.User.FName + " " + order.User.LName),
+            ProductCount = order.OrdersProductDetails.Count(),
+            TotalPrice = order.OrdersProductDetails.Sum(op => Math.Round((op.Product.Price - (op.Product.Price * (op.Product.Discount / 100))) * op.Quantity, 0)),
             ProductsInOrder = order.OrdersProductDetails.Select(op => new ProductsInOrder
             {
                 Quantity = op.Quantity,
                 ProductName = op.Product.Name,
-                ProductDescription = op.Product.Description,
                 ProductPrice = op.Product.Price,
                 ProductImage = op.Product.Image,
-                ProductModel = op.Product.Model,
-            })
+                Discount = op.Product.Discount,
+                ProductId = op.ProductId
+            }),
+            City = order.UserAddress.City,
+            Street = order.UserAddress.Street,
+            Phone = order.UserAddress.Phone
 
         };
 

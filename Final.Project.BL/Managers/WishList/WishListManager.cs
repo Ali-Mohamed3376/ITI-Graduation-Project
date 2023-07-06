@@ -43,4 +43,20 @@ public class WishListManager : IWishListManager
        int counter= _unitOfWork.WishListRepo.count(userIdFromToken);
         return counter;
     }
+
+    public IEnumerable<wishListProductDto> GetWishListProducts(string userIdFromToken)
+    {
+        IEnumerable<WishList> wishListFromDB = _unitOfWork.WishListRepo.GetuserWishList(userIdFromToken);
+        IEnumerable<wishListProductDto> wishLishProducts = wishListFromDB.Select(p => new wishListProductDto
+        {
+            Id = p.Product.Id,
+            Name = p.Product.Name,
+            Price = p.Product.Price,
+            Image = p.Product.Image,
+            Discount = p.Product.Discount,
+            AvgRating = p.Product.Reviews.Any() ? (decimal)p.Product.Reviews.Average(r => r.Rating) : 0,
+            ReviewCount = p.Product.Reviews.Count()
+        });
+        return wishLishProducts;
+    }
 }

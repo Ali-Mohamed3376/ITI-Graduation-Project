@@ -21,8 +21,8 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
     public ICollection<Order> GetOrdersWithData()
     {
         return _context.Set<Order>()
-                .Include(o=>o.User)
-                .Include(o=>o.OrdersProductDetails)
+                .Include(o => o.User)
+                .Include(o => o.OrdersProductDetails)
                     .ThenInclude(op => op.Product)
                 .ToList();
     }
@@ -33,6 +33,7 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
     {
         return _context.Set<Order>()
                 .Include(o => o.User)
+                .Include(o => o.UserAddress)
                 .Include(o => o.OrdersProductDetails)
                     .ThenInclude(op => op.Product)
                 .First(o => o.Id == OrderId);
