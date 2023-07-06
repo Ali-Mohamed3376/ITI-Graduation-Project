@@ -25,84 +25,88 @@ namespace Final.Project.API.Controllers
 
         #region profile
 
-            #region getuser
+        #region getuser
 
-            [HttpGet]
-            [Route("profile")]
-            public ActionResult<UserReadDto> getUserProfile()
-            {
-                var currentUser = _Usermanager.GetUserAsync(User).Result;
-                //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
-                UserReadDto? user = _UsersManager.GetUserReadDto(currentUser);
-
-                if (user is null)
-                {
-                    return NotFound();
-                }
-
-
-                return Ok(user);
-            }
-        #endregion
-
-            #region EditUserName
-
-            [HttpPut]
-            [Route("Edit")]
-            public ActionResult Edit(UserUpdateDto updateDto)
+        [HttpGet]
+        [Route("profile")]
+        public ActionResult<UserReadDto> getUserProfile()
         {
             var currentUser = _Usermanager.GetUserAsync(User).Result;
-            //updateDto.Id=currentUser.Id;
-            if (currentUser.Id is null)
+            //UserReadDto? user = _UsersManager.GetUserReadDto(currentUser.Id);
+            UserReadDto? user = _UsersManager.GetUserReadDto(currentUser);
+
+            if (user is null)
             {
-                return BadRequest("Edit failed");
+                return NotFound();
             }
 
-            // _UsersManager.Edit(updateDto,currentUser.Id);
-            _UsersManager.Edit(updateDto, currentUser);
 
-
-            return Ok("Edit successfully");
+            return Ok(user);
         }
         #endregion
 
-            #region Delete
-            [HttpDelete]
-            [Route("DeleteUser")]
-            public ActionResult Delete()
+        #region EditUserName
+
+        [HttpPut]
+        [Route("Edit")]
+        public async Task<ActionResult> Edit(UserUpdateDto updateDto)
+        {
+            var currentUser = await _Usermanager.GetUserAsync(User);
+            
+            //updateDto.Id=currentUser.Id;
+            if (currentUser is null)
             {
-                var currentUser = _Usermanager.GetUserAsync(User).Result;
-
-                //id = currentUser.Id;
-        
-               // if (!result) { return NotFound(); }
-                var isfound = _UsersManager.delete(currentUser.Id);
-
-                if (!isfound) { return NotFound(); }
-
-                return Ok("Deleted  Successfully");
+                return BadRequest();
             }
+
+            // _UsersManager.Edit(updateDto,currentUser.Id);
+             _UsersManager.Edit(updateDto, currentUser);
+
+            return Ok();
+        }
+        #endregion
+
+        #region Delete
+        [HttpDelete]
+        [Route("DeleteUser")]
+        public ActionResult Delete()
+        {
+            var currentUser = _Usermanager.GetUserAsync(User).Result;
+
+            //id = currentUser.Id;
+
+            // if (!result) { return NotFound(); }
+            var isfound = _UsersManager.delete(currentUser.Id);
+
+            if (!isfound) { return NotFound(); }
+
+            return Ok("Deleted  Successfully");
+        }
         #endregion
         //done
-            #region ChangePassword
+        #region ChangePassword
 
-            [HttpPost]
-            [Route("Change_Password")]
-            public ActionResult ChangePassword(UserChangepassDto passwordDto)
+        [HttpPost]
+        [Route("Change_Password")]
+        public async Task<ActionResult> ChangePassword(UserChangepassDto passwordDto)
         {
             //get the user
-            User? currentUser = _Usermanager.GetUserAsync(User).Result;
+            User? currentUser = await _Usermanager.GetUserAsync(User);
+            if (currentUser is null)
+            {
+                return BadRequest();
+            }
 
             //confirm old password
-            var isValiduser = _Usermanager.CheckPasswordAsync(currentUser!, passwordDto.OldPassword).Result;
+            var isValiduser = await _Usermanager.CheckPasswordAsync(currentUser!, passwordDto.OldPassword);
             if (!isValiduser)
             {
-                return BadRequest("Incorrect Password!!!");
+                return BadRequest();
             }
             //change password
-            var test = _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword).Result;
+            var test = await _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword);
 
-            return Ok("Password Changed Successfully!!!");
+            return Ok();
         }
 
 
@@ -147,7 +151,7 @@ namespace Final.Project.API.Controllers
         public ActionResult<UserOrderDetailsDto> GetOrderDetails(int orderId)
         {
             //var currentUser = _Usermanager.GetUserAsync(User).Result;
-           // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
+            // var order = _UsersManager.GetUserOrderDto(currentUser.Id);
             var orderDetails = _UsersManager.GetUserOrderDetailsDto(orderId);
             if (orderDetails is null)
             {
