@@ -107,7 +107,6 @@ public class OrdersManager : IOrdersManager
                 ProductName = op.Product.Name,
                 ProductDescription = op.Product.Description,
                 ProductPrice = op.Product.Price,
-                ProductImage = op.Product.Image,
                 ProductModel = op.Product.Model,
             })
 

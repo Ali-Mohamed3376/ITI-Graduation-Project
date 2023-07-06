@@ -52,7 +52,6 @@ public class UsersManager : IUsersManager
 
         IEnumerable<UserOrderDetailsDto> products = OrderProductDetails.Select(p => new UserOrderDetailsDto
         {
-            Image = p.Product.Image,
             Price = p.Product.Price,
             Quantity = p.Quantity,
             title = p.Product.Name
@@ -75,7 +74,6 @@ public class UsersManager : IUsersManager
             DeliverdDate = order.DeliverdDate,
             Products = order.OrdersProductDetails.Select(ip => new UserProductDto
             {
-                Image = ip.Product.Image,
                 title = ip.Product.Name,
             }
 

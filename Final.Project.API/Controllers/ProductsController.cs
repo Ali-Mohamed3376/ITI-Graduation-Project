@@ -14,19 +14,30 @@ namespace Final.Project.API.Controllers
     {
         private readonly IProductsManager _productsManager;
         private readonly ECommerceContext context;
-        private readonly IHelper _helper;
+        private readonly IHelper helper;
 
         public ProductsController(IProductsManager productsManager, ECommerceContext context,IHelper Helper)
         {
             _productsManager = productsManager;
             this.context = context;
-            _helper = Helper;
+            helper = Helper;
         }
 
         #region Get Product By Id
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<ProductDetailsDto> GetProductDetails(int id)
+        public ActionResult<ProducttoeditdashboardDto> GetProductDetails(int id)
+        {
+            ProducttoeditdashboardDto product = _productsManager.GetProductByIDdashboard(id);
+            if (product == null) { return NotFound(); }
+            return Ok(product);
+        }
+        #endregion
+
+        #region Get Product By Id in dashboard for edit
+        [HttpGet]
+        [Route("dashboard/{id}")]
+        public ActionResult<ProductDetailsDto> GetProductbyid(int id)
         {
             ProductDetailsDto product = _productsManager.GetProductByID(id);
             if (product == null) { return NotFound(); }
@@ -109,33 +120,45 @@ namespace Final.Project.API.Controllers
         #region Add Product
         //[Authorize(Policy = "ForAdmin")]
         [HttpPost]
-        [Route("Dashboard/AddProduct")]
-        public ActionResult Add([FromForm] ProductAddDto product)
+        [Route("Dashboard/addProduct")]
+        public ActionResult Add( ProductAddDto product)
         {
-            string message = _helper.ImageValidation(product.Image);
-
-            if (message == "ok")
-            {
-                _productsManager.AddProduct(product, Request.Host.Value, Request.Scheme);
-                return Ok(new { message = "ok" });
-            }
-            return BadRequest(message);
+            if (product == null) return BadRequest();
+            _productsManager.AddProduct(product);
+            return NoContent();
+          
+        }
+        [HttpPost]
+        [Route("Dashboard/uploadImages")]
+        public ActionResult<UploadFileDto> Upload(IFormFile file)
+        {
+            
+            helper.ImageValidation(file);
+            var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var imagesPath = Path.Combine(Environment.CurrentDirectory, "Images");
+            var fulFilePath=Path.Combine(imagesPath, newFileName);
+            using var stream = new FileStream(fulFilePath, FileMode.Create);
+            file.CopyTo(stream);
+            
+            var url = $"{Request.Scheme}://{Request.Host}/Images/{newFileName}";
+            return new UploadFileDto(true, "Success",url);
         }
         #endregion
+                
 
         #region Edit Product
-        [Authorize(Policy = "ForAdmin")]
+        //[Authorize(Policy = "ForAdmin")]
 
         [HttpPatch]
-        [Route("{id}")]
-        public ActionResult<Product> Edit(ProductEditDto product, int id)
+        [Route("/dashboard/editproduct")]
+        public ActionResult<Product> Edit(ProductEditDto product)
         {
-            if (id != product.Id)
+            if (product==null)
             {
                 return BadRequest();
             }
             _productsManager.EditProduct(product);
-            return Ok(product);
+            return NoContent();
 
         }
 

@@ -1,6 +1,7 @@
 ﻿
 
 using Final.Project.DAL;
+using Final.Project.DAL.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Final.Project.BL;
@@ -25,7 +26,6 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                Image = p.Image,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
                 ReviewCount=p.Reviews.Count()
@@ -53,7 +53,7 @@ public class ProductsManager: IProductsManager
             Discount= productFromDb.Discount,
             Description = productFromDb.Description,
             Model = productFromDb.Model,
-            Image = productFromDb.Image,
+            CategoryId=productFromDb.CategoryID,
             CategoryName = productFromDb.Category.Name,
             ReviewCount = productFromDb.Reviews.Count(),
 
@@ -82,7 +82,6 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                Image = p.Image,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
                 ReviewCount = p.Reviews.Count()
@@ -108,7 +107,6 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                Image = p.Image,
                 CategoryName = p.Category.Name
             });
         return productReadDto;
@@ -117,31 +115,21 @@ public class ProductsManager: IProductsManager
     #endregion
 
     #region Add Product
-    public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme)
+    public bool AddProduct(ProductAddDto productDto)
     {
-
-
-        var extension = Path.GetExtension(productDto.Image.FileName);
-        // Save the file to disk
-        var fileName = $"{Guid.NewGuid()}{extension}";
-        var filePath = Path.Combine(Environment.CurrentDirectory, "Images", fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            productDto.Image.CopyToAsync(stream);
-        }
-
-        // Create a new Product object and save it to the database
         var ProductToAdd = new Product
         {
             Name = productDto.Name,
-            //Image = $"{Request.Scheme}://{Request.Host}/Images/{fileName}",
-            Image = $"{requestScheme}://{requestHost}/Image/{fileName}",
             Price = productDto.Price,
             CategoryID = productDto.CategoryID,
             Description = productDto.Description,
             Model = productDto.Model,
-            Discount=productDto.Discount
+            Discount = productDto.Discount,
+            ProductImages = productDto.Image.Select(i => new ProductImages
+            {
+                ImageUrl = i
+            }).ToList()
+
         };
         _unitOfWork.ProductRepo.Add(ProductToAdd);
         return _unitOfWork.Savechanges() > 0;
@@ -153,7 +141,7 @@ public class ProductsManager: IProductsManager
 
     public bool EditProduct(ProductEditDto productEditDto)
     {
-        var product = _unitOfWork.ProductRepo.GetById(productEditDto.Id);
+        var product = _unitOfWork.ProductRepo.GetProductByIdWithimages(productEditDto.Id);
         if (product is null)
         {
             return false;
@@ -162,7 +150,10 @@ public class ProductsManager: IProductsManager
         product.Name = productEditDto.Name;
         product.Price = productEditDto.Price;
         product.Description = productEditDto.Description;
-        product.Image = productEditDto == null ? product.Image : productEditDto.Image;
+        product.ProductImages = productEditDto.ImagesURLs.Select(i => new ProductImages
+        {
+            ImageUrl = i
+        }).ToList();
         product.Model = productEditDto.Model;
         product.CategoryID = productEditDto.CategoryID;
         product.Discount = productEditDto.Discount;
@@ -198,7 +189,6 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                Image = p.Image,
                 CategoryName=p.Category.Name,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
@@ -229,13 +219,31 @@ public class ProductsManager: IProductsManager
             Id = p.Id,
             Name = p.Name,
             Price = p.Price,
-            Image = p.Image,
             Discount = p.Discount,
             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
             ReviewCount = p.Reviews.Count()
         }) ;
 
         return productsFilteredRsulte;
+    }
+
+    public ProducttoeditdashboardDto GetProductByIDdashboard(int id)
+    {
+        Product? productFromDb = _unitOfWork.ProductRepo.GetProductByIdWithimages(id);
+
+        if (productFromDb is null) { return null; }
+        return new ProducttoeditdashboardDto()
+        {
+            Id = productFromDb.Id,
+            Name = productFromDb.Name,
+            Price = productFromDb.Price,
+            Discount = productFromDb.Discount,
+            Description = productFromDb.Description,
+            Model = productFromDb.Model,
+            CategoryId = productFromDb.CategoryID,
+            Image=productFromDb.ProductImages.Select(i=>i.ImageUrl).ToList()
+
+        };
     }
 }
 

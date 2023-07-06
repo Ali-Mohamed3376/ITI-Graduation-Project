@@ -76,8 +76,6 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.Property(e => e.Description)
                 .IsRequired();
 
-            entity.Property(e => e.Image)
-                .IsRequired();
 
             entity.HasOne(e => e.Category)
                     .WithMany(e => e.Products)

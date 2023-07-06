@@ -22,6 +22,18 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     }
 
     #endregion
+    #region Get Product Details with images
+    public Product? GetProductByIdWithimages(int id)
+    {
+        return _context.Set<Product>()
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefault(p=>p.Id==id);
+                    
+                    
+                    
+    }
+
+    #endregion
 
     #region Get All Products With AvgRating
     public IEnumerable<Product> GetAllProductsWithAvgRating()
