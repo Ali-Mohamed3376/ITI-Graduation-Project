@@ -103,6 +103,12 @@ namespace Final.Project.API.Controllers
             {
                 return NotFound(); 
             }
+
+            if (passwordDto.NewPassword != passwordDto.ConfirmNewPassword)
+            {
+                return NoContent();
+            }
+
             //change password
             await _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword);
 
