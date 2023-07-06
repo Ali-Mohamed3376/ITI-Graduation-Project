@@ -56,7 +56,7 @@ namespace Final.Project.API.Controllers
             //updateDto.Id=currentUser.Id;
             if (currentUser is null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             // _UsersManager.Edit(updateDto,currentUser.Id);
@@ -83,7 +83,7 @@ namespace Final.Project.API.Controllers
             return Ok("Deleted  Successfully");
         }
         #endregion
-        //done
+        
         #region ChangePassword
 
         [HttpPost]
@@ -94,17 +94,17 @@ namespace Final.Project.API.Controllers
             User? currentUser = await _Usermanager.GetUserAsync(User);
             if (currentUser is null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             //confirm old password
             var isValiduser = await _Usermanager.CheckPasswordAsync(currentUser!, passwordDto.OldPassword);
             if (!isValiduser)
             {
-                return BadRequest();
+                return NotFound(); 
             }
             //change password
-            var test = await _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword);
+            await _Usermanager.ChangePasswordAsync(currentUser!, passwordDto.OldPassword, passwordDto.NewPassword);
 
             return Ok();
         }
@@ -114,8 +114,6 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-
-        //done
         #region GetUserOrders
         [HttpGet]
         [Route("orders")]
@@ -144,7 +142,6 @@ namespace Final.Project.API.Controllers
         //}
         #endregion
 
-        //done
         #region getUserOrderDetails
         [HttpGet]
         [Route("orderDetails/{orderId}")]
