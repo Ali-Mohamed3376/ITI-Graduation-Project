@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Final.Project.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,4 +11,5 @@ public interface IWishListManager
 {
     bool AddtoWishList(string userIdFromToken, int productId);
     int GetWishListCount(string userIdFromToken);
+    IEnumerable<wishListProductDto> GetWishListProducts(string userIdFromToken);
 }

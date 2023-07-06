@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Final.Project.DAL.Migrations
 {
     [DbContext(typeof(ECommerceContext))]
-    [Migration("20230705095609_InitWithWishList")]
-    partial class InitWithWishList
+    [Migration("20230705164109_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,6 +229,457 @@ namespace Final.Project.DAL.Migrations
                             Model = "eq2009ne",
                             Name = "NOTEBOOK-HP-AMD-15s",
                             Price = 16666m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Air is a lightweight and portable laptop with excellent battery life.",
+                            Discount = 50m,
+                            Image = "",
+                            Model = "MacBook Air",
+                            Name = "Apple MacBook Air",
+                            Price = 40000m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Pro is a high-performance laptop loved by professionals.",
+                            Discount = 20m,
+                            Image = "",
+                            Model = "MacBook Pro",
+                            Name = "Apple MacBook Pro",
+                            Price = 80000m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryID = 2,
+                            Description = "The Dell XPS 13 is a sleek and powerful laptop with a stunning display.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "XPS 13",
+                            Name = "Dell XPS 13",
+                            Price = 40000m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryID = 2,
+                            Description = "The Dell Inspiron 15 is a versatile laptop suitable for everyday use.",
+                            Discount = 13m,
+                            Image = "",
+                            Model = "Inspiron 15",
+                            Name = "Dell Inspiron 15",
+                            Price = 35000m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryID = 3,
+                            Description = "The HP Spectre x360 is a stylish 2-in-1 laptop with powerful performance.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "Spectre x360",
+                            Name = "HP Spectre x360",
+                            Price = 25000m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryID = 3,
+                            Description = "The HP Pavilion 14 is a budget-friendly laptop with decent specifications.",
+                            Discount = 60m,
+                            Image = "",
+                            Model = "Pavilion 14",
+                            Name = "HP Pavilion 14",
+                            Price = 15000m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Air is a lightweight and portable laptop with excellent battery life.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "MacBook Air",
+                            Name = "Apple MacBook Air",
+                            Price = 28000m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Pro is a high-performance laptop loved by professionals.",
+                            Discount = 12m,
+                            Image = "",
+                            Model = "MacBook Pro",
+                            Name = "Apple MacBook Pro",
+                            Price = 30000m
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CategoryID = 1,
+                            Description = "The Apple iMac is a sleek and powerful all-in-one desktop computer.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "iMac",
+                            Name = "Apple iMac",
+                            Price = 16000m
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CategoryID = 2,
+                            Description = "The Dell XPS 13 is a sleek and powerful laptop with a stunning display.",
+                            Discount = 90m,
+                            Image = "",
+                            Model = "XPS 13",
+                            Name = "Dell XPS 13",
+                            Price = 14000m
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CategoryID = 2,
+                            Description = "The Dell Inspiron 15 is a versatile laptop suitable for everyday use.",
+                            Discount = 18m,
+                            Image = "",
+                            Model = "Inspiron 15",
+                            Name = "Dell Inspiron 15",
+                            Price = 30000m
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CategoryID = 2,
+                            Description = "The Dell G5 Gaming Desktop is a powerful gaming machine with immersive graphics.",
+                            Discount = 20m,
+                            Image = "",
+                            Model = "G5 Gaming Desktop",
+                            Name = "Dell G5 Gaming Desktop",
+                            Price = 38000m
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CategoryID = 3,
+                            Description = "The HP Spectre x360 is a stylish 2-in-1 laptop with powerful performance.",
+                            Discount = 19m,
+                            Image = "",
+                            Model = "Spectre x360",
+                            Name = "HP Spectre x360",
+                            Price = 26000m
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CategoryID = 3,
+                            Description = "The HP Pavilion 14 is a budget-friendly laptop with decent specifications.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "Pavilion 14",
+                            Name = "HP Pavilion 14",
+                            Price = 6000m
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CategoryID = 3,
+                            Description = "The HP EliteBook 840 is a business laptop with top-notch security features.",
+                            Discount = 80m,
+                            Image = "",
+                            Model = "EliteBook 840",
+                            Name = "HP EliteBook 840",
+                            Price = 50000m
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Air is a lightweight and portable laptop with excellent battery life.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "MacBook Air",
+                            Name = "Apple MacBook Air",
+                            Price = 18000m
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CategoryID = 2,
+                            Description = "The Dell XPS 13 is a sleek and powerful laptop with a stunning display.",
+                            Discount = 5m,
+                            Image = "",
+                            Model = "XPS 13",
+                            Name = "Dell XPS 13",
+                            Price = 13000m
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CategoryID = 3,
+                            Description = "The HP Spectre x360 is a stylish 2-in-1 laptop with powerful performance.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "Spectre x360",
+                            Name = "HP Spectre x360",
+                            Price = 12000m
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CategoryID = 4,
+                            Description = "The Lenovo ThinkCentre M720 is a compact and reliable desktop computer for business use.",
+                            Discount = 6m,
+                            Image = "",
+                            Model = "ThinkCentre M720",
+                            Name = "Lenovo ThinkCentre M720",
+                            Price = 15000m
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CategoryID = 5,
+                            Description = "The ASUS ROG Strix G15 is a powerful gaming desktop with RGB lighting and high-performance components.",
+                            Discount = 60m,
+                            Image = "",
+                            Model = "ROG Strix G15",
+                            Name = "ASUS ROG Strix G15",
+                            Price = 80000m
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CategoryID = 6,
+                            Description = "The Acer Aspire TC is a budget-friendly desktop computer with decent performance.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "Aspire TC",
+                            Name = "Acer Aspire TC",
+                            Price = 18000m
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CategoryID = 2,
+                            Description = "The Dell Inspiron 27 is an all-in-one desktop computer with a large display and powerful performance.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "Inspiron 27",
+                            Name = "Dell Inspiron 27",
+                            Price = 22000m
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CategoryID = 5,
+                            Description = "The ASUS ZenBook Pro is a premium laptop with a stunning 4K display and high-performance components.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "ZenBook Pro",
+                            Name = "ASUS ZenBook Pro",
+                            Price = 28000m
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CategoryID = 3,
+                            Description = "The HP Pavilion Gaming Desktop is a gaming powerhouse with advanced graphics and smooth gameplay.",
+                            Discount = 80m,
+                            Image = "",
+                            Model = "Pavilion Gaming Desktop",
+                            Name = "HP Pavilion Gaming Desktop",
+                            Price = 15000m
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CategoryID = 4,
+                            Description = "The Lenovo Legion Y540 is a gaming laptop with powerful hardware and immersive gaming experience.",
+                            Discount = 12m,
+                            Image = "",
+                            Model = "Legion Y540",
+                            Name = "Lenovo Legion Y540",
+                            Price = 20000m
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CategoryID = 1,
+                            Description = "The Apple iMac is a sleek all-in-one desktop computer with a stunning Retina display and powerful performance.",
+                            Discount = 20m,
+                            Image = "",
+                            Model = "iMac",
+                            Name = "Apple iMac",
+                            Price = 24000m
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CategoryID = 2,
+                            Description = "The Dell G5 is a gaming laptop with high-performance hardware and immersive gaming features.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "G5 Gaming Laptop",
+                            Name = "Dell G5 Gaming Laptop",
+                            Price = 18000m
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CategoryID = 3,
+                            Description = "The HP Envy 15 is a premium laptop with a sleek design and powerful performance for multimedia and productivity tasks.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "Envy 15",
+                            Name = "HP Envy 15",
+                            Price = 16000m
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CategoryID = 4,
+                            Description = "The Lenovo IdeaCentre 5 is a compact and versatile desktop computer suitable for home and office use.",
+                            Discount = 50m,
+                            Image = "",
+                            Model = "IdeaCentre 5",
+                            Name = "Lenovo IdeaCentre 5",
+                            Price = 8990m
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CategoryID = 5,
+                            Description = "The ASUS VivoBook S15 is a stylish and lightweight laptop with a vibrant display and long battery life.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "VivoBook S15",
+                            Name = "ASUS VivoBook S15",
+                            Price = 9990m
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CategoryID = 10,
+                            Description = "The Samsung Galaxy Book Pro is a thin and lightweight laptop with a stunning AMOLED display and powerful performance.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "Galaxy Book Pro",
+                            Name = "Samsung Galaxy Book Pro",
+                            Price = 14990m
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CategoryID = 2,
+                            Description = "The Dell Alienware Aurora R10 is a high-performance gaming desktop with powerful hardware and customizable lighting.",
+                            Discount = 20m,
+                            Image = "",
+                            Model = "Alienware Aurora R10",
+                            Name = "Dell Alienware Aurora R10",
+                            Price = 28000m
+                        },
+                        new
+                        {
+                            Id = 37,
+                            CategoryID = 3,
+                            Description = "The HP Omen 15 is a gaming laptop with a sleek design, high-refresh-rate display, and powerful performance for gaming enthusiasts.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "Omen 15",
+                            Name = "HP Omen 15",
+                            Price = 17999m
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CategoryID = 1,
+                            Description = "The Apple MacBook Air is a lightweight and portable laptop with a stunning Retina display and all-day battery life.",
+                            Discount = 10m,
+                            Image = "",
+                            Model = "MacBook Air",
+                            Name = "Apple MacBook Air",
+                            Price = 12990m
+                        },
+                        new
+                        {
+                            Id = 39,
+                            CategoryID = 9,
+                            Description = "The Razer Blade 15 is a premium gaming laptop with a sleek design, high-refresh-rate display, and powerful performance.",
+                            Discount = 15m,
+                            Image = "",
+                            Model = "Blade 15",
+                            Name = "Razer Blade 15",
+                            Price = 23990m
+                        },
+                        new
+                        {
+                            Id = 40,
+                            CategoryID = 4,
+                            Description = "The Lenovo ThinkPad X1 Carbon is a premium business laptop with a durable build, long battery life, and top-notch performance.",
+                            Discount = 60m,
+                            Image = "",
+                            Model = "ThinkPad X1 Carbon",
+                            Name = "Lenovo ThinkPad X1 Carbon",
+                            Price = 18990m
+                        },
+                        new
+                        {
+                            Id = 41,
+                            CategoryID = 5,
+                            Description = "The ASUS ROG Zephyrus G14 is a powerful gaming laptop with an ultra-portable design and impressive performance.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "ROG Zephyrus G14",
+                            Name = "ASUS ROG Zephyrus G14",
+                            Price = 17000m
+                        },
+                        new
+                        {
+                            Id = 42,
+                            CategoryID = 8,
+                            Description = "The MSI GS66 Stealth is a high-performance gaming laptop with a sleek design and powerful components.",
+                            Discount = 19m,
+                            Image = "",
+                            Model = "GS66 Stealth",
+                            Name = "MSI GS66 Stealth",
+                            Price = 23999m
+                        },
+                        new
+                        {
+                            Id = 43,
+                            CategoryID = 8,
+                            Description = "The MSI Prestige 14 is a stylish and powerful laptop designed for creative professionals.",
+                            Discount = 17m,
+                            Image = "",
+                            Model = "Prestige 14",
+                            Name = "MSI Prestige 14",
+                            Price = 15990m
+                        },
+                        new
+                        {
+                            Id = 44,
+                            CategoryID = 7,
+                            Description = "The Microsoft Surface Laptop 4 is a sleek and versatile laptop with a premium design and excellent performance.",
+                            Discount = 14m,
+                            Image = "",
+                            Model = "Surface Laptop 4",
+                            Name = "Microsoft Surface Laptop 4",
+                            Price = 23000m
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CategoryID = 7,
+                            Description = "The Microsoft Surface Pro 7 is a powerful 2-in-1 tablet-laptop hybrid with a detachable keyboard and versatile functionality.",
+                            Discount = 0m,
+                            Image = "",
+                            Model = "Surface Pro 7",
+                            Name = "Microsoft Surface Pro 7",
+                            Price = 20000m
                         });
                 });
 
