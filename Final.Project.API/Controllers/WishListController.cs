@@ -17,6 +17,19 @@ namespace Final.Project.API.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetWishList()
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+
+            }
+            var wishList = _wishListManager.GetWishListProducts(userIdFromToken);
+            return Ok(wishList);
+        }
+
+        [HttpGet]
         [Route("Add/{productId}")]
         public ActionResult AddToWishList(int productId)
         {
