@@ -14,7 +14,7 @@ public interface IProductRepo :IGenericRepo<Product>
     int GetCount();
     IEnumerable<Product> GetProductFilteredInPagination(QueryParametars parametars, int page, int countPerPage);
 
-
+    public IEnumerable<Product> GetNewProducts();
 
     // ahmed
 
