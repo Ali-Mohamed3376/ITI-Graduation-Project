@@ -11,6 +11,9 @@ public interface IUnitOfWork
     public IReviewRepo ReviewRepo { get; }
     public IDashboardUserRepo DashboardUserRepo { get; }
     public IWishListRepo WishListRepo { get; }
+    public IContactUsRepo ContactUsRepo { get; }
+
+
 
 
 
