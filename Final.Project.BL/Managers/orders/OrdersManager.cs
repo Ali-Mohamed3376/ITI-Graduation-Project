@@ -110,7 +110,7 @@ public class OrdersManager : IOrdersManager
                 Quantity = op.Quantity,
                 ProductName = op.Product.Name,
                 ProductPrice = op.Product.Price,
-                ProductImage = op.Product.Image,
+                ProductImage = op.Product.ProductImages.FirstOrDefault()?.ImageUrl??"",
                 Discount = op.Product.Discount,
                 ProductId = op.ProductId
             }),

@@ -7,7 +7,7 @@ public interface IProductsManager
    public ProductDetailsDto GetProductByID(int id);
     public ProducttoeditdashboardDto GetProductByIDdashboard(int id);
 
-    IEnumerable<ProductChildDto> GetAllProductsWithAvgRating();
+    //IEnumerable<ProductChildDto> GetAllProductsWithAvgRating();
 
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount();
 

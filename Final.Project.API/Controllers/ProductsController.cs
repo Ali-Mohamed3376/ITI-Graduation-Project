@@ -199,7 +199,8 @@ namespace Final.Project.API.Controllers
 
         public ActionResult<ProductPaginationDto> GetAllProductsInPagination(int page,int countPerPage)
         {
-            return _productsManager.GetAllProductsInPagnation(page,countPerPage);
+            var products = _productsManager.GetAllProductsInPagnation(page, countPerPage);
+            return Ok(products);
             
         }
         #endregion

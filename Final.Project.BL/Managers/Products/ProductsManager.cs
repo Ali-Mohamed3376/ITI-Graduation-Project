@@ -17,25 +17,25 @@ public class ProductsManager: IProductsManager
 
 
     #region Get All Products in Database
-   // public IEnumerable<ProductChildDto> GetAllProductsWithAvgRating()
-   // {
-   //     IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllProductsWithAvgRating();
-   //     IEnumerable<ProductChildDto> productsDtos = productsFromDb
-   //         .Select(p => new ProductChildDto
-   //         {
-   //             Id = p.Id,
-   //             Name = p.Name,
-   //             Price = p.Price,
-   //             Image = p.Image,
-   //             Discount = p.Discount,
-   //             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-   //             ReviewCount=p.Reviews.Count()
-                
-   //         });
-   //     return productsDtos;
-   // }
+    // public IEnumerable<ProductChildDto> GetAllProductsWithAvgRating()
+    // {
+    //     IEnumerable<Product> productsFromDb = _unitOfWork.ProductRepo.GetAllProductsWithAvgRating();
+    //     IEnumerable<ProductChildDto> productsDtos = productsFromDb
+    //         .Select(p => new ProductChildDto
+    //         {
+    //             Id = p.Id,
+    //             Name = p.Name,
+    //             Price = p.Price,
+    //             Image = p.ProductImages.FirstOrDefault()?.ImageUrl??"",
+    //             Discount = p.Discount,
+    //             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+    //             ReviewCount=p.Reviews.Count()
 
-   ////version before making pagination
+    //         });
+    //     return productsDtos;
+    // }
+
+    ////version before making pagination
 
     #endregion
 
@@ -51,12 +51,13 @@ public class ProductsManager: IProductsManager
             Id = productFromDb.Id,
             Name = productFromDb.Name,
             Price = productFromDb.Price,
-            Discount= productFromDb.Discount,
+            Discount = productFromDb.Discount,
             Description = productFromDb.Description,
             Model = productFromDb.Model,
-            CategoryId=productFromDb.CategoryID,
+            CategoryId = productFromDb.CategoryID,
             CategoryName = productFromDb.Category.Name,
             ReviewCount = productFromDb.Reviews.Count(),
+            Images = productFromDb.ProductImages.Select(i => i.ImageUrl).ToList(),
 
             Reviews = productFromDb.Reviews.Select(p => new ReviewDto
             {
@@ -86,7 +87,8 @@ public class ProductsManager: IProductsManager
                 Price = p.Price,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-                ReviewCount = p.Reviews.Count()
+                ReviewCount = p.Reviews.Count(),
+                Image= p.ProductImages.FirstOrDefault()?.ImageUrl??"",
 
             });
         return productsDtos;
@@ -109,7 +111,9 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                CategoryName = p.Category.Name
+                CategoryName = p.Category.Name,
+                Image = p.ProductImages.FirstOrDefault()?.ImageUrl??"",
+
             });
         return productReadDto;
     }
@@ -194,8 +198,10 @@ public class ProductsManager: IProductsManager
                 CategoryName=p.Category.Name,
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-                ReviewCount=p.Reviews.Count()
-                
+                ReviewCount=p.Reviews.Count(),
+                Image = p.ProductImages.FirstOrDefault()?.ImageUrl??"",
+
+
 
 
             });
@@ -226,7 +232,9 @@ public class ProductsManager: IProductsManager
             Price = p.Price,
             Discount = p.Discount,
             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
-            ReviewCount = p.Reviews.Count()
+            ReviewCount = p.Reviews.Count(),
+            Image = p.ProductImages.FirstOrDefault()?.ImageUrl??"",
+
         });
 
         return productsFilteredRsulte;
@@ -244,7 +252,7 @@ public class ProductsManager: IProductsManager
                Id = p.Id,
                Name = p.Name,
                Price = p.Price,
-               Image = p.Image,
+               Image = p.ProductImages.FirstOrDefault()?.ImageUrl??"",
                Discount = p.Discount,
                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
                ReviewCount = p.Reviews.Count()
@@ -283,7 +291,7 @@ public class ProductsManager: IProductsManager
             Id = p.Id,
             Name = p.Name,
             Price = p.Price,
-            Image = p.Image,
+                Image= p.ProductImages.FirstOrDefault()?.ImageUrl??"",
             Discount = p.Discount,
             AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
             ReviewCount = p.Reviews.Count()
