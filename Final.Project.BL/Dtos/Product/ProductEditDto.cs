@@ -8,7 +8,7 @@ public class ProductEditDto
     public string Name { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public string Description { get; set; } = string.Empty;
-    public string? Image { get; set; }
+    public IEnumerable<string> ImagesURLs { get; set; } = new HashSet<string>();
     public string Model { get; set; } = string.Empty;
     public decimal Discount { get; set; }
 

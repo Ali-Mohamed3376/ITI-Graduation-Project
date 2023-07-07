@@ -39,6 +39,8 @@ public class UserRepo : IUserRepo
         return _context.Orders
                 .Include(x => x.OrdersProductDetails)
                     .ThenInclude(x => x.Product)
+                        .ThenInclude(p => p.ProductImages)
+
                 .Where(x => x.UserId == id);
                 
            

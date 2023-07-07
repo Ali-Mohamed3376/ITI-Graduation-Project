@@ -23,6 +23,7 @@ public class UserProdutsCartRepo : GenericRepo<UserProductsCart>, IUserProductsC
     {
         var products = _context.Set<UserProductsCart>()
                 .Include(u => u.Product)
+                        .ThenInclude(p => p.ProductImages)
                 .Where(u => u.UserId == userId)
                 .ToList();
 

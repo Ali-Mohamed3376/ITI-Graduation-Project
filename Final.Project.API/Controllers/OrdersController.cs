@@ -12,7 +12,7 @@ namespace Final.Project.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersManager _ordersManager;
-        
+
         public OrdersController(IOrdersManager ordersManager)
         {
             _ordersManager = ordersManager;
@@ -96,5 +96,5 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
-    }
+    }
 }
