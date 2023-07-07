@@ -22,5 +22,6 @@ public interface IProductsManager
     ProductPaginationDto GetAllProductsInPagnation(int page, int countPerPage);
     ProductFilterationPaginationResultDto ProductAfterFilterationInPagination(ProductQueryDto queryDto, int page, int countPerPage);
 
+    IEnumerable<ProductChildDto> GetNewProducts();
 
 }

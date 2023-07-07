@@ -306,8 +306,25 @@ public class ProductsManager: IProductsManager
         };
     }
     #endregion
+    #region Get New Products
+    public IEnumerable<ProductChildDto> GetNewProducts()
+    {
+        IEnumerable<Product>? productsFromDb = _unitOfWork.ProductRepo.GetNewProducts();
+        IEnumerable<ProductChildDto> productsDtos = productsFromDb
+            .Select(p => new ProductChildDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Image = p.Image,
+                Discount = p.Discount,
+                AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
+                ReviewCount = p.Reviews.Count()
 
-
+            });
+        return productsDtos;
+    }
+#endregion
 
 }
 

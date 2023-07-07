@@ -62,5 +62,16 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
+
+        #region Get New Products
+        [HttpGet]
+        [Route("NewProducts")]
+        public ActionResult<IEnumerable<ProductChildDto>> GetNewProducts()
+        {
+            IEnumerable<ProductChildDto> NewProducts = _productsManager.GetNewProducts();
+            return Ok(NewProducts);
+
+        }
+        #endregion
     }
 }
