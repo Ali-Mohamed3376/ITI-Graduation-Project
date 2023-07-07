@@ -26,23 +26,25 @@ namespace Final.Project.API.Controllers
         #region Get Product By Id
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<ProducttoeditdashboardDto> GetProductDetails(int id)
-        {
-            ProducttoeditdashboardDto product = _productsManager.GetProductByIDdashboard(id);
-            if (product == null) { return NotFound(); }
-            return Ok(product);
-        }
-        #endregion
-
-        #region Get Product By Id in dashboard for edit
-        [HttpGet]
-        [Route("dashboard/{id}")]
         public ActionResult<ProductDetailsDto> GetProductbyid(int id)
         {
             ProductDetailsDto product = _productsManager.GetProductByID(id);
             if (product == null) { return NotFound(); }
             return Ok(product);
         }
+       
+        #endregion
+
+        #region Get Product By Id in dashboard for edit
+        [HttpGet]
+        [Route("dashboard/{id}")]
+        public ActionResult<ProducttoeditdashboardDto> GetProductDetails(int id)
+        {
+            ProducttoeditdashboardDto product = _productsManager.GetProductByIDdashboard(id);
+            if (product == null) { return NotFound(); }
+            return Ok(product);
+        }
+
         #endregion
 
         #region Products Filteration Old Version
