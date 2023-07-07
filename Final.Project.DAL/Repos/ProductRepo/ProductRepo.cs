@@ -168,4 +168,15 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     }
 
     #endregion
+
+
+    #region Get last new products
+    public IEnumerable<Product> GetNewProducts()
+    {
+        return _context.Products
+            .Include(p => p.Reviews)
+            .OrderByDescending(p => p.Id)
+            .Take(10);
+    }
+    #endregion
 }
