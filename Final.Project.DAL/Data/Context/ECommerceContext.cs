@@ -18,6 +18,8 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<WishList> wishLists => Set<WishList>();
+    public DbSet<ContactUs> ContactUs => Set<ContactUs>();
+
 
 
     public ECommerceContext(DbContextOptions<ECommerceContext> options) : base(options)
