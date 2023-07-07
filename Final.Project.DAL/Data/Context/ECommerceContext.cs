@@ -18,6 +18,8 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<WishList> wishLists => Set<WishList>();
+    public DbSet<ContactUs> ContactUs => Set<ContactUs>();
+
 
 
     public ECommerceContext(DbContextOptions<ECommerceContext> options) : base(options)
@@ -78,8 +80,6 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.Property(e => e.Description)
                 .IsRequired();
 
-            entity.Property(e => e.Image)
-                .IsRequired();
 
             entity.HasOne(e => e.Category)
                     .WithMany(e => e.Products)
@@ -131,11 +131,11 @@ public class ECommerceContext : IdentityDbContext<User>
         #region OrderDetails
         builder.Entity<OrderProductDetails>(entity =>
         {
-            entity.Property(e=>e.Quantity)
+            entity.Property(e => e.Quantity)
                 .IsRequired();
 
             entity.HasOne(e => e.Product)
-                    .WithMany(e=>e.OrdersProductDetails)
+                    .WithMany(e => e.OrdersProductDetails)
                     .HasForeignKey(e => e.ProductId);
 
             entity.HasOne(e => e.Order)
@@ -169,7 +169,7 @@ public class ECommerceContext : IdentityDbContext<User>
         #region WishList
         builder.Entity<WishList>(entity =>
         {
-            
+
             entity.HasKey(e => new { e.UserId, e.ProductId });
 
         });
@@ -181,7 +181,7 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.City)
-                  .HasMaxLength(100)      
+                  .HasMaxLength(100)
                   .IsRequired();
 
             entity.Property(e => e.Street)
@@ -262,11 +262,11 @@ public class ECommerceContext : IdentityDbContext<User>
         Price = 80000,
         Discount =20,
         Description = "The Apple MacBook Pro is a high-performance laptop loved by professionals.",
-        
+
         Model = "MacBook Pro",
         CategoryID = 1
     },
-    
+
     new Product
     {
         Id = 7,
@@ -338,7 +338,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "iMac",
         CategoryID = 1
     },
-    
+
     new Product
     {
         Id = 14,
@@ -369,7 +369,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "G5 Gaming Desktop",
         CategoryID = 2
     },
-   
+
     new Product
     {
         Id = 17,
@@ -400,7 +400,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "EliteBook 840",
         CategoryID = 3
     },
-    
+
     new Product
     {
         Id = 20,
@@ -411,7 +411,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "MacBook Air",
         CategoryID = 1
     },
-   
+
     new Product
     {
         Id = 21,
@@ -422,7 +422,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "XPS 13",
         CategoryID = 2
     },
-   
+
     new Product
     {
         Id = 22,
@@ -433,7 +433,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "Spectre x360",
         CategoryID = 3
     },
-    
+
     new Product
     {
         Id = 23,
@@ -444,7 +444,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "ThinkCentre M720",
         CategoryID = 4
     },
-   
+
     new Product
     {
         Id = 24,
@@ -465,7 +465,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "Aspire TC",
         CategoryID = 6
     },
-  
+
     new Product
     {
         Id = 26,
@@ -506,7 +506,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "Legion Y540",
         CategoryID = 4
     },
-    
+
     new Product
     {
         Id = 30,
@@ -588,7 +588,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "Omen 15",
         CategoryID = 3
     },
-    
+
     new Product
     {
         Id = 38,
@@ -670,7 +670,7 @@ public class ECommerceContext : IdentityDbContext<User>
         Model = "Surface Pro 7",
         CategoryID = 7
     },
-    
+
 
 
     };
@@ -678,7 +678,7 @@ public class ECommerceContext : IdentityDbContext<User>
 
         builder.Entity<Product>().HasData(ProductList);
         builder.Entity<Product>().HasData(productss);
-        
+
         #endregion
 
     }

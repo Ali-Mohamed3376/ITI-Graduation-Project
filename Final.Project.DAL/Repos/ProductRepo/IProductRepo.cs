@@ -6,6 +6,7 @@ public interface IProductRepo :IGenericRepo<Product>
 
     IEnumerable<Product> GetAllWithCategory();
     IEnumerable<Product> GetRelatedProductsByCategoryName(string brand);
+    Product? GetProductByIdWithimages(int id);
 
     IEnumerable<Product> GetProductFiltered (QueryParametars parametars);
 
@@ -14,5 +15,7 @@ public interface IProductRepo :IGenericRepo<Product>
     IEnumerable<Product> GetProductFilteredInPagination(QueryParametars parametars, int page, int countPerPage);
 
     public IEnumerable<Product> GetNewProducts();
+
+    // ahmed
 
 }

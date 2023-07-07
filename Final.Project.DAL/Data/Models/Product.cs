@@ -1,4 +1,7 @@
-﻿namespace Final.Project.DAL;
+﻿using Final.Project.DAL.Data.Models;
+using System.Drawing;
+
+namespace Final.Project.DAL;
 public class Product
 {
     public int Id { get; set; }
@@ -6,7 +9,7 @@ public class Product
     public decimal Price { get; set; }
     public decimal Discount { get; set; }
     public string Description { get; set; } = string.Empty;
-    public string Image { get; set; } = string.Empty;
+    public List<ProductImages> ProductImages { get; set; } = new List<ProductImages>();
     public string Model { get; set; } = string.Empty;
     public int CategoryID { get; set; }
     public Category Category { get; set; } = null!;
@@ -16,3 +19,4 @@ public class Product
     public IEnumerable<WishList> WishLists { get; set; } = new HashSet<WishList>();
 
 }
+

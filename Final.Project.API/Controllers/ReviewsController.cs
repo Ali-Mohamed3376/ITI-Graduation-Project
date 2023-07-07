@@ -44,7 +44,7 @@ namespace Final.Project.API.Controllers
         [HttpGet]
         [Route("Dashboard/Reviews")]
         [Authorize(Policy = "ForAdmin")]
-        public ActionResult<IEnumerable<CategoryDto>> GetAllCategories()
+        public ActionResult<IEnumerable<ReviewReadDto>> GetAllReviews()
         {
             IEnumerable<ReviewReadDto> reviews = _reviewsManager.GetAllReviews();
             return Ok(reviews);

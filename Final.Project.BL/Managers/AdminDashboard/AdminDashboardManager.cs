@@ -24,6 +24,8 @@ public class AdminDashboardManager : IAdminDashboardManager
 
         if (user is null) { return false; }
 
+        _unitOfWork.UserAddressRepo.deleteByUId(user.Id);
+
         _unitOfWork.UserRepo.Delete(user);
         _unitOfWork.Savechanges();
         return true;

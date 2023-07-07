@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +39,12 @@ public  class WishListRepo: GenericRepo<WishList>, IWishListRepo
     public IEnumerable<WishList> GetuserWishList(string userId)
     {
         return _context.Set<WishList>()
+                .Include(u => u.Product)
+                    .ThenInclude(u=>u.Reviews)
+                .Include(u => u.Product)
+                    .ThenInclude(u => u.ProductImages)
                 .Where(u => u.UserId == userId);
+
     }
 
     
