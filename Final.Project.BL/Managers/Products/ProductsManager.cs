@@ -314,7 +314,7 @@ public class ProductsManager: IProductsManager
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
-                Image = p.Image,
+                Image = p.ProductImages.FirstOrDefault() ? .ImageUrl ?? "",
                 Discount = p.Discount,
                 AvgRating = p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
                 ReviewCount = p.Reviews.Count()
