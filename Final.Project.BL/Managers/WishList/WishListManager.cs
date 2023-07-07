@@ -52,7 +52,7 @@ public class WishListManager : IWishListManager
             Id = p.Product.Id,
             Name = p.Product.Name,
             Price = p.Product.Price,
-            Image = p.Product.Image,
+            Image = p.Product.ProductImages.FirstOrDefault()?.ImageUrl??"",
             Discount = p.Product.Discount,
             AvgRating = p.Product.Reviews.Any() ? (decimal)p.Product.Reviews.Average(r => r.Rating) : 0,
             ReviewCount = p.Product.Reviews.Count()

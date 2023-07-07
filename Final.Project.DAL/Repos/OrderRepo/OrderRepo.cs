@@ -24,6 +24,7 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
                 .Include(o => o.User)
                 .Include(o => o.OrdersProductDetails)
                     .ThenInclude(op => op.Product)
+                        .ThenInclude(p=>p.ProductImages)
                 .ToList();
     }
 
@@ -36,6 +37,8 @@ public class OrderRepo : GenericRepo<Order>, IOrderRepo
                 .Include(o => o.UserAddress)
                 .Include(o => o.OrdersProductDetails)
                     .ThenInclude(op => op.Product)
+                        .ThenInclude(p => p.ProductImages)
+
                 .First(o => o.Id == OrderId);
     }
 

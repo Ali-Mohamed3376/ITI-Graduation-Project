@@ -41,6 +41,8 @@ public  class WishListRepo: GenericRepo<WishList>, IWishListRepo
         return _context.Set<WishList>()
                 .Include(u => u.Product)
                     .ThenInclude(u=>u.Reviews)
+                .Include(u => u.Product)
+                    .ThenInclude(u => u.ProductImages)
                 .Where(u => u.UserId == userId);
 
     }

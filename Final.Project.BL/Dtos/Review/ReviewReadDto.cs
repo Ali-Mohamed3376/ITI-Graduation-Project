@@ -9,6 +9,7 @@ public class ReviewReadDto
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
     public string Comment { get; set; } = string.Empty;
-    public DateTime CreationDate { get; set; } = DateTime.Now.Date;
+    public DateTime CreationDate { get; set; }
+    public string FormattedCreationDate => CreationDate.ToString("dd-MM-yyyy");
     public int Rating { get; set; }
 }

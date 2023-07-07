@@ -18,8 +18,21 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
         return _context.Products
                     .Include(p => p.Category)
                     .Include(p => p.Reviews)
-                    .ThenInclude(p=>p.User)
+                        .ThenInclude(p => p.User)
+                    .Include(p => p.ProductImages)
                     .FirstOrDefault(p => p.Id == id);
+    }
+
+    #endregion
+    #region Get Product Details with images
+    public Product? GetProductByIdWithimages(int id)
+    {
+        return _context.Set<Product>()
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefault(p => p.Id == id);
+
+
+
     }
 
     #endregion
@@ -29,6 +42,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     {
         return _context.Products
             .Include(p => p.Reviews)
+            .Include(p => p.ProductImages)
             .Where(p => p.Discount > 0)
             .OrderByDescending(p => p.Discount)
             .Take(10);
@@ -40,7 +54,9 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     public IEnumerable<Product> GetAllWithCategory()
     {
         return _context.Set<Product>()
-                       .Include(x => x.Category);
+                       .Include(x => x.Category)
+                       .Include(p => p.ProductImages);
+
     }
     #endregion
 
@@ -49,7 +65,9 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     {
         return _context.Set<Product>()
             .Include(x => x.Category)
-            .Include(x=>x.Reviews)
+            .Include(x => x.Reviews)
+            .Include(p => p.ProductImages)
+
             .Where(x => x.Category.Name == brand)
             .Take(5);
 
@@ -62,8 +80,9 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     public IEnumerable<Product> GetProductFiltered(QueryParametars parametars)
     {
 
-        var products = _context.Products.Include(p=>p.Reviews).AsQueryable();
-        
+        var products = _context.Products.Include(p => p.Reviews).AsQueryable();
+        products = products.Include(p => p.ProductImages);
+
         if (parametars.CategotyId > 0)
         {
             products = products.Where(q => q.CategoryID == parametars.CategotyId);
@@ -76,11 +95,11 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
         if (parametars.MaxPrice > 0)
         {
-            products = products.Where(q => q.Price-(q.Price * q.Discount/100) <= parametars.MaxPrice);
+            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) <= parametars.MaxPrice);
         }
         if (parametars.MinPrice > 0)
         {
-            products = products.Where(q => q.Price-(q.Price * q.Discount/100) >= parametars.MinPrice);
+            products = products.Where(q => q.Price - (q.Price * q.Discount / 100) >= parametars.MinPrice);
         }
 
         if (parametars.Rating > 0)
@@ -98,6 +117,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     {
         return _context.Products
             .Include(p => p.Reviews)
+            .Include(p => p.ProductImages)
             .Skip((page - 1) * countPerPage)
             .Take(countPerPage);
 
@@ -112,10 +132,11 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
 
     #region Get Product After Filteration with Pagination
 
-    public IEnumerable<Product> GetProductFilteredInPagination(QueryParametars parametars,int page, int countPerPage)
+    public IEnumerable<Product> GetProductFilteredInPagination(QueryParametars parametars, int page, int countPerPage)
     {
 
         var products = _context.Products.Include(p => p.Reviews).AsQueryable();
+        products = products.Include(p => p.ProductImages);
 
         if (parametars.CategotyId > 0)
         {
@@ -142,8 +163,9 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
         }
 
         return products
-            
-;    }
+
+;
+    }
 
     #endregion
 }

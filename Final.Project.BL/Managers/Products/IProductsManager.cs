@@ -1,17 +1,18 @@
-﻿
-
-using Final.Project.DAL;
+﻿using Final.Project.DAL;
 
 namespace Final.Project.BL;
 
 public interface IProductsManager
 {
    public ProductDetailsDto GetProductByID(int id);
+    public ProducttoeditdashboardDto GetProductByIDdashboard(int id);
+
+    //IEnumerable<ProductChildDto> GetAllProductsWithAvgRating();
 
     public IEnumerable<ProductChildDto> GetAllProductWithDiscount();
 
     IEnumerable<ProductReadDto> GetAllProducts();
-    public bool AddProduct(ProductAddDto productDto, string requestHost, string requestScheme);
+    public bool AddProduct(ProductAddDto productDto);
     bool EditProduct(ProductEditDto productEditDto);
     bool DeleteProduct(int Id);
 

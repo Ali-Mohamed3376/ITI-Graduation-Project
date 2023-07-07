@@ -55,7 +55,6 @@ public class CategoriesManager: ICategoriesManager
         {
 
             Id = p.Id,
-            Image = p.Image,
             Name = p.Name,
             Price = p.Price,
             Discount= p.Discount,
@@ -86,7 +85,6 @@ public class CategoriesManager: ICategoriesManager
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    Image = p.Image, 
                     Discount= p.Discount,
                     AvgRating=p.Reviews.Any() ? (decimal)p.Reviews.Average(r => r.Rating) : 0,
                     ReviewCount = p.Reviews.Count()
