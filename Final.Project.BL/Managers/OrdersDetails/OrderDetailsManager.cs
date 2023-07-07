@@ -21,10 +21,10 @@ public class OrderDetailsManager:IOrderDetailsManager
                 Id = p.Product.Id,
                 Name = p.Product.Name,
                 Price = p.Product.Price,
-                Image = p.Product.Image,
                 Discount = p.Product.Discount,
                 AvgRating = p.Product.Reviews.Any() ? (decimal)p.Product.Reviews.Average(r => r.Rating) : 0,
-                ReviewCount = p.Product.Reviews.Count()
+                ReviewCount = p.Product.Reviews.Count(),
+                Image=p.Product.ProductImages.FirstOrDefault()?.ImageUrl??""
             });
         return productDtos;
     }
