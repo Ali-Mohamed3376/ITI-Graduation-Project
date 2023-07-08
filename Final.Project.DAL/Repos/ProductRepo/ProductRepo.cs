@@ -175,6 +175,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     {
         return _context.Products
             .Include(p => p.Reviews)
+            .Include(p=>p.ProductImages)
             .OrderByDescending(p => p.Id)
             .Take(10);
     }
