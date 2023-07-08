@@ -45,7 +45,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
             .Include(p => p.ProductImages)
             .Where(p => p.Discount > 0)
             .OrderByDescending(p => p.Discount)
-            .Take(10);
+            .Take(8);
     }
     #endregion
 
@@ -177,7 +177,20 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
             .Include(p => p.Reviews)
             .Include(p=>p.ProductImages)
             .OrderByDescending(p => p.Id)
-            .Take(10);
+            .Take(8);
+    }
+
+
+    #endregion
+
+    #region Get All Dashboard Products with pagination
+    public IEnumerable<Product> GetAllPaginationDashboardProducts(int page, int countPerPage)
+    {
+        return _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.ProductImages)
+            .Skip((page - 1) * countPerPage)
+            .Take(countPerPage);
     }
     #endregion
 }

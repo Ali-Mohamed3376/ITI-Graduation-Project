@@ -60,7 +60,7 @@ public class OrdersDetailsRepo : GenericRepo<OrderProductDetails>, IOrdersDetail
                 .GroupBy(op => op.ProductId)
                 .Select(g => new OrderProductDetails { Product = g.First().Product, Quantity = g.Sum(op => op.Quantity) })
                 .OrderByDescending(pq => pq.Quantity)
-                .Take(10);
+                .Take(8);
     }
 
     #endregion

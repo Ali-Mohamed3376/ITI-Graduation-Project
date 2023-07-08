@@ -343,6 +343,31 @@ public class ProductsManager: IProductsManager
 
         };
     }
+
+    #region Get all Products in dashboard with pagination
+
+    public ProductReadPaginationDto GetAllPaginationDashboardProducts(int page, int countPerPage)
+    {
+        var products = _unitOfWork.ProductRepo.GetAllPaginationDashboardProducts(page, countPerPage)
+        
+            .Select(p => new ProductReadDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                CategoryName = p.Category.Name,
+                Image = p.ProductImages.FirstOrDefault()?.ImageUrl ?? "",
+
+            });
+        var totalCount = _unitOfWork.ProductRepo.GetCount();
+
+        return new ProductReadPaginationDto
+        {
+            Products= products,
+            TotalCount= totalCount
+        };
+    }
+    #endregion
 }
 
 
