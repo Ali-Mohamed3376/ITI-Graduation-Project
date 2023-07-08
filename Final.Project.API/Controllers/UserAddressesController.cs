@@ -85,7 +85,7 @@ namespace Final.Project.API.Controllers
 
             _userAddressesManager.EditAddress(userIdFromToken, address);
 
-            return Ok("address Edited successfully");
+            return Ok();
         }
 
         #endregion
@@ -101,7 +101,7 @@ namespace Final.Project.API.Controllers
                 return BadRequest("not logged in");
             }
             _userAddressesManager.SetDefaultAddress(userIdFromToken, AddressId);
-            return Ok("Set as default succeeded");
+            return Ok();
         }
 
         #endregion
