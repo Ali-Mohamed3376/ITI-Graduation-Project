@@ -10,6 +10,7 @@ public class UserOrderDetailsDto
 {
     public IEnumerable<UserOrderProductsDetailsDto>? OrderProducts { get; set; } = null;
     public UserOrderAddressDetailsDto? OrderAddress { get; set; } = null;
+    public bool IsOrderDelieverd { get; set; } = false;
 }
 
 public class UserOrderProductsDetailsDto
@@ -19,6 +20,7 @@ public class UserOrderProductsDetailsDto
     public string Image { get; set; } = string.Empty;
     public int Quantity { get; set; } = 0;
     public decimal Price { get; set; }
+    public bool IsReviewed { get; set; } = false;
 
 }
 public class UserOrderAddressDetailsDto

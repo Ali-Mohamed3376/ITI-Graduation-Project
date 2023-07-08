@@ -12,6 +12,28 @@ public class ReviewsManager:IReviewsManager
         _unitOfWork = unitOfWork;
     }
 
+    #region AddReview by Abdo
+    public bool AddReviewToProduct(string userIdFromToken, AddReviewDto review)
+    {
+        Review reviewToadd = new Review()
+        {
+            UserId=userIdFromToken,
+            OrderId=review.OrderId,
+            ProductId=review.ProductId,
+            Comment=review.Comment,
+            CreationDate=DateTime.Now,
+            Rating=review.Rating,
+        };
+        _unitOfWork.ReviewRepo.Add(reviewToadd);
+        //change the is reviewed of product to true to disable adding review again to this product in this order
+        var product = _unitOfWork.OrdersDetailsRepo.GetByCompositeId(review.ProductId,review.OrderId);
+        product.IsReviewed = true;
+        var count = _unitOfWork.Savechanges();
+
+        return count>1;
+    }
+    #endregion
+
     #region AddReview
 
     public void AddReview(string userId, int productId, string comment, int rating)
@@ -77,6 +99,8 @@ public class ReviewsManager:IReviewsManager
         _unitOfWork.ReviewRepo.Delete(review);
         return _unitOfWork.Savechanges() > 0;
     }
+
+   
 
     #endregion
 

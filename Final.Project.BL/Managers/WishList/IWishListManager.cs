@@ -12,4 +12,6 @@ public interface IWishListManager
     bool AddtoWishList(string userIdFromToken, int productId);
     int GetWishListCount(string userIdFromToken);
     IEnumerable<wishListProductDto> GetWishListProducts(string userIdFromToken);
+    IEnumerable<wishListProductIdsDto> GetuserWishListProductIds(string userId);
+
 }

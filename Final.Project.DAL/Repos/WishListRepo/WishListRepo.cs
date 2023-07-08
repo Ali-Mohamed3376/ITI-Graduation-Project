@@ -47,5 +47,13 @@ public  class WishListRepo: GenericRepo<WishList>, IWishListRepo
 
     }
 
-    
+    public IEnumerable<WishList> GetuserWishListProductIds(string userId)
+    {
+        return _context.Set<WishList>()
+                .Include(u => u.Product)
+                .Where(u => u.UserId == userId);
+
+    }
+
+
 }

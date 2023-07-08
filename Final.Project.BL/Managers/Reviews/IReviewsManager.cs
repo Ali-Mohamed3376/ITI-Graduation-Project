@@ -9,4 +9,5 @@ public interface IReviewsManager
     IEnumerable<ReviewReadDto> GetAllReviews();
 
     bool DeleteReview(ReviewKeyDto reviewKey);
+    bool AddReviewToProduct(string userIdFromToken, AddReviewDto review);
 }

@@ -12,4 +12,6 @@ public interface IWishListRepo:IGenericRepo<WishList>
     WishList CheckItExistInWishList(string userIdFromToken, int productId);
     int count(string userIdFromToken);
     IEnumerable<WishList> GetuserWishList(string userId);
+    IEnumerable<WishList> GetuserWishListProductIds(string userId);
+
 }

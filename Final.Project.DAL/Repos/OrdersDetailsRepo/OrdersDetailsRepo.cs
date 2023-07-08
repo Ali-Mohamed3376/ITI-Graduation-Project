@@ -18,6 +18,16 @@ public class OrdersDetailsRepo : GenericRepo<OrderProductDetails>, IOrdersDetail
 
     }
 
+    public OrderProductDetails? GetByCompositeId(int ProductId, int orderId)
+    {
+
+        return _context.Set<OrderProductDetails>()
+                        .Where(o => o.ProductId == ProductId && o.OrderId == orderId)
+                        .FirstOrDefault();
+
+
+    }
+
 
 
 

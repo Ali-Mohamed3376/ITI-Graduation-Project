@@ -18,10 +18,39 @@ namespace Final.Project.API.Controllers
             _reviewsManager = reviewsManager;
         }
 
+        #region Abdo Add Review 
+
+        [HttpPost]
+        [Route("AddReview")]
+        public ActionResult AddReview(AddReviewDto review)
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+            }
+
+            bool status =_reviewsManager.AddReviewToProduct(userIdFromToken,review);
+
+            if(status)
+            {
+                return Ok(new
+                {
+                    message = "Review Added Successfully"
+                });
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    message = "Review Added Successfully"
+                });
+            }
+        }
+        #endregion
 
 
 
-        
         [HttpPost("Products/{productId}/AddReview")]
         public IActionResult AddReview(int productId, [FromBody] ReviewDto reviewDto)
         {

@@ -57,6 +57,20 @@ namespace Final.Project.API.Controllers
             return Ok(wishListCounter);
         }
 
+        [HttpGet]
+        [Route("ProductsId")]
+        public ActionResult GetWishListProductsId()
+        {
+            var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken is null)
+            {
+                return BadRequest("not logged in");
+
+            }
+            IEnumerable<wishListProductIdsDto> ProductsId = _wishListManager.GetuserWishListProductIds(userIdFromToken);
+            return Ok(ProductsId);
+        }
+
 
     }
 }

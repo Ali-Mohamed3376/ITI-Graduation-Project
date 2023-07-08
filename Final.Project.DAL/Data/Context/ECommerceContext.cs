@@ -204,10 +204,16 @@ public class ECommerceContext : IdentityDbContext<User>
             entity.HasOne(x => x.User)
             .WithMany(x => x.Reviews)
             .HasForeignKey(e => e.UserId);
+
             entity.HasOne(x => x.Product)
             .WithMany(x => x.Reviews)
             .HasForeignKey(x => x.ProductId);
-            entity.HasKey(e => new { e.UserId, e.ProductId });
+
+            entity.HasOne(x => x.Order)
+           .WithMany(x => x.Reviews)
+           .HasForeignKey(e => e.OrderId);
+
+            entity.HasKey(e => new { e.UserId, e.ProductId,e.OrderId });
         });
 
 

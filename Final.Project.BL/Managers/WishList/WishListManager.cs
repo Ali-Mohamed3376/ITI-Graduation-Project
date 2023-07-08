@@ -59,4 +59,15 @@ public class WishListManager : IWishListManager
         });
         return wishLishProducts;
     }
+
+    public IEnumerable<wishListProductIdsDto> GetuserWishListProductIds(string userId)
+    {
+        var wishList = _unitOfWork.WishListRepo.GetuserWishListProductIds(userId);
+        IEnumerable<wishListProductIdsDto> wishlistProductsId = wishList.Select(w => new wishListProductIdsDto
+        {
+            Id = w.ProductId
+        });
+        return wishlistProductsId;
+    }
+
 }
