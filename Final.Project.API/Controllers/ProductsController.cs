@@ -218,5 +218,21 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
+
+        #region Get all Products in dashboard with pagination
+        [HttpGet]
+        [Route("Dashboard/AllProducts/{page}/{countPerPage}")]
+        public ActionResult<ProductReadPaginationDto> GetAllPaginationDashboardProducts(int page, int countPerPage)
+        {
+            ProductReadPaginationDto products = _productsManager.GetAllPaginationDashboardProducts(page, countPerPage);
+
+            if (products is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+        #endregion
     }
 }

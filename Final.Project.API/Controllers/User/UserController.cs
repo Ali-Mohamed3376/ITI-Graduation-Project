@@ -43,14 +43,14 @@ namespace Final.Project.API.Controllers
         public ActionResult<TokenDto> Login(LoginDto loginCredientials)
         {
             // Search by Email and check if user found or Not 
-            User? user = manager.FindByNameAsync(loginCredientials.UserName).Result;
-            if (user is null) { return BadRequest("User Not Found!!!"); }
+            User? user = manager.FindByEmailAsync(loginCredientials.Email).Result;
+            if (user is null) { return NotFound("Invalid Email!"); }
 
             // Check On Password
             bool isValiduser = manager.CheckPasswordAsync(user, loginCredientials.Password).Result;
             if (!isValiduser)
             {
-                return BadRequest("Invalid Password!!!");
+                return BadRequest("Invalid Password!");
             }
 
             // Get claims
@@ -89,8 +89,8 @@ namespace Final.Project.API.Controllers
             {
                 FName = credentials.FName,
                 LName = credentials.LName,
-                UserName = credentials.Email,
                 Email = credentials.Email,
+                UserName= credentials.Email,
                 Role = Role.Customer,
                
             };
@@ -114,10 +114,6 @@ namespace Final.Project.API.Controllers
                 return BadRequest(claimsResult.Errors);
             }
 
-
-            //var token = await manager.GenerateEmailConfirmationTokenAsync(user);
-            //var confirmationLink = $"{configuration.GetValue<string>("AppURL")}";
-            //await mailingService.SendEmailAsync(user.Email , "Confirm Email", $"<p>Follwo this Link to Complete Your Registration Process  <a href='{confirmationLink}'>Click Here</a></p>");
 
 
             string? secretKey = configuration.GetValue<string>("SecretKey");
@@ -225,8 +221,6 @@ namespace Final.Project.API.Controllers
             }
 
             var token = await manager.GeneratePasswordResetTokenAsync(user);
-            //var encodedtoken = Encoding.UTF8.GetBytes(token);
-            //var validtoken = WebEncoders.Base64UrlEncode(encodedtoken);
 
             var result = await manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword);
 

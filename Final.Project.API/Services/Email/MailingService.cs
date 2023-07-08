@@ -4,13 +4,8 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Net.Mail;
 using System.Net;
-
-
-
-
-
-
 namespace Final.Project.API;
+
 public class MailingService : IMailingService
 {
     private readonly MailSetting mailSetting;
@@ -19,10 +14,6 @@ public class MailingService : IMailingService
     {
         this.mailSetting = _mailSetting.Value;
     }
-
-
-
-
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         string fromMail = "lab847270@gmail.com";
@@ -44,29 +35,4 @@ public class MailingService : IMailingService
 
         smtpClient.Send(message);
     }
-
-
-
-
-    //public async Task SendEmailAsync(string mailTo, string subject, string body)
-    //{
-    //    var email = new MimeMessage
-    //    {
-    //        // Configure Sender
-    //        Sender = MailboxAddress.Parse(mailSetting.Email),
-    //        Subject = subject,
-    //    };
-
-    //    //  Configure reciver
-    //    email.To.Add(MailboxAddress.Parse(mailTo));
-
-    //    email.From.Add(new MailboxAddress(mailSetting.DisplayName, mailSetting.Email));
-    //    using var smtp = new MailKit.Net.Smtp.SmtpClient();
-    //    smtp.Connect(mailSetting.Host, mailSetting.Port, SecureSocketOptions.StartTls);
-
-    //    smtp.Authenticate(mailSetting.Email, mailSetting.Password);
-    //    await smtp.SendAsync(email);
-    //    smtp.Disconnect(true);
-    //}
-
 }
