@@ -116,13 +116,13 @@ builder.Services.AddDbContext<ECommerceContext>(options => options
 #region Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
+    options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredUniqueChars = 3;
-    options.Password.RequiredLength = 3;
+    options.Password.RequiredLength = 5;
     options.Password.RequireDigit = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
-    options.User.RequireUniqueEmail = false;
 
 
 }).AddEntityFrameworkStores<ECommerceContext>()
@@ -171,7 +171,6 @@ builder.Services.AddAuthorization(options =>
 
 
 #endregion
-
 
 var app = builder.Build();
 
