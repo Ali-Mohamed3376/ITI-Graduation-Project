@@ -62,11 +62,11 @@ namespace Final.Project.API.Controllers
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (userIdFromToken is null)
             {
-                return BadRequest("not logged in");
+                return BadRequest();
             }
             _userAddressesManager.AddNewAddress(userIdFromToken, newAddress);
 
-            return Ok("Address Added Successfully");
+            return Ok();
 
         }
 
@@ -114,12 +114,12 @@ namespace Final.Project.API.Controllers
             var userIdFromToken = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (userIdFromToken is null)
             {
-                return BadRequest("not logged in");
+                return BadRequest();
             }
 
             _userAddressesManager.Delete(addressId);
 
-            return Ok("Address deleted Successfully");
+            return Ok();
         } 
         #endregion
 
