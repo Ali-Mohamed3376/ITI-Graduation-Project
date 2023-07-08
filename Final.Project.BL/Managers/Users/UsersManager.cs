@@ -58,6 +58,8 @@ public class UsersManager : IUsersManager
             Price = p.Product.Price,
             Quantity = p.Quantity,
             title = p.Product.Name,
+            IsReviewed=p.IsReviewed
+            
           
         });
 
@@ -71,10 +73,15 @@ public class UsersManager : IUsersManager
 
         };
 
+        //check order status is delievered or not 
+        bool OrderStatus = ((int)OrderProductDetails.FirstOrDefault().Order.OrderStatus)==3;
+
+
         UserOrderDetailsDto orderDetails = new UserOrderDetailsDto
         {
             OrderProducts = products,
-            OrderAddress = orderAddress
+            OrderAddress = orderAddress,
+            IsOrderDelieverd= OrderStatus
         };
 
 
