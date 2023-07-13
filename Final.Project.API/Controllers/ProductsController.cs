@@ -104,6 +104,8 @@ namespace Final.Project.API.Controllers
         #region Get all Products
         [HttpGet]
         [Route("Dashboard/GetAllProducts")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
         {
             IEnumerable<ProductReadDto> products = _productsManager.GetAllProducts();
@@ -119,7 +121,7 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Add Product
-        //[Authorize(Policy = "ForAdmin")]
+        [Authorize(Policy = "ForAdmin")]
         [HttpPost]
         [Route("Dashboard/addProduct")]
         public ActionResult Add( ProductAddDto product)
@@ -148,10 +150,11 @@ namespace Final.Project.API.Controllers
                 
 
         #region Edit Product
-        //[Authorize(Policy = "ForAdmin")]
 
         [HttpPatch]
         [Route("/dashboard/editproduct")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult<Product> Edit(ProductEditDto product)
         {
             if (product==null)
@@ -166,9 +169,10 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Delete Product
-        [Authorize(Policy = "ForAdmin")]
         [HttpDelete]
         [Route("Dashboard/DeleteProduct/{Id}")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _productsManager.DeleteProduct(Id);

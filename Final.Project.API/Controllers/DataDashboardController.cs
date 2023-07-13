@@ -7,7 +7,7 @@ namespace Final.Project.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "ForAdmin")]
     public class DataDashboardController : ControllerBase
     {
         private readonly IDataDashboardManager _dashboardManager;

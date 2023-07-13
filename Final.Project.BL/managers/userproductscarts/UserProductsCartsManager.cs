@@ -96,6 +96,7 @@ public class UserProductsCartsManager : IUserProductsCartsManager
             Quantity = p.Quantity,
             Name = p.Product.Name,
             Price = p.Product.Price,
+            Discount=p.Product.Discount,
             Image=p.Product.ProductImages.FirstOrDefault()?.ImageUrl??""
         });
 
