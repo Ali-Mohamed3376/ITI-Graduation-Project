@@ -56,9 +56,11 @@ public class UsersManager : IUsersManager
             product_Id = p.ProductId,
             Image = p.Product.ProductImages.FirstOrDefault()?.ImageUrl??"",
             Price = p.Product.Price,
+            Discount=p.Product.Discount,
             Quantity = p.Quantity,
             title = p.Product.Name,
-            IsReviewed=p.IsReviewed
+            IsReviewed=p.IsReviewed,
+            ProductPriceAtThisTime=p.ProductPriceAtThisTime
             
           
         });

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace Final.Project.API.Controllers
 {
@@ -104,6 +105,8 @@ namespace Final.Project.API.Controllers
         #region Get all Products
         [HttpGet]
         [Route("Dashboard/GetAllProducts")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
         {
             IEnumerable<ProductReadDto> products = _productsManager.GetAllProducts();
@@ -119,7 +122,7 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Add Product
-        //[Authorize(Policy = "ForAdmin")]
+        [Authorize(Policy = "ForAdmin")]
         [HttpPost]
         [Route("Dashboard/addProduct")]
         public ActionResult Add( ProductAddDto product)
@@ -129,29 +132,40 @@ namespace Final.Project.API.Controllers
             return NoContent();
           
         }
-        [HttpPost]
+
+
+    [HttpPost]
         [Route("Dashboard/uploadImages")]
-        public ActionResult<UploadFileDto> Upload(IFormFile file)
+        public ActionResult<List<string>> Upload(List<IFormFile> files)
+
         {
-            
-            helper.ImageValidation(file);
-            var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var imagesPath = Path.Combine(Environment.CurrentDirectory, "Images");
-            var fulFilePath=Path.Combine(imagesPath, newFileName);
-            using var stream = new FileStream(fulFilePath, FileMode.Create);
-            file.CopyTo(stream);
-            
-            var url = $"{Request.Scheme}://{Request.Host}/Images/{newFileName}";
-            return new UploadFileDto(true, "Success",url);
+            List<string> urls = new List<string>();
+            foreach (IFormFile file in files)
+            {
+                helper.ImageValidation(file);
+                var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var imagesPath = Path.Combine(Environment.CurrentDirectory, "Images");
+                var fulFilePath = Path.Combine(imagesPath, newFileName);
+                using var stream = new FileStream(fulFilePath, FileMode.Create);
+                file.CopyTo(stream);
+
+                var url = $"{Request.Scheme}://{Request.Host}/Images/{newFileName}";
+                urls.Add(url);
+
+
+            }
+
+            return urls;
         }
         #endregion
                 
 
         #region Edit Product
-        //[Authorize(Policy = "ForAdmin")]
 
         [HttpPatch]
         [Route("/dashboard/editproduct")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult<Product> Edit(ProductEditDto product)
         {
             if (product==null)
@@ -166,9 +180,10 @@ namespace Final.Project.API.Controllers
         #endregion
 
         #region Delete Product
-        [Authorize(Policy = "ForAdmin")]
         [HttpDelete]
         [Route("Dashboard/DeleteProduct/{Id}")]
+        [Authorize(Policy = "ForAdmin")]
+
         public ActionResult Delete(int Id)
         {
             bool isDeleted = _productsManager.DeleteProduct(Id);

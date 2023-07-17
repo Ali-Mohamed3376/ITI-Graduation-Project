@@ -73,7 +73,7 @@ namespace Final.Project.API.Controllers
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("Role",user.Role.ToString()),
+                new Claim(ClaimTypes.Role,user.Role.ToString()),
             };
 
             var claimsResult = _manager.AddClaimsAsync(user, claims).Result;
