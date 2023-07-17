@@ -45,7 +45,8 @@ public class OrdersManager : IOrdersManager
         {
             OrderId = LastOrderId,
             ProductId = p.ProductId,
-            Quantity = p.Quantity
+            Quantity = p.Quantity,
+            ProductPriceAtThisTime=p.Product.Price*(1- (p.Product.Discount/100))
         });
 
         _unitOfWork.OrdersDetailsRepo.AddRange(orderProducts);

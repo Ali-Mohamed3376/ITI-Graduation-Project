@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace Final.Project.API.Controllers
 {
@@ -131,20 +132,30 @@ namespace Final.Project.API.Controllers
             return NoContent();
           
         }
-        [HttpPost]
+
+
+    [HttpPost]
         [Route("Dashboard/uploadImages")]
-        public ActionResult<UploadFileDto> Upload(IFormFile file)
+        public ActionResult<List<string>> Upload(List<IFormFile> files)
+
         {
-            
-            helper.ImageValidation(file);
-            var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var imagesPath = Path.Combine(Environment.CurrentDirectory, "Images");
-            var fulFilePath=Path.Combine(imagesPath, newFileName);
-            using var stream = new FileStream(fulFilePath, FileMode.Create);
-            file.CopyTo(stream);
-            
-            var url = $"{Request.Scheme}://{Request.Host}/Images/{newFileName}";
-            return new UploadFileDto(true, "Success",url);
+            List<string> urls = new List<string>();
+            foreach (IFormFile file in files)
+            {
+                helper.ImageValidation(file);
+                var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var imagesPath = Path.Combine(Environment.CurrentDirectory, "Images");
+                var fulFilePath = Path.Combine(imagesPath, newFileName);
+                using var stream = new FileStream(fulFilePath, FileMode.Create);
+                file.CopyTo(stream);
+
+                var url = $"{Request.Scheme}://{Request.Host}/Images/{newFileName}";
+                urls.Add(url);
+
+
+            }
+
+            return urls;
         }
         #endregion
                 

@@ -22,6 +22,7 @@ public class UserOrderProductsDetailsDto
     public decimal Price { get; set; }
     public decimal Discount { get; set; }
     public decimal PriceAfter => Math.Round(Price - (Price * Discount / 100), 0);
+    public decimal ProductPriceAtThisTime { get; set; }
     public bool IsReviewed { get; set; } = false;
 
 }

@@ -59,7 +59,8 @@ public class UsersManager : IUsersManager
             Discount=p.Product.Discount,
             Quantity = p.Quantity,
             title = p.Product.Name,
-            IsReviewed=p.IsReviewed
+            IsReviewed=p.IsReviewed,
+            ProductPriceAtThisTime=p.ProductPriceAtThisTime
             
           
         });
