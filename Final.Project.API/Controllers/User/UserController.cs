@@ -170,6 +170,7 @@ namespace Final.Project.API.Controllers
 
             return Ok(response);
         }
+
         #endregion
 
         #region Check Code For User
@@ -245,9 +246,9 @@ namespace Final.Project.API.Controllers
         [Route("Send_Email")]
         public async Task<ActionResult> SendEmail([FromForm] MailRequestDto mailRequestDto)
         {
-            await mailingService.SendEmailAsync(mailRequestDto.ToEmail, mailRequestDto.Subject, mailRequestDto.Body);
+            bool result = await mailingService.SendEmailAsync(mailRequestDto.ToEmail, mailRequestDto.Subject, mailRequestDto.Body) ;
 
-            return Ok("Email Sending Successfully!!!");
+            return result ? Ok(true) : BadRequest(false);
         }
 
 

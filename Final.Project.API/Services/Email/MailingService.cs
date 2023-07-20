@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Net.Mail;
 using System.Net;
+using Final.Project.BL;
+
 namespace Final.Project.API;
 
 public class MailingService : IMailingService
@@ -14,25 +16,30 @@ public class MailingService : IMailingService
     {
         this.mailSetting = _mailSetting.Value;
     }
-    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+    public async Task<bool> SendEmailAsync(string email, string subject, string body)
     {
-        string fromMail = "lab847270@gmail.com";
-        string fromPassword = "quhaueejlzwyekky";
-
         MailMessage message = new MailMessage();
-        message.From = new MailAddress(fromMail);
+        message.From = new MailAddress(mailSetting.Email);
         message.Subject = subject;
-        message.Body = $"<html><body>{htmlMessage}</body></html>";
+        message.Body = $"<html><body>{body}</body></html>";
         message.IsBodyHtml = true;
         message.To.Add(email);
 
-        var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
+        var smtpClient = new System.Net.Mail.SmtpClient(mailSetting.Host)
         {
-            Port = 587,
-            Credentials = new NetworkCredential(fromMail, fromPassword),
-            EnableSsl = true,
+            Port = mailSetting.Port,
+            Credentials = new NetworkCredential(mailSetting.Email, mailSetting.Password),
+            EnableSsl = mailSetting.EnableSsl,
         };
 
-        smtpClient.Send(message);
+        try
+        {
+            await smtpClient.SendMailAsync(message);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }
