@@ -189,6 +189,9 @@ namespace Final.Project.DAL.Migrations
                     b.Property<bool>("IsReviewed")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("ProductPriceAtThisTime")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 

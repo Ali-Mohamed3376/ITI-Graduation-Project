@@ -24,6 +24,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     }
 
     #endregion
+
     #region Get Product Details with images
     public Product? GetProductByIdWithimages(int id)
     {
@@ -80,8 +81,7 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     public IEnumerable<Product> GetProductFiltered(QueryParametars parametars)
     {
 
-        var products = _context.Products.Include(p => p.Reviews).AsQueryable();
-        products = products.Include(p => p.ProductImages);
+        var products = _context.Products.Include(p => p.Reviews).Include(p => p.ProductImages).AsQueryable();
 
         if (parametars.CategotyId > 0)
         {
@@ -168,7 +168,6 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     }
 
     #endregion
-
 
     #region Get last new products
     public IEnumerable<Product> GetNewProducts()

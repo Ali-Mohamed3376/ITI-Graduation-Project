@@ -5,6 +5,8 @@ using MimeKit;
 using System.Net.Mail;
 using System.Net;
 using Final.Project.BL;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Final.Project.API;
 
@@ -42,4 +44,6 @@ public class MailingService : IMailingService
             return false;
         }
     }
+
+
 }
