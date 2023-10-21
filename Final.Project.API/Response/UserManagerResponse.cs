@@ -1,4 +1,6 @@
-﻿namespace Final.Project.API.Responses;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Final.Project.API.Responses;
 public class UserManagerResponse
 {
     //public string? Token { get; set; }
@@ -7,5 +9,5 @@ public class UserManagerResponse
     public bool IsSuccess { get; set; }
     public Object? Data { get; set; }
     public int Status { get; set; }
-    public IEnumerable<string>? Errors { get; set; }
+    public IEnumerable<IdentityError>? Errors { get; set; }
 }

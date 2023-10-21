@@ -1,4 +1,5 @@
-﻿using Final.Project.BL;
+﻿using Final.Project.API.Responses;
+using Final.Project.BL;
 using Final.Project.DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -23,119 +24,141 @@ namespace Final.Project.API.Controllers
         private readonly ILogger<UserController> logger;
         private readonly IMailingService mailingService;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IUserService userService;
 
         public UserController(IConfiguration configuration,
                                  UserManager<User> manager,
                                  ILogger<UserController> logger,
                                  IMailingService mailingService,
-                                 IUnitOfWork unitOfWork)
+                                 IUnitOfWork unitOfWork,
+                                 IUserService userService)
         {
             this.configuration = configuration;
             this.manager = manager;
             this.logger = logger;
             this.mailingService = mailingService;
             this.unitOfWork = unitOfWork;
+            this.userService = userService;
         }
 
-        #region Login
-        [HttpPost]
-        [Route("Login")]
-        public ActionResult<TokenDto> Login(LoginDto loginCredientials)
+        #region Login Old Version
+        //[HttpPost]
+        //[Route("Login")]
+        //public ActionResult<TokenDto> Login(LoginDto loginCredientials)
+        //{
+        //    // Search by Email and check if user found or Not 
+        //    User? user = manager.FindByEmailAsync(loginCredientials.Email).Result;
+        //    if (user is null) { return NotFound("Invalid Email!"); }
+
+        //    // Check On Password
+        //    bool isValiduser = manager.CheckPasswordAsync(user, loginCredientials.Password).Result;
+        //    if (!isValiduser)
+        //    {
+        //        return BadRequest("Invalid Password!");
+        //    }
+
+        //    // Get claims
+        //    List<Claim> claims = manager.GetClaimsAsync(user).Result.ToList();
+
+        //    // get Secret Key
+        //    string? secretKey = configuration.GetValue<string>("SecretKey");
+        //    byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+        //    SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+        //    SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        //    DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+        //    JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+        //    JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+        //    var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+        //    var currentUser = manager.GetUserAsync(User).Result;
+        //    return new TokenDto
+        //    {
+        //        Token = token,
+        //        Role = user.Role.ToString()
+        //    };
+        //}
+        #endregion
+
+        #region Register Old Version
+
+        //[HttpPost]
+        //[Route("Register")]
+        //public async Task<ActionResult<TokenDto>> Register([FromBody] RegisterDto credentials)
+        //{
+
+        //    User user = new User
+        //    {
+        //        FName = credentials.FName,
+        //        LName = credentials.LName,
+        //        Email = credentials.Email,
+        //        UserName= credentials.Email,
+        //        Role = Role.Customer,
+
+        //    };
+
+        //    var result = await manager.CreateAsync(user, credentials.Password);
+        //    if (!result.Succeeded)
+        //    {
+        //        return BadRequest(result.Errors);
+        //    }
+
+        //    List<Claim> claims = new List<Claim>()
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        //        new Claim(ClaimTypes.Role, user.Role.ToString()),
+        //    };
+
+        //    var claimsResult = await manager.AddClaimsAsync(user, claims);
+
+        //    if (!claimsResult.Succeeded)
+        //    {
+        //        return BadRequest(claimsResult.Errors);
+        //    }
+
+
+
+        //    string? secretKey = configuration.GetValue<string>("SecretKey");
+        //    byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+        //    SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+        //    SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        //    DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+        //    JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+        //    JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+        //    var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+        //    return new TokenDto
+        //    {
+        //        Token = token,
+        //        Role = user.Role.ToString()
+        //    };
+        //}
+
+
+        #endregion
+
+        #region New Login Version
+        [HttpPost("Login")]
+        public async Task<ActionResult<UserManagerResponse>> Login(LoginDto loginCredientials)
         {
-            // Search by Email and check if user found or Not 
-            User? user = manager.FindByEmailAsync(loginCredientials.Email).Result;
-            if (user is null) { return NotFound("Invalid Email!"); }
-
-            // Check On Password
-            bool isValiduser = manager.CheckPasswordAsync(user, loginCredientials.Password).Result;
-            if (!isValiduser)
-            {
-                return BadRequest("Invalid Password!");
-            }
-
-            // Get claims
-            List<Claim> claims = manager.GetClaimsAsync(user).Result.ToList();
-
-            // get Secret Key
-            string? secretKey = configuration.GetValue<string>("SecretKey");
-            byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
-
-            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
-
-            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
-
-            var currentUser = manager.GetUserAsync(User).Result;
-            return new TokenDto
-            {
-                Token = token,
-                Role = user.Role.ToString()
-            };
+            var result = await userService.Login(loginCredientials);
+            return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Message);    
         }
         #endregion
 
-        #region Register
+        #region New Register Version
 
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("Register")]
         public async Task<ActionResult<TokenDto>> Register([FromBody] RegisterDto credentials)
         {
-
-            User user = new User
-            {
-                FName = credentials.FName,
-                LName = credentials.LName,
-                Email = credentials.Email,
-                UserName= credentials.Email,
-                Role = Role.Customer,
-               
-            };
-
-            var result = await manager.CreateAsync(user, credentials.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
-            };
-
-            var claimsResult = await manager.AddClaimsAsync(user, claims);
-
-            if (!claimsResult.Succeeded)
-            {
-                return BadRequest(claimsResult.Errors);
-            }
-
-
-
-            string? secretKey = configuration.GetValue<string>("SecretKey");
-            byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
-
-            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
-
-            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
-
-            return new TokenDto
-            {
-                Token = token,
-                Role = user.Role.ToString()
-            };
+            var result = await userService.Register(credentials);
+            return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Errors);
         }
-
-
         #endregion
 
         #region Forget Password

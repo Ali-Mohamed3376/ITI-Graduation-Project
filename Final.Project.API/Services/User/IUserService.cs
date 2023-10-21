@@ -5,5 +5,6 @@ namespace Final.Project.API;
 public interface IUserService
 {
     Task<UserManagerResponse> Login(LoginDto loginCredientials);
+    Task<UserManagerResponse> Register(RegisterDto registerCredientials);
 
 }

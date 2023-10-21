@@ -43,7 +43,7 @@ public class UserService : IUserService
             {
                 Message = "User Not Found",
                 IsSuccess = false,
-               
+
             };
         }
 
@@ -77,6 +77,69 @@ public class UserService : IUserService
         return new UserManagerResponse
         {
             Message = "User Loggedin Successfully",
+            IsSuccess = true,
+            Data = new TokenDto
+            {
+                Token = token,
+                Role = user.Role.ToString(),
+            },
+        };
+    }
+
+    public async Task<UserManagerResponse> Register(RegisterDto registerCredientials)
+    {
+        User user = new User
+        {
+            FName = registerCredientials.FName,
+            LName = registerCredientials.LName,
+            Email = registerCredientials.Email,
+            UserName = registerCredientials.Email,
+            Role = Role.Customer,
+
+        };
+
+        var result = await manager.CreateAsync(user, registerCredientials.Password);
+        if (!result.Succeeded)
+        {
+            return new UserManagerResponse
+            {
+                Errors = result.Errors,
+                IsSuccess = false,
+            };
+        }
+
+        List<Claim> claims = new List<Claim>()
+         {
+             new Claim(ClaimTypes.NameIdentifier, user.Id),
+             new Claim(ClaimTypes.Role, user.Role.ToString()),
+         };
+
+        var claimsResult = await manager.AddClaimsAsync(user, claims);
+
+        if (!claimsResult.Succeeded)
+        {
+            return new UserManagerResponse
+            {
+                Errors = claimsResult.Errors,
+                IsSuccess = false,
+            };
+        }
+
+        string? secretKey = configuration.GetValue<string>("SecretKey");
+        byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+        SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+        SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+        JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+        JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+        var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+        return new UserManagerResponse
+        {
+            Message = "Register Successfully",
             IsSuccess = true,
             Data = new TokenDto
             {
