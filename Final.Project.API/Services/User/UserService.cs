@@ -9,143 +9,315 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Final.Project.API;
 public class UserService : IUserService
 {
     private readonly IConfiguration configuration;
     private readonly UserManager<User> manager;
-    private readonly ILogger<UserController> logger;
     private readonly IMailingService mailingService;
     private readonly IUnitOfWork unitOfWork;
 
 
     public UserService(IConfiguration configuration,
                                  UserManager<User> manager,
-                                 ILogger<UserController> logger,
                                  IMailingService mailingService,
                                  IUnitOfWork unitOfWork)
     {
         this.configuration = configuration;
         this.manager = manager;
-        this.logger = logger;
         this.mailingService = mailingService;
         this.unitOfWork = unitOfWork;
     }
 
+
     public async Task<UserManagerResponse> Login(LoginDto loginCredientials)
     {
-        // Search by Email and check if user found or Not 
-        User? user = await manager.FindByEmailAsync(loginCredientials.Email);
-        if (user is null)
+        try
+        {
+            // Search by Email and check if user found or Not 
+            User? user = await manager.FindByEmailAsync(loginCredientials.Email);
+            if (user is null)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "User Not Found",
+                    IsSuccess = false,
+
+                };
+            }
+
+            // Check On Password
+            bool isValiduser =  manager.CheckPasswordAsync(user, loginCredientials.Password).GetAwaiter().GetResult();
+            if (!isValiduser)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Invalid Password!",
+                    IsSuccess = false,
+                };
+            }
+
+            // Get claims
+            var claims = await manager.GetClaimsAsync(user);
+            //List<Claim> claims = manager.GetClaimsAsync(user).GetAwaiter().GetResult().ToList();
+
+            // get Secret Key
+            string? secretKey = configuration.GetValue<string>("SecretKey");
+            byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+            return new UserManagerResponse
+            {
+                Message = "User Loggedin Successfully",
+                IsSuccess = true,
+                Data = new TokenDto
+                {
+                    Token = token,
+                    Role = user.Role.ToString(),
+                },
+            };
+        }
+        catch (Exception ex)
         {
             return new UserManagerResponse
             {
-                Message = "User Not Found",
-                IsSuccess = false,
-
-            };
-        }
-
-        // Check On Password
-        bool isValiduser = await manager.CheckPasswordAsync(user, loginCredientials.Password);
-        if (!isValiduser)
-        {
-            return new UserManagerResponse
-            {
-                Message = "Invalid Password!",
+                Message = ex.Message,
                 IsSuccess = false,
             };
         }
-
-        // Get claims
-        List<Claim> claims = manager.GetClaimsAsync(user).Result.ToList();
-
-        // get Secret Key
-        string? secretKey = configuration.GetValue<string>("SecretKey");
-        byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-        SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
-
-        SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-        DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-        JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
-
-        JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
-
-        return new UserManagerResponse
-        {
-            Message = "User Loggedin Successfully",
-            IsSuccess = true,
-            Data = new TokenDto
-            {
-                Token = token,
-                Role = user.Role.ToString(),
-            },
-        };
     }
 
     public async Task<UserManagerResponse> Register(RegisterDto registerCredientials)
     {
-        User user = new User
+        try
         {
-            FName = registerCredientials.FName,
-            LName = registerCredientials.LName,
-            Email = registerCredientials.Email,
-            UserName = registerCredientials.Email,
-            Role = Role.Customer,
+            User user = new User
+            {
+                FName = registerCredientials.FName,
+                LName = registerCredientials.LName,
+                Email = registerCredientials.Email,
+                UserName = registerCredientials.Email,
+                Role = Role.Customer,
 
-        };
+            };
 
-        var result = await manager.CreateAsync(user, registerCredientials.Password);
-        if (!result.Succeeded)
+            var result = await manager.CreateAsync(user, registerCredientials.Password);
+            if (!result.Succeeded)
+            {
+                return new UserManagerResponse
+                {
+                    Errors = result.Errors,
+                    IsSuccess = false,
+                };
+            }
+
+            List<Claim> claims = new List<Claim>()
+             {
+                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                 new Claim(ClaimTypes.Role, user.Role.ToString()),
+             };
+            var claimsResult = await manager.AddClaimsAsync(user, claims);
+            if (!claimsResult.Succeeded)
+            {
+                return new UserManagerResponse
+                {
+                    Errors = claimsResult.Errors,
+                    IsSuccess = false,
+                };
+            }
+
+            string? secretKey = configuration.GetValue<string>("SecretKey");
+            byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+            return new UserManagerResponse
+            {
+                Message = "Register Successfully",
+                IsSuccess = true,
+                Data = new TokenDto
+                {
+                    Token = token,
+                    Role = user.Role.ToString(),
+                },
+            };
+        }
+        catch (Exception ex)
         {
             return new UserManagerResponse
             {
-                Errors = result.Errors,
+                Message = ex.Message,
                 IsSuccess = false,
             };
         }
+    }
 
-        List<Claim> claims = new List<Claim>()
-         {
-             new Claim(ClaimTypes.NameIdentifier, user.Id),
-             new Claim(ClaimTypes.Role, user.Role.ToString()),
-         };
+    public async Task<UserManagerResponse> Forget_Password(string email)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Please Enter Email",
+                    IsSuccess = false,
+                };
+            }
 
-        var claimsResult = await manager.AddClaimsAsync(user, claims);
+            User? user = await manager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "User not found with the given email.",
+                    IsSuccess = false,
+                };
+            }
 
-        if (!claimsResult.Succeeded)
+            var random = new Random();
+            var code = random.Next(10000, 99999).ToString();
+            user.Code = code;
+            var result = unitOfWork.Savechanges();
+            if (result <= 0)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Code can Not be Set !!!!",
+                    IsSuccess = false,
+                };
+            }
+
+            await mailingService.SendEmailAsync(email, "Reset Password", $"Your Code is {code}");
+            return new UserManagerResponse
+            {
+                Message = "Reset Password Email has been Sent Successfully!!!",
+                IsSuccess = true,
+            };
+        }
+        catch (Exception ex)
         {
             return new UserManagerResponse
             {
-                Errors = claimsResult.Errors,
+                Message = ex.Message,
                 IsSuccess = false,
             };
         }
+    }
 
-        string? secretKey = configuration.GetValue<string>("SecretKey");
-        byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-        SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
-
-        SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-        DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-        JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
-
-        JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
-
-        return new UserManagerResponse
+    public async Task<UserManagerResponse> Check_Code(ConfirmCodeDto confirmCodeDto)
+    {
+        try
         {
-            Message = "Register Successfully",
-            IsSuccess = true,
-            Data = new TokenDto
+            if (string.IsNullOrEmpty(confirmCodeDto.Email))
             {
-                Token = token,
-                Role = user.Role.ToString(),
-            },
-        };
+                return new UserManagerResponse {
+                    Message = "Email is Invalid!!!!",
+                    IsSuccess = false,
+                };
+            }
+
+            User? user = await manager.FindByEmailAsync(confirmCodeDto.Email);
+            if (user is null)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "User not found with the given email.",
+                    IsSuccess = false,
+                };
+            }
+
+            if (user.Code != confirmCodeDto.Code)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Invalid Code!!!",
+                    IsSuccess = false,  
+                };
+            }
+
+            return new UserManagerResponse
+            {
+                IsSuccess = true,
+                Message = "Code Is Valid!"
+            };
+        }
+        catch (Exception ex)
+        {
+            return new UserManagerResponse
+            {
+                Message = ex.Message,
+                IsSuccess = false,
+            };
+        }
+    }
+
+    public async Task<UserManagerResponse> Reset_Password(UserResetPasswordDto userResetPasswordDto)
+    {
+        try
+        {
+            User? user = await manager.FindByEmailAsync(userResetPasswordDto.Email);
+            if (user is null)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "User Not Found With This Email!!!",
+                    IsSuccess = false,
+                };
+            }
+
+            if (userResetPasswordDto.NewPassword != userResetPasswordDto.ConfirmNewPassword)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Passwored Dosen't Match Confirmation!!!",
+                    IsSuccess = false,
+                };
+            }
+
+            var token = await manager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await manager.ResetPasswordAsync(user, token, userResetPasswordDto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return new UserManagerResponse
+                {
+                    Errors = result.Errors,
+                    IsSuccess = false
+                };
+            }
+
+            return new UserManagerResponse
+            {
+                Message = "Reset Password Successfully!!!",
+                IsSuccess = true,
+            };
+        }
+        catch (Exception ex)
+        {
+            return new UserManagerResponse
+            {
+                Message = ex.Message,
+                IsSuccess = false,
+            };
+        }
     }
 }
