@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-#endregion
+#endregion 
 
 #region CORS Policy
 builder.Services.AddCors(options =>
