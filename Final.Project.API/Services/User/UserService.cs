@@ -66,14 +66,14 @@ public class UserService : IUserService
             // get Secret Key
             string? secretKey = configuration.GetValue<string>("SecretKey");
             byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+            SymmetricSecurityKey key = new(keyAsBytes);
 
-            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+            SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+            DateTime exp = DateTime.Now.AddMinutes(1);//expire after 20days
+            JwtSecurityToken jwtSecurity = new(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
-            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
             var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
 
             return new UserManagerResponse
@@ -101,7 +101,7 @@ public class UserService : IUserService
     {
         try
         {
-            User user = new User
+            User user = new()
             {
                 FName = registerCredientials.FName,
                 LName = registerCredientials.LName,
@@ -121,7 +121,7 @@ public class UserService : IUserService
                 };
             }
 
-            List<Claim> claims = new List<Claim>()
+            List<Claim> claims = new()
              {
                  new Claim(ClaimTypes.NameIdentifier, user.Id),
                  new Claim(ClaimTypes.Role, user.Role.ToString()),
@@ -138,14 +138,14 @@ public class UserService : IUserService
 
             string? secretKey = configuration.GetValue<string>("SecretKey");
             byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+            SymmetricSecurityKey key = new(keyAsBytes);
 
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
-            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+            DateTime exp = DateTime.Now.AddMinutes(1);//expire after 20days
+            JwtSecurityToken jwtSecurity = new(claims: claims, signingCredentials: signingCredentials, expires: exp);
 
-            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
             var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
 
             return new UserManagerResponse

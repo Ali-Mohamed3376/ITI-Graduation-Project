@@ -68,7 +68,7 @@ namespace Final.Project.API.Controllers
 
             return Ok(new
             {
-                message=status
+                message = status
             });
 
         }
