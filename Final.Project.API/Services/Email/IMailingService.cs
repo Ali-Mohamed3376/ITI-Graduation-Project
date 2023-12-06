@@ -1,5 +1,7 @@
-﻿namespace Final.Project.API;
+﻿using Final.Project.API.Responses;
+
+namespace Final.Project.API;
 public interface IMailingService
 {
-    Task SendEmailAsync(string mailTo, string subject, string body);
+    Task<UserManagerResponse> SendEmailAsync(string email, string subject, string body);
 }

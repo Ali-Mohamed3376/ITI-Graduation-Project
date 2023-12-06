@@ -14,43 +14,49 @@ public class UserProductsCartsManager : IUserProductsCartsManager
 
     public string AddProductToCart(productToAddToCartDto product, string userId)
     {
-        string status = "Product Added";// we will use it in controller to send the message to user
-
-        //check if product exist in user cart 
-        UserProductsCart? productFromDB = _unitOfWork.UserProdutsCartRepo.GetByCompositeId(product.ProductId, userId);
-        if (productFromDB is null) // if not exist ==>  add this product in user cart
+        try
         {
-            //check the quantity is > 10  ===> make the quantity 10 it is our limit
-            if (product.Quantity > 10)
+            string status = "Product Added";// we will use it in controller to send the message to user
+            //check if product exist in user cart 
+            UserProductsCart? productFromDB = _unitOfWork.UserProdutsCartRepo.GetByCompositeId(product.ProductId, userId);
+            if (productFromDB is null) // if not exist ==>  add this product in user cart
             {
-                product.Quantity = 10;
-                status = " Product Added only 10 pieces Max";
+                //check the quantity is > 10  ===> make the quantity 10 it is our limit
+                if (product.Quantity > 10)
+                {
+                    product.Quantity = 10;
+                    status = " Product Added only 10 pieces Max";
+                }
+                var productToAddToCart = new UserProductsCart
+                {
+                    ProductId = product.ProductId,
+                    UserId = userId,
+                    Quantity = product.Quantity
+                };
+                _unitOfWork.UserProdutsCartRepo.Add(productToAddToCart);
             }
-            var productToAddToCart = new UserProductsCart
+            else // if product exist in userCart before , edit the quantity only 
             {
-                ProductId = product.ProductId,
-                UserId = userId,
-                Quantity = product.Quantity
-            };
-            _unitOfWork.UserProdutsCartRepo.Add(productToAddToCart);
-        }
-        else // if product exist in userCart before , edit the quantity only 
-        {
-            productFromDB.Quantity += product.Quantity;
-            //check the quantity is > 10  ===> make the quantity 10 it is our limit
-            if (productFromDB.Quantity > 10)
-            {
-                productFromDB.Quantity = 10;
-                status = "Product Exist in cart so ,Quantity Updated to only 10 pieces Max";
+                productFromDB.Quantity += product.Quantity;
+                //check the quantity is > 10  ===> make the quantity 10 it is our limit
+                if (productFromDB.Quantity > 10)
+                {
+                    productFromDB.Quantity = 10;
+                    status = "Product Exist in cart so ,Quantity Updated to only 10 pieces Max";
+                }
+                else
+                {
+                    status = "Product Exist in cart so ,Quantity Updated";
+                }
             }
-            else
-            {
-                status = "Product Exist in cart so ,Quantity Updated";
-            }
-        }
+            _unitOfWork.Savechanges();
 
-        _unitOfWork.Savechanges();
-        return status;
+            return status;
+        }
+        catch (Exception)
+        {
+            return "Please Login Again!";
+        }
     }
 
     public string UpdateProductQuantityInCart(ProductQuantityinCartUpdateDto product, string userId)
@@ -65,7 +71,7 @@ public class UserProductsCartsManager : IUserProductsCartsManager
             product.Quantity = 10;
             status = "product Quantity Edited in userCart to 10 pieces Max";
         }
-     
+
         productToEdit.Quantity = product.Quantity;
         _unitOfWork.Savechanges();
         return status;
@@ -96,8 +102,8 @@ public class UserProductsCartsManager : IUserProductsCartsManager
             Quantity = p.Quantity,
             Name = p.Product.Name,
             Price = p.Product.Price,
-            Discount=p.Product.Discount,
-            Image=p.Product.ProductImages.FirstOrDefault()?.ImageUrl??""
+            Discount = p.Product.Discount,
+            Image = p.Product.ProductImages.FirstOrDefault()?.ImageUrl ?? ""
         });
 
         return products;

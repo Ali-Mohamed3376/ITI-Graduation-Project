@@ -101,7 +101,6 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
         #region Get all Products
         [HttpGet]
         [Route("Dashboard/GetAllProducts")]
@@ -158,7 +157,6 @@ namespace Final.Project.API.Controllers
             return urls;
         }
         #endregion
-                
 
         #region Edit Product
 
@@ -209,7 +207,6 @@ namespace Final.Project.API.Controllers
         }
         #endregion
 
-
         #region Get All Products in Pagination 
         [HttpGet]
         [Route("{page}/{countPerPage}")]
@@ -232,7 +229,6 @@ namespace Final.Project.API.Controllers
             return Ok(result);
         }
         #endregion
-
 
         #region Get all Products in dashboard with pagination
         [HttpGet]

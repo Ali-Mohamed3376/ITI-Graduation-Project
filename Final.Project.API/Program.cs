@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-#endregion
+#endregion 
 
 #region CORS Policy
 builder.Services.AddCors(options =>
@@ -62,6 +62,7 @@ builder.Services.AddScoped<IContactUsManager, ContactUsManager>();
 
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
 builder.Services.AddTransient<IMailingService, MailingService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 
@@ -108,7 +109,7 @@ builder.Services.AddDbContext<ECommerceContext>(options => options
     //.UseSqlServer(@"Server=DESKTOP-35F9698\SQLEXPRESS;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
     //.UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
-    .UseSqlServer(@"Server=DESKTOP-85Q5KQD\SS17;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
+    .UseSqlServer(@"Server=.;Database=E-CommerceDB;Trusted_Connection=true;Encrypt=false"));
 
 
 #endregion
