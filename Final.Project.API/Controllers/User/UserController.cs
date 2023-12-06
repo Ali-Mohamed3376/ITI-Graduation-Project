@@ -1,5 +1,6 @@
 ﻿using Final.Project.BL;
 using Final.Project.DAL;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,149 @@ namespace Final.Project.API.Controllers
             this.mailingService = mailingService;
             this.unitOfWork = unitOfWork;
         }
+        #region LoginWithGoogle
+        [HttpPost]
+        [Route("LoginWithGoogle")]
+        public async Task<ActionResult<TokenDto>> LoginWithGoogle(LoginCred credential)
+        {
+            //validateAsync used to validate  Google Sign-In token
+            //this code take the credential jwt that send from Angular and return the data
+            //of user like his email,first name,last name, id
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential.Credential);
+                if (payload is null)
+                {
+                    return BadRequest();
+                }
+
+                LoginDto loginCredientials = new LoginDto
+                {
+                    Email = payload.Email,
+                    Password = $"{payload.Email}+212154484844545445"
+                };
+                User? user = manager.FindByEmailAsync(loginCredientials.Email).Result;
+                if (user is null) { return NotFound("Invalid Email!"); }
+
+                // Check On Password
+                bool isValiduser = manager.CheckPasswordAsync(user, loginCredientials.Password).Result;
+                if (!isValiduser)
+                {
+                    return BadRequest("Invalid Password!");
+                }
+
+                // Get claims
+                List<Claim> claims = manager.GetClaimsAsync(user).Result.ToList();
+
+                // get Secret Key
+                string? secretKey = configuration.GetValue<string>("SecretKey");
+                byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+                SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+                SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+                DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+                JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+                JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+                var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+                var currentUser = manager.GetUserAsync(User).Result;
+                return new TokenDto
+                {
+                    Token = token,
+                    Role = user.Role.ToString()
+                };
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Exception: {ex.Message}");
+                return BadRequest(ex.Message);
+
+            }
+        }
+        #endregion
+
+        #region RegisterWithGoogle
+
+        [HttpPost]
+        [Route("RegisterWithGoogle")]
+        public async Task<ActionResult<TokenDto>> Register([FromBody] LoginCred credential)
+        {
+
+            try
+            {
+
+                //validateAsync used to validate  Google Sign-In token
+                //this code take the credential jwt that send from Angular and return the data
+                //of user like his email,first name,last name, id
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential.Credential);
+                if (payload is null)
+                {
+                    return BadRequest();
+                }
+
+                //now i will create that user in our database
+                // i will put password for all gmail user that equal email+any string
+                User user = new User
+                {
+                    FName = payload.GivenName,
+                    LName = payload.FamilyName,
+                    Email = payload.Email,
+                    UserName = payload.Email,
+                    Role = Role.Customer,
+
+                };
+
+                var result = await manager.CreateAsync(user, $"{payload.Email}+212154484844545445");
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+
+                List<Claim> claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+            };
+
+                var claimsResult = await manager.AddClaimsAsync(user, claims);
+
+                if (!claimsResult.Succeeded)
+                {
+                    return BadRequest(claimsResult.Errors);
+                }
+
+
+
+                string? secretKey = configuration.GetValue<string>("SecretKey");
+                byte[] keyAsBytes = Encoding.ASCII.GetBytes(secretKey!);
+                SymmetricSecurityKey key = new SymmetricSecurityKey(keyAsBytes);
+
+                SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+                DateTime exp = DateTime.Now.AddDays(20);//expire after 20days
+                JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials, expires: exp);
+
+                JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+                var token = jwtSecurityTokenHandler.WriteToken(jwtSecurity);
+
+                return new TokenDto
+                {
+                    Token = token,
+                    Role = user.Role.ToString()
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
+
 
         #region Login
         [HttpPost]
@@ -90,9 +234,9 @@ namespace Final.Project.API.Controllers
                 FName = credentials.FName,
                 LName = credentials.LName,
                 Email = credentials.Email,
-                UserName= credentials.Email,
+                UserName = credentials.Email,
                 Role = Role.Customer,
-               
+
             };
 
             var result = await manager.CreateAsync(user, credentials.Password);
@@ -253,5 +397,10 @@ namespace Final.Project.API.Controllers
 
         #endregion
 
+    }
+
+    public class LoginCred
+    {
+        public string Credential { get; set; } = string.Empty;
     }
 }
